@@ -6,7 +6,33 @@ package chess;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
+
 public class ChessBoard {
+
+    private static final int BOARD_SIZE = 8;
+//    private static final ChessGame.TeamColor[][] START_COLORS = {
+//            {BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK},
+//            {BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK},
+//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
+//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
+//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
+//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
+//            {WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE},
+//            {WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE}
+//    };
+//    private static final ChessPiece.PieceType[][] START_PIECES = {
+//            {ROOK,KNIGHT,BISHOP,KING,QUEEN,BISHOP,KNIGHT,ROOK},
+//            {PAWN,PAWN,PAWN,PAWN,PAWN,PAWN,PAWN,PAWN},
+//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
+//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
+//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
+//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
+//            {PAWN,PAWN,PAWN,PAWN,PAWN,PAWN,PAWN,PAWN},
+//            {ROOK,KNIGHT,BISHOP,QUEEN,KING,BISHOP,KNIGHT,ROOK}
+//    };
+
+
+    private ChessPiece[][] board = new ChessPiece[BOARD_SIZE][BOARD_SIZE];
 
     public ChessBoard() {
         
@@ -19,7 +45,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        throw new RuntimeException("Not implemented");
+        board[position.getRow()][position.getColumn()] = piece;
     }
 
     /**
@@ -30,7 +56,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        return board[position.getRow()][position.getColumn()];
     }
 
     /**
@@ -38,6 +64,10 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        throw new RuntimeException("Not implemented");
+        for (int i = 0; i < BOARD_SIZE; i++){
+            for (int j = 0; j < BOARD_SIZE; j++){
+                board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
+            }
+        }
     }
 }
