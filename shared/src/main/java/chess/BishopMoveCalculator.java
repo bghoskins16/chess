@@ -22,9 +22,51 @@ public class BishopMoveCalculator extends PieceMoveCalculator {
         // Try up and to the right
         endRow = startRow;
         endCol = startCol;
+        while (endRow > 1 && endCol < 8) {
+            // Change the move Location
+            endRow--;
+            endCol++;
+            endPos = new ChessPosition(endRow, endCol);
 
-        // Keep moving until you hit a wall or another piece
-        while (endRow > 0 && endCol > 0) {
+            // if this is not my own piece add to Collection
+            if (board.getPiece(endPos) != null) {
+                ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
+                if (color != pieceColor) {
+                    moves.add(new ChessMove(myPosition, endPos, null));
+                }
+                break;
+            }
+            else {
+                moves.add(new ChessMove(myPosition, endPos, null));
+            }
+        }
+
+        // Try down and to the right
+        endRow = startRow;
+        endCol = startCol;
+        while (endRow < 8 && endCol < 8) {
+            // Change the move Location
+            endRow++;
+            endCol++;
+            endPos = new ChessPosition(endRow, endCol);
+
+            // if this is not my own piece add to Collection
+            if (board.getPiece(endPos) != null) {
+                ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
+                if (color != pieceColor) {
+                    moves.add(new ChessMove(myPosition, endPos, null));
+                }
+                break;
+            }
+            else {
+                moves.add(new ChessMove(myPosition, endPos, null));
+            }
+        }
+
+        // Try up and to the left
+        endRow = startRow;
+        endCol = startCol;
+        while (endRow > 1 && endCol > 1) {
             // Change the move Location
             endRow--;
             endCol--;
@@ -38,13 +80,32 @@ public class BishopMoveCalculator extends PieceMoveCalculator {
                 }
                 break;
             }
+            else {
+                moves.add(new ChessMove(myPosition, endPos, null));
+            }
         }
 
-        // Try up and to the left
-
-        // Try down and to the right
-
         // Try down and to the left
+        endRow = startRow;
+        endCol = startCol;
+        while (endRow < 8 && endCol > 1) {
+            // Change the move Location
+            endRow++;
+            endCol--;
+            endPos = new ChessPosition(endRow, endCol);
+
+            // if this is not my own piece add to Collection
+            if (board.getPiece(endPos) != null) {
+                ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
+                if (color != pieceColor) {
+                    moves.add(new ChessMove(myPosition, endPos, null));
+                }
+                break;
+            }
+            else {
+                moves.add(new ChessMove(myPosition, endPos, null));
+            }
+        }
 
         return moves;
     }
