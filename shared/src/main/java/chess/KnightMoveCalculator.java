@@ -16,90 +16,130 @@ public class KnightMoveCalculator extends PieceMoveCalculator {
         int endCol;
         ChessPosition endPos;
 
-        // Try up and to the right
-        endRow = startRow;
-        endCol = startCol;
-        while (endRow > 1 && endCol < 8) {
-            // Change the move Location
-            endRow--;
-            endCol++;
+        // case 1
+        endRow = startRow + 1;
+        endCol = startCol + 2;
+        if (endRow >= 1 && endRow <= 8 && endCol >= 1 && endCol <= 8) {
             endPos = new ChessPosition(endRow, endCol);
-
             // if this is not my own piece add to Collection
             if (board.getPiece(endPos) != null) {
                 ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
                 if (color != pieceColor) {
                     moves.add(new ChessMove(myPosition, endPos, null));
                 }
-                break;
-            }
-            else {
+            } else {
                 moves.add(new ChessMove(myPosition, endPos, null));
             }
         }
 
-        // Try down and to the right
-        endRow = startRow;
-        endCol = startCol;
-        while (endRow < 8 && endCol < 8) {
-            // Change the move Location
-            endRow++;
-            endCol++;
+        // case 2
+        endRow = startRow + 1;
+        endCol = startCol - 2;
+        if (endRow >= 1 && endRow <= 8 && endCol >= 1 && endCol <= 8) {
             endPos = new ChessPosition(endRow, endCol);
-
             // if this is not my own piece add to Collection
             if (board.getPiece(endPos) != null) {
                 ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
                 if (color != pieceColor) {
                     moves.add(new ChessMove(myPosition, endPos, null));
                 }
-                break;
-            }
-            else {
+            } else {
                 moves.add(new ChessMove(myPosition, endPos, null));
             }
         }
 
-        // Try up and to the left
-        endRow = startRow;
-        endCol = startCol;
-        while (endRow > 1 && endCol > 1) {
-            // Change the move Location
-            endRow--;
-            endCol--;
+        // case 3
+        endRow = startRow - 1;
+        endCol = startCol + 2;
+        if (endRow >= 1 && endRow <= 8 && endCol >= 1 && endCol <= 8) {
             endPos = new ChessPosition(endRow, endCol);
-
             // if this is not my own piece add to Collection
             if (board.getPiece(endPos) != null) {
                 ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
                 if (color != pieceColor) {
                     moves.add(new ChessMove(myPosition, endPos, null));
                 }
-                break;
-            }
-            else {
+            } else {
                 moves.add(new ChessMove(myPosition, endPos, null));
             }
         }
 
-        // Try down and to the left
-        endRow = startRow;
-        endCol = startCol;
-        while (endRow < 8 && endCol > 1) {
-            // Change the move Location
-            endRow++;
-            endCol--;
+        // case 4
+        endRow = startRow - 1;
+        endCol = startCol - 2;
+        if (endRow >= 1 && endRow <= 8 && endCol >= 1 && endCol <= 8) {
             endPos = new ChessPosition(endRow, endCol);
-
             // if this is not my own piece add to Collection
             if (board.getPiece(endPos) != null) {
                 ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
                 if (color != pieceColor) {
                     moves.add(new ChessMove(myPosition, endPos, null));
                 }
-                break;
+            } else {
+                moves.add(new ChessMove(myPosition, endPos, null));
             }
-            else {
+        }
+
+        // case 5
+        endRow = startRow + 2;
+        endCol = startCol + 1;
+        if (endRow >= 1 && endRow <= 8 && endCol >= 1 && endCol <= 8) {
+            endPos = new ChessPosition(endRow, endCol);
+            // if this is not my own piece add to Collection
+            if (board.getPiece(endPos) != null) {
+                ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
+                if (color != pieceColor) {
+                    moves.add(new ChessMove(myPosition, endPos, null));
+                }
+            } else {
+                moves.add(new ChessMove(myPosition, endPos, null));
+            }
+        }
+
+        // case 6
+        endRow = startRow + 2;
+        endCol = startCol - 1;
+        if (endRow >= 1 && endRow <= 8 && endCol >= 1 && endCol <= 8) {
+            endPos = new ChessPosition(endRow, endCol);
+            // if this is not my own piece add to Collection
+            if (board.getPiece(endPos) != null) {
+                ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
+                if (color != pieceColor) {
+                    moves.add(new ChessMove(myPosition, endPos, null));
+                }
+            } else {
+                moves.add(new ChessMove(myPosition, endPos, null));
+            }
+        }
+
+        // case 7
+        endRow = startRow - 2;
+        endCol = startCol + 1;
+        if (endRow >= 1 && endRow <= 8 && endCol >= 1 && endCol <= 8) {
+            endPos = new ChessPosition(endRow, endCol);
+            // if this is not my own piece add to Collection
+            if (board.getPiece(endPos) != null) {
+                ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
+                if (color != pieceColor) {
+                    moves.add(new ChessMove(myPosition, endPos, null));
+                }
+            } else {
+                moves.add(new ChessMove(myPosition, endPos, null));
+            }
+        }
+
+        // case 8
+        endRow = startRow - 2;
+        endCol = startCol - 1;
+        if (endRow >= 1 && endRow <= 8 && endCol >= 1 && endCol <= 8) {
+            endPos = new ChessPosition(endRow, endCol);
+            // if this is not my own piece add to Collection
+            if (board.getPiece(endPos) != null) {
+                ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
+                if (color != pieceColor) {
+                    moves.add(new ChessMove(myPosition, endPos, null));
+                }
+            } else {
                 moves.add(new ChessMove(myPosition, endPos, null));
             }
         }
