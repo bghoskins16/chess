@@ -10,27 +10,6 @@ package chess;
 public class ChessBoard {
 
     private static final int BOARD_SIZE = 8;
-//    private static final ChessGame.TeamColor[][] START_COLORS = {
-//            {BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK},
-//            {BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK,BLACK},
-//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-//            {WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE},
-//            {WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE,WHITE}
-//    };
-//    private static final ChessPiece.PieceType[][] START_PIECES = {
-//            {ROOK,KNIGHT,BISHOP,KING,QUEEN,BISHOP,KNIGHT,ROOK},
-//            {PAWN,PAWN,PAWN,PAWN,PAWN,PAWN,PAWN,PAWN},
-//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-//            {NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL},
-//            {PAWN,PAWN,PAWN,PAWN,PAWN,PAWN,PAWN,PAWN},
-//            {ROOK,KNIGHT,BISHOP,QUEEN,KING,BISHOP,KNIGHT,ROOK}
-//    };
-
 
     private ChessPiece[][] board = new ChessPiece[BOARD_SIZE][BOARD_SIZE];
 
@@ -64,10 +43,37 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        for (int i = 0; i < BOARD_SIZE; i++){
-            for (int j = 0; j < BOARD_SIZE; j++){
-                board[i][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
+
+        board[0][0] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
+        board[0][1] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
+        board[0][2] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
+        board[0][3] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
+        board[0][4] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
+        board[0][5] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
+        board[0][6] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
+        board[0][7] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
+
+        for (int j = 0; j < BOARD_SIZE; j++){
+            board[1][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+        }
+
+        for (int i = 2; i < BOARD_SIZE - 2; i++){
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                board[i][j] = null;
             }
         }
+
+        for (int j = 0; j < BOARD_SIZE; j++){
+            board[6][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        }
+
+        board[7][0] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
+        board[7][1] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
+        board[7][2] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
+        board[7][3] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN);
+        board[7][4] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
+        board[7][5] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
+        board[7][6] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
+        board[7][7] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
     }
 }
