@@ -43,7 +43,7 @@ public class KingMoveCalculator extends PieceMoveCalculator {
         }
 
         // Try up and to the left
-        if (startRow > 0 && startCol < 8) {
+        if (startRow > 1 && startCol < 8) {
             endPos = new ChessPosition(startRow - 1, startCol + 1);
             // if this is not my own piece add to Collection
             if (board.getPiece(endPos) != null) {
