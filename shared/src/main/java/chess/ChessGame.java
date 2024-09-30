@@ -1,6 +1,8 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -10,6 +12,9 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    TeamColor teamTurn;
+    ChessBoard gameBoard;
+
     public ChessGame() {
 
     }
@@ -18,7 +23,7 @@ public class ChessGame {
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        throw new RuntimeException("Not implemented");
+        return teamTurn;
     }
 
     /**
@@ -27,7 +32,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        throw new RuntimeException("Not implemented");
+        teamTurn = team;
     }
 
     /**
@@ -46,7 +51,24 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        ChessPiece piece = gameBoard.getPiece(startPosition);
+        if (piece == null) return null;
+        Collection<ChessMove> allMoves = piece.pieceMoves(gameBoard, startPosition);
+        Collection<ChessMove> validMoves = new ArrayList<>();
+        for (ChessMove move: allMoves){
+            ChessGame gameCopy = this;
+            try {
+                gameCopy.makeMove(move);
+            }
+            catch (Exception e){
+                continue;
+            }
+            if (gameCopy.isInCheck(TeamColor.WHITE)) continue;
+            if (gameCopy.isInCheckmate(TeamColor.WHITE)) continue;
+
+            validMoves.add(move);
+        }
+        return validMoves;
     }
 
     /**
@@ -56,7 +78,7 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        gameBoard.resetBoard();
     }
 
     /**
