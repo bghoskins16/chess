@@ -15,8 +15,11 @@ public class ChessGame {
     TeamColor teamTurn;
     ChessBoard gameBoard;
 
-    public ChessGame() {
 
+    public ChessGame() {
+        gameBoard = new ChessBoard();
+        gameBoard.resetBoard();
+        teamTurn = TeamColor.WHITE;
     }
 
     /**
@@ -65,7 +68,7 @@ public class ChessGame {
             }
 
             // Don't add to if it makes the team become in check
-            if (gameCopy.isInCheck(TeamColor.WHITE)) continue;
+            if (gameCopy.isInCheck(piece.getTeamColor())) continue;
             // Otherwise add it to the valid list
             validMoves.add(move);
         }
@@ -79,6 +82,7 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        //TODO: Add invalid move handling
         if (move.getPromotionPiece() == null) {
             gameBoard.addPiece(move.getEndPosition(), gameBoard.getPiece(move.getStartPosition()));
         }
@@ -97,7 +101,20 @@ public class ChessGame {
     public boolean isInCheck(TeamColor teamColor) {
         // Figure out where the king is
         // TODO: Figure this part out
-        ChessPosition kingPos = new ChessPosition(0,0);
+        ChessPosition kingPos = null;
+        for (int i = 1; i <= 8 - 2; i++) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPosition pos = new ChessPosition(i, j);
+                ChessPiece piece = gameBoard.getPiece(pos);
+                if (piece == null) continue;
+                if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == teamColor){
+                    kingPos = pos;
+                }
+            }
+        }
+        if (kingPos == null){
+            return false;
+        }
 
         //Loop through whole board and see if any move are in the kings spot
         for (int i = 1; i <= 8 - 2; i++){
@@ -134,7 +151,7 @@ public class ChessGame {
             return false;
         }
 
-        for (int i = 1; i <= 8 - 2; i++) {
+        for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 ChessPosition pos = new ChessPosition(i, j);
                 ChessPiece piece = gameBoard.getPiece(pos);
@@ -165,7 +182,7 @@ public class ChessGame {
             return false;
         }
 
-        for (int i = 1; i <= 8 - 2; i++) {
+        for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 ChessPosition pos = new ChessPosition(i, j);
                 ChessPiece piece = gameBoard.getPiece(pos);
