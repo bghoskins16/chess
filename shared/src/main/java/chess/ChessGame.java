@@ -63,6 +63,8 @@ public class ChessGame {
             catch (Exception e){
                 continue;
             }
+
+            // Don't add to if it makes the team become in check
             if (gameCopy.isInCheck(TeamColor.WHITE)) continue;
             if (gameCopy.isInCheckmate(TeamColor.WHITE)) continue;
 
@@ -94,7 +96,31 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        // Figure out where the king is
+        // TODO: Figure this part out
+        ChessPosition kingPos = new ChessPosition(0,0);
+
+        //Loop through whole board and see if any move are in the kings spot
+        for (int i = 1; i <= 8 - 2; i++){
+            for (int j = 1; j <= 8; j++) {
+                ChessPosition pos = new ChessPosition(i,j);
+                ChessPiece piece = gameBoard.getPiece(pos);
+
+                // Move to next piece if ths piece is empty of same team
+                if (piece == null || piece.getTeamColor() == teamColor) continue;
+
+                // Loo through all move and look for the kings position. If found return true.
+                Collection<ChessMove> moves = piece.pieceMoves(gameBoard, pos);
+                for (ChessMove move: moves){
+                    if (move.getEndPosition() == kingPos) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // If it made it here then king is not in check, return false
+        return false;
     }
 
     /**
