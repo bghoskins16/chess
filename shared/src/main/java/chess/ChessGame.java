@@ -102,13 +102,14 @@ public class ChessGame {
         // Figure out where the king is
         // TODO: Figure this part out
         ChessPosition kingPos = null;
-        for (int i = 1; i <= 8 - 2; i++) {
+        FindKing: for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 ChessPosition pos = new ChessPosition(i, j);
                 ChessPiece piece = gameBoard.getPiece(pos);
                 if (piece == null) continue;
                 if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == teamColor){
                     kingPos = pos;
+                    break FindKing;
                 }
             }
         }
@@ -117,7 +118,7 @@ public class ChessGame {
         }
 
         //Loop through whole board and see if any move are in the kings spot
-        for (int i = 1; i <= 8 - 2; i++){
+        for (int i = 1; i <= 8; i++){
             for (int j = 1; j <= 8; j++) {
                 ChessPosition pos = new ChessPosition(i,j);
                 ChessPiece piece = gameBoard.getPiece(pos);
@@ -128,7 +129,7 @@ public class ChessGame {
                 // Loop through all move and look for the kings position. If found return true.
                 Collection<ChessMove> moves = piece.pieceMoves(gameBoard, pos);
                 for (ChessMove move: moves){
-                    if (move.getEndPosition() == kingPos) {
+                    if (move.getEndPosition().equals(kingPos)) {
                         return true;
                     }
                 }
