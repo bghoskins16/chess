@@ -10,7 +10,7 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 
-public class ChessBoard {
+public class ChessBoard implements Cloneable{
 
     private static final int BOARD_SIZE = 8;
 
@@ -91,5 +91,12 @@ public class ChessBoard {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(board);
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        ChessBoard newBoard = (ChessBoard) super.clone();
+        newBoard.board = board.clone();
+        return newBoard;
     }
 }
