@@ -10,7 +10,7 @@ import java.util.LinkedList;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessGame {
+public class ChessGame implements Cloneable{
 
     TeamColor teamTurn;
     ChessBoard gameBoard;
@@ -218,5 +218,13 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return gameBoard;
+    }
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        ChessGame game = (ChessGame) super.clone();
+        game.setBoard((ChessBoard) getBoard().clone());
+        game.setTeamTurn(getTeamTurn());
+        return game;
     }
 }
