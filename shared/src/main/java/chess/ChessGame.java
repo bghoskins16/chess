@@ -59,16 +59,16 @@ public class ChessGame implements Cloneable{
         Collection<ChessMove> allMoves = piece.pieceMoves(gameBoard, startPosition);
         Collection<ChessMove> validMoves = new ArrayList<>();
         for (ChessMove move: allMoves){
-            ChessGame gameCopy = this;
             try {
+                ChessGame gameCopy = (ChessGame) clone();
                 gameCopy.makeMove(move);
+                // Don't add to if it makes the team become in check
+                if (gameCopy.isInCheck(piece.getTeamColor())) continue;
             }
             catch (Exception e){
                 continue;
             }
 
-            // Don't add to if it makes the team become in check
-            if (gameCopy.isInCheck(piece.getTeamColor())) continue;
             // Otherwise add it to the valid list
             validMoves.add(move);
         }
@@ -90,6 +90,13 @@ public class ChessGame implements Cloneable{
             gameBoard.addPiece(move.getEndPosition(), new ChessPiece(gameBoard.getPiece(move.getStartPosition()).getTeamColor(), move.getPromotionPiece()));
         }
         gameBoard.addPiece(move.getStartPosition(), null);
+
+        if (teamTurn == TeamColor.WHITE){
+            teamTurn = TeamColor.BLACK;
+        }
+        else {
+            teamTurn = TeamColor.WHITE;
+        }
     }
 
     /**

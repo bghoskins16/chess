@@ -97,6 +97,9 @@ public class ChessBoard implements Cloneable{
     protected Object clone() throws CloneNotSupportedException {
         ChessBoard newBoard = (ChessBoard) super.clone();
         newBoard.board = board.clone();
+        for (int i = 0; i < 8; i++){
+            newBoard.board[i] = board[i].clone();
+        }
         return newBoard;
     }
 }
