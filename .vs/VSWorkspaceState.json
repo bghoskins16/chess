@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\shared",
+    "\\shared\\src",
+    "\\shared\\src\\main",
+    "\\shared\\src\\main\\java",
+    "\\shared\\src\\main\\java\\chess"
+  ],
+  "SelectedNode": "\\shared\\src\\main\\java\\chess\\BishopMoveCalculator.java",
+  "PreviewInSolutionExplorer": false
+}
