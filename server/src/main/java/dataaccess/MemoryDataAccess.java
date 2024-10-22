@@ -14,6 +14,8 @@ public class MemoryDataAccess implements DataAccess{
     final private Collection<AuthData> authTokens = new ArrayList<>();
     final private Collection<GameData> games = new ArrayList<>();
 
+    int nextGameID = 0;
+
     //clear: A method for clearing all data from the database. This is used during testing.
     public void clear(){
         users.clear();
@@ -37,9 +39,10 @@ public class MemoryDataAccess implements DataAccess{
     }
 
     //createGame: Create a new game.
-    public int createGame(String authToken, String gameName){
-        // add to here
-        return 15;
+    public int createGame(String gameName){
+        nextGameID++;
+        games.add(new GameData(nextGameID, "", "", gameName, new ChessGame()));
+        return nextGameID;
     }
 
     //getGame: Retrieve a specified game with the given game ID.
@@ -77,7 +80,7 @@ public class MemoryDataAccess implements DataAccess{
     }
 
     //deleteAuth: Delete an authorization so that it is no longer valid.
-    public void deleteAuth(String authToken){
-        // ADD HERE
+    public void deleteAuth(AuthData authToken){
+        authTokens.remove(authToken);
     }
 }

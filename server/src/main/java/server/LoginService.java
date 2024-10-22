@@ -7,10 +7,8 @@ import dataaccess.MemoryDataAccess;
 import model.UserData;
 
 public class LoginService extends Services{
-    DataAccess database;
 
     public LoginService() {
-        database = new MemoryDataAccess();
     }
 
     public AuthData login(LoginRequest loginReq){

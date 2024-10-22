@@ -17,7 +17,7 @@ public interface DataAccess {
     public UserData getUser(String username);
 
     //createGame: Create a new game.
-    public int createGame(String authToken, String gameName);
+    public int createGame(String gameName);
 
     //getGame: Retrieve a specified game with the given game ID.
     public GameData getGame(int gameID);
@@ -34,5 +34,5 @@ public interface DataAccess {
     public AuthData getAuth(String authToken);
 
     //deleteAuth: Delete an authorization so that it is no longer valid.
-    public void deleteAuth(String authToken);
+    public void deleteAuth(AuthData authToken);
 }
