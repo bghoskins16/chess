@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessGame;
 import model.UserData;
 import model.AuthData;
 import model.GameData;
@@ -36,10 +37,21 @@ public class MemoryDataAccess implements DataAccess{
     }
 
     //createGame: Create a new game.
+    public int createGame(String authToken, String gameName){
+        // add to here
+        return 15;
+    }
 
     //getGame: Retrieve a specified game with the given game ID.
+    public GameData getGame(int gameID){
+        // Add more here
+        return new GameData(gameID, "wp", "bp", "name", new ChessGame());
+    }
 
     //listGames: Retrieve all games.
+    public Collection<GameData> listGames(){
+        return games;
+    }
 
     //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
 
@@ -61,4 +73,7 @@ public class MemoryDataAccess implements DataAccess{
     }
 
     //deleteAuth: Delete an authorization so that it is no longer valid.
+    public void deleteAuth(String authToken){
+        // ADD HERE
+    }
 }
