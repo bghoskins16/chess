@@ -2,6 +2,7 @@ package dataaccess;
 
 import model.UserData;
 import model.AuthData;
+import model.GameData;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,8 +11,14 @@ import java.util.UUID;
 public class MemoryDataAccess implements DataAccess{
     final private Collection<UserData> users = new ArrayList<>();
     final private Collection<AuthData> authTokens = new ArrayList<>();
+    final private Collection<GameData> games = new ArrayList<>();
 
     //clear: A method for clearing all data from the database. This is used during testing.
+    public void clear(){
+        users.clear();
+        authTokens.clear();
+        games.clear();
+    }
 
     //createUser: Create a new user.
     public void createUser(UserData newUser){
