@@ -1,11 +1,10 @@
 package dataaccess;
 
-import server.AuthData;
-import server.UserData;
+import model.UserData;
+import model.AuthData;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.UUID;
 
 public class MemoryDataAccess implements DataAccess{

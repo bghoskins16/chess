@@ -1,7 +1,10 @@
 package server;
 
+import model.AuthData;
+
 import dataaccess.DataAccess;
 import dataaccess.MemoryDataAccess;
+import model.UserData;
 
 public class LoginService extends Services{
     DataAccess database;

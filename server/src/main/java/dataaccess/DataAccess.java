@@ -1,6 +1,6 @@
 package dataaccess;
-import server.AuthData;
-import server.UserData;
+import model.UserData;
+import model.AuthData;
 
 public interface DataAccess {
 
