@@ -44,8 +44,12 @@ public class MemoryDataAccess implements DataAccess{
 
     //getGame: Retrieve a specified game with the given game ID.
     public GameData getGame(int gameID){
-        // Add more here
-        return new GameData(gameID, "wp", "bp", "name", new ChessGame());
+        for (GameData game : games) {
+            if (game.gameID() == gameID){
+                return game;
+            }
+        }
+        return null;
     }
 
     //listGames: Retrieve all games.
