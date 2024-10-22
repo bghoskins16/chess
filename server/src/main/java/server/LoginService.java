@@ -1,14 +1,16 @@
 package server;
 
+import dataaccess.DataAccess;
+import dataaccess.MemoryDataAccess;
+
 public class LoginService extends Services{
+    DataAccess database;
 
     public LoginService() {
+        database = new MemoryDataAccess();
     }
 
-    void login(LoginRequest loginReq){
-        //Do something
-        int n = 0;
-        n++;
-        loginReq.toString();
+    public void login(LoginRequest loginReq){
+        UserData data = database.getUser(loginReq.username());
     }
 }

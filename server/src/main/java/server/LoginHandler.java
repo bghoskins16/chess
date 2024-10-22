@@ -10,7 +10,7 @@ public class LoginHandler extends Handler {
         LoginRequest loginReq = new LoginRequest(username, password);
 
         // Run the login service using the login request
-       Services loginSer = new LoginService();
+       LoginService loginSer = new LoginService();
        loginSer.login(loginReq);
 
         // return json
