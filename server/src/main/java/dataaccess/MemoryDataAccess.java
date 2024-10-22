@@ -1,13 +1,16 @@
 package dataaccess;
 
-import server.LoginResult;
+import server.AuthData;
 import server.UserData;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.UUID;
 
 public class MemoryDataAccess implements DataAccess{
     final private Collection<UserData> users = new ArrayList<>();
+    final private Collection<AuthData> authTokens = new ArrayList<>();
 
     //clear: A method for clearing all data from the database. This is used during testing.
 
@@ -35,11 +38,21 @@ public class MemoryDataAccess implements DataAccess{
     //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
 
     //createAuth: Create a new authorization.
-    public LoginResult createAuth(String username){
-        return new LoginResult(username, "1234");
+    public AuthData createAuth(String username){
+        AuthData newAuth = new AuthData(username,UUID.randomUUID().toString());
+        authTokens.add(newAuth);
+        return newAuth;
     }
 
     //getAuth: Retrieve an authorization given an authToken.
+    public AuthData getAuth(String authToken){
+        for (AuthData auth : authTokens) {
+            if (auth.authToken().equals(authToken)){
+                return auth;
+            }
+        }
+        return null;
+    }
 
     //deleteAuth: Delete an authorization so that it is no longer valid.
 }

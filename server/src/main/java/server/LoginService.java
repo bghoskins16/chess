@@ -10,9 +10,8 @@ public class LoginService extends Services{
         database = new MemoryDataAccess();
     }
 
-    public LoginResult login(LoginRequest loginReq){
+    public AuthData login(LoginRequest loginReq){
         UserData data = database.getUser(loginReq.username());
-        LoginResult result = database.createAuth(loginReq.username());
-        return result;
+        return database.createAuth(loginReq.username());
     }
 }

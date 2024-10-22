@@ -1,5 +1,5 @@
 package dataaccess;
-import server.LoginResult;
+import server.AuthData;
 import server.UserData;
 
 public interface DataAccess {
@@ -21,9 +21,10 @@ public interface DataAccess {
     //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
 
     //createAuth: Create a new authorization.
-    public LoginResult createAuth(String username);
+    public AuthData createAuth(String username);
 
     //getAuth: Retrieve an authorization given an authToken.
+    public AuthData getAuth(String authToken);
 
     //deleteAuth: Delete an authorization so that it is no longer valid.
 
