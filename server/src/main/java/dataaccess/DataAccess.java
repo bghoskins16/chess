@@ -1,4 +1,5 @@
 package dataaccess;
+import server.LoginResult;
 import server.UserData;
 
 public interface DataAccess {
@@ -9,7 +10,7 @@ public interface DataAccess {
     public void createUser(UserData newUser);
 
     //getUser: Retrieve a user with the given username.
-    public UserData getUser(String Username);
+    public UserData getUser(String username);
 
     //createGame: Create a new game.
 
@@ -20,6 +21,7 @@ public interface DataAccess {
     //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
 
     //createAuth: Create a new authorization.
+    public LoginResult createAuth(String username);
 
     //getAuth: Retrieve an authorization given an authToken.
 

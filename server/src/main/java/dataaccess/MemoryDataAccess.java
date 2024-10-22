@@ -1,5 +1,6 @@
 package dataaccess;
 
+import server.LoginResult;
 import server.UserData;
 
 import java.util.ArrayList;
@@ -34,6 +35,9 @@ public class MemoryDataAccess implements DataAccess{
     //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
 
     //createAuth: Create a new authorization.
+    public LoginResult createAuth(String username){
+        return new LoginResult(username, "1234");
+    }
 
     //getAuth: Retrieve an authorization given an authToken.
 
