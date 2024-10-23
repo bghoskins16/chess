@@ -10,10 +10,10 @@ public class RegisterService extends Services{
     public RegisterService() {
     }
 
-    public AuthData register(RegisterRequest RegisterReq){
-        if (database.getUser(RegisterReq.username()) == null){
-            database.createUser(new UserData(RegisterReq.username(), RegisterReq.password(), RegisterReq.email()));
-            return database.createAuth(RegisterReq.username());
+    public AuthData register(RegisterRequest r){
+        if (database.getUser(r.username()) == null){
+            database.createUser(new UserData(r.username(), r.password(), r.email()));
+            return database.createAuth(r.username());
         }
         return null;
     }
