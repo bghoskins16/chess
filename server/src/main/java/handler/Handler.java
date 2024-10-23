@@ -1,4 +1,6 @@
-package server.handler;
+package handler;
+
+import spark.*;
 
 public class Handler {
 

@@ -1,8 +1,8 @@
-package server.service;
+package service;
 
 import model.AuthData;
 import model.GameData;
-import server.request.JoinGameRequest;
+import request.JoinGameRequest;
 
 public class JoinGameService extends Services {
 

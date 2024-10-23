@@ -1,4 +1,4 @@
-package server.service;
+package service;
 
 import dataaccess.DataAccess;
 import dataaccess.MemoryDataAccess;

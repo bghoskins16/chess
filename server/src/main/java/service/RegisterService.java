@@ -1,8 +1,8 @@
-package server.service;
+package service;
 
 import model.AuthData;
 import model.UserData;
-import server.request.RegisterRequest;
+import request.RegisterRequest;
 
 public class RegisterService extends Services {
 

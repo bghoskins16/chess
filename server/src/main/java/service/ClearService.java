@@ -1,4 +1,4 @@
-package server.service;
+package service;
 
 public class ClearService extends Services {
 

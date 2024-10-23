@@ -1,7 +1,7 @@
-package server.service;
+package service;
 
 import model.AuthData;
-import server.request.LogoutRequest;
+import request.LogoutRequest;
 
 public class LogoutService extends Services {
 

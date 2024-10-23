@@ -1,15 +1,17 @@
-package server.handler;
+package handler;
 
 import model.AuthData;
-import server.request.RegisterRequest;
-import server.service.RegisterService;
+import request.RegisterRequest;
+import service.RegisterService;
+import spark.*;
 
 public class RegisterHandler extends Handler {
 
     public RegisterHandler() {
     }
 
-    public String doHandle(String username, String password, String email){
+    public static String doHandle(Request req, Response res){
+        String username= ""; String password = ""; String email = "";
         //create a register request
         RegisterRequest RegisterReq = new RegisterRequest(username, password, email);
 

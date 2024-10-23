@@ -1,9 +1,9 @@
-package server.service;
+package service;
 
 import model.AuthData;
 
 import model.UserData;
-import server.request.LoginRequest;
+import request.LoginRequest;
 
 public class LoginService extends Services {
 

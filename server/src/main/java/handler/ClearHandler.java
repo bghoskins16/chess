@@ -1,13 +1,15 @@
-package server.handler;
+package handler;
 
-import server.service.ClearService;
+import service.ClearService;
+import spark.Request;
+import spark.Response;
 
 public class ClearHandler extends Handler {
 
     public ClearHandler() {
     }
 
-    public String doHandle(){
+    public static String doHandle(Request req, Response res){
         ClearService clearSer = new ClearService();
         clearSer.clear();
         return "{}";
