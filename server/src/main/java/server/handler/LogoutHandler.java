@@ -1,6 +1,9 @@
-package server;
+package server.handler;
 
-public class LogoutHandler extends Handler{
+import server.request.LogoutRequest;
+import server.service.LogoutService;
+
+public class LogoutHandler extends Handler {
 
     public LogoutHandler() {
     }

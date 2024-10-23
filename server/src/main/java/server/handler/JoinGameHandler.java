@@ -1,8 +1,9 @@
-package server;
+package server.handler;
 
-import model.AuthData;
+import server.request.JoinGameRequest;
+import server.service.JoinGameService;
 
-public class JoinGameHandler extends Handler{
+public class JoinGameHandler extends Handler {
 
     public JoinGameHandler() {
     }

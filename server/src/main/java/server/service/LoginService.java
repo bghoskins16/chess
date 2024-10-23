@@ -1,12 +1,11 @@
-package server;
+package server.service;
 
 import model.AuthData;
 
-import dataaccess.DataAccess;
-import dataaccess.MemoryDataAccess;
 import model.UserData;
+import server.request.LoginRequest;
 
-public class LoginService extends Services{
+public class LoginService extends Services {
 
     public LoginService() {
     }

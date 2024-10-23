@@ -1,6 +1,8 @@
-package server;
+package server.handler;
 
-public class ClearHandler extends Handler{
+import server.service.ClearService;
+
+public class ClearHandler extends Handler {
 
     public ClearHandler() {
     }

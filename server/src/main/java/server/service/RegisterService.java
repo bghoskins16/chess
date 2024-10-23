@@ -1,11 +1,10 @@
-package server;
+package server.service;
 
-import dataaccess.DataAccess;
-import dataaccess.MemoryDataAccess;
 import model.AuthData;
 import model.UserData;
+import server.request.RegisterRequest;
 
-public class RegisterService extends Services{
+public class RegisterService extends Services {
 
     public RegisterService() {
     }

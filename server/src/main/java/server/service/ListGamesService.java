@@ -1,12 +1,12 @@
-package server;
+package server.service;
 
-import chess.ChessGame;
 import model.AuthData;
 import model.GameData;
+import server.request.ListGamesRequest;
 
 import java.util.Collection;
 
-public class ListGamesService extends Services{
+public class ListGamesService extends Services {
 
     public ListGamesService() {
     }

@@ -1,8 +1,9 @@
-package server;
+package server.service;
 
 import model.AuthData;
+import server.request.CreateGameRequest;
 
-public class CreateGameService extends Services{
+public class CreateGameService extends Services {
 
     public CreateGameService() {
     }

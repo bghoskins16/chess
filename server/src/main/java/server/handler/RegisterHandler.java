@@ -1,8 +1,10 @@
-package server;
+package server.handler;
 
 import model.AuthData;
+import server.request.RegisterRequest;
+import server.service.RegisterService;
 
-public class RegisterHandler extends Handler{
+public class RegisterHandler extends Handler {
 
     public RegisterHandler() {
     }

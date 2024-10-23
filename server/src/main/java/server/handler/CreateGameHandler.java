@@ -1,6 +1,9 @@
-package server;
+package server.handler;
 
-public class CreateGameHandler extends Handler{
+import server.request.CreateGameRequest;
+import server.service.CreateGameService;
+
+public class CreateGameHandler extends Handler {
 
     public CreateGameHandler() {
     }

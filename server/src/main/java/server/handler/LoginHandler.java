@@ -1,6 +1,8 @@
-package server;
+package server.handler;
 
 import model.AuthData;
+import server.request.LoginRequest;
+import server.service.LoginService;
 
 public class LoginHandler extends Handler {
 

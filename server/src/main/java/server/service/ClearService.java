@@ -1,8 +1,6 @@
-package server;
+package server.service;
 
-import model.AuthData;
-
-public class ClearService extends Services{
+public class ClearService extends Services {
 
     public ClearService() {
     }

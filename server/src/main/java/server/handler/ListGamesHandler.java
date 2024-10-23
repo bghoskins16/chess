@@ -1,11 +1,12 @@
-package server;
+package server.handler;
 
-import chess.ChessGame;
 import model.GameData;
+import server.request.ListGamesRequest;
+import server.service.ListGamesService;
 
 import java.util.Collection;
 
-public class ListGamesHandler extends Handler{
+public class ListGamesHandler extends Handler {
 
     public ListGamesHandler() {
     }
