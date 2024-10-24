@@ -2,7 +2,7 @@ package handler;
 
 import model.GameData;
 import request.ListGamesRequest;
-import service.ListGamesService;
+import service.GameService;
 import spark.Request;
 import spark.Response;
 import spark.*;
@@ -17,7 +17,7 @@ public class ListGamesHandler extends Handler {
     public static String doHandle(Request req, Response res){
         String authToken = "";
         ListGamesRequest listReq = new ListGamesRequest(authToken);
-        ListGamesService listSer = new ListGamesService();
+        GameService listSer = new GameService();
         Collection<GameData> games = listSer.listGames(listReq);
         StringBuilder retStr  = new StringBuilder("{");
         boolean addComma = false;

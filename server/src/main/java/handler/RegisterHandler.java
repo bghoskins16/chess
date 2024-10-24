@@ -1,9 +1,14 @@
 package handler;
 
 import model.AuthData;
+import request.LoginRequest;
 import request.RegisterRequest;
-import service.RegisterService;
+import response.ErrorResponse;
+import service.UserService;
+import service.UserService;
 import spark.*;
+import com.google.gson.Gson;
+import java.io.IOException;
 
 public class RegisterHandler extends Handler {
 
@@ -11,15 +16,22 @@ public class RegisterHandler extends Handler {
     }
 
     public static String doHandle(Request req, Response res){
-        String username= ""; String password = ""; String email = "";
+        var serializer = new Gson();
+        RegisterRequest registerRequest = serializer.fromJson(req.body(), RegisterRequest.class);
+
         //create a register request
-        RegisterRequest RegisterReq = new RegisterRequest(username, password, email);
+        RegisterRequest RegisterReq = new RegisterRequest(registerRequest.username(), registerRequest.password(), registerRequest.email());
 
         // Run the register service using the register request
-        RegisterService RegisterSer = new RegisterService();
-        AuthData auth = RegisterSer.register(RegisterReq);
+        UserService RegisterSer = new UserService();
+        try {
+            AuthData auth = RegisterSer.register(RegisterReq);
+            // return json
+            return serializer.toJson(auth);
 
-        // return json
-        return "{username: " + auth.username() + ", authToken: " + auth.authToken() + "}";
+        }catch (Exception e){
+            res.status(403);
+            return serializer.toJson(new ErrorResponse("Error: already taken"));
+        }
     }
 }

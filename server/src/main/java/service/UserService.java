@@ -1,22 +1,20 @@
 package service;
 
-import dataaccess.DataAccess;
 import model.AuthData;
 import model.UserData;
 import request.LoginRequest;
 import request.LogoutRequest;
 import request.RegisterRequest;
 
-public class UserService extends Services {
+public class UserService extends Service {
 
-    public UserService(DataAccess dataAccess) {
-        super(dataAccess);
+    public UserService() {
     }
 
     public AuthData register(RegisterRequest r) throws ServiceException{
-        if (database.getUser(r.username()) == null){
-            database.createUser(new UserData(r.username(), r.password(), r.email()));
-            return database.createAuth(r.username());
+        if (userDatabase.getUser(r.username()) == null){
+            userDatabase.createUser(new UserData(r.username(), r.password(), r.email()));
+            return authDatabase.createAuth(r.username());
         }
         else{
             System.out.println("reregister");
@@ -25,14 +23,14 @@ public class UserService extends Services {
     }
 
     public AuthData login(LoginRequest loginReq){
-        UserData data = database.getUser(loginReq.username());
-        return database.createAuth(loginReq.username());
+        UserData data = userDatabase.getUser(loginReq.username());
+        return authDatabase.createAuth(loginReq.username());
     }
 
     public void logout(LogoutRequest logoutReq){
-        AuthData auth = database.getAuth(logoutReq.authToken());
+        AuthData auth = authDatabase.getAuth(logoutReq.authToken());
         if (auth != null){
-            database.deleteAuth(auth);
+            authDatabase.deleteAuth(auth);
         }
     }
 }

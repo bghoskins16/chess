@@ -10,9 +10,9 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class MemoryDataAccess implements DataAccess{
-    final private Collection<UserData> users = new ArrayList<>();
-    final private Collection<AuthData> authTokens = new ArrayList<>();
-    final private Collection<GameData> games = new ArrayList<>();
+    static final private Collection<UserData> users = new ArrayList<>();
+    static final private Collection<AuthData> authTokens = new ArrayList<>();
+    static final private Collection<GameData> games = new ArrayList<>();
 
     int nextGameID = 0;
 

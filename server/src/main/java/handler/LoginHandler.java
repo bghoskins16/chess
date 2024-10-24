@@ -2,7 +2,7 @@ package handler;
 
 import model.AuthData;
 import request.LoginRequest;
-import service.LoginService;
+import service.UserService;
 import spark.Request;
 import spark.Response;
 import com.google.gson.Gson;
@@ -13,16 +13,18 @@ public class LoginHandler extends Handler {
     }
 
     public static String doHandle(Request req, Response res){
-        LoginRequest loginRequest = new Gson().fromJson(req.body(), LoginRequest.class);
+        var serializer = new Gson();
+        LoginRequest loginRequest = serializer.fromJson(req.body(), LoginRequest.class);
 
         //create a login request
         LoginRequest loginReq = new LoginRequest(loginRequest.username(), loginRequest.password());
 
         // Run the login service using the login request
-       LoginService loginSer = new LoginService();
+       UserService loginSer = new UserService();
        AuthData auth = loginSer.login(loginReq);
 
         // return json
-        return "{\"username\": \"" + auth.username() + "\", \"authToken\": \"" + auth.authToken() + "\"}";
+        //return "{\"username\": \"" + auth.username() + "\", \"authToken\": \"" + auth.authToken() + "\"}";
+        return serializer.toJson(auth);
     }
 }

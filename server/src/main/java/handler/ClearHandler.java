@@ -1,8 +1,8 @@
 package handler;
 
-import service.ClearService;
 import spark.Request;
 import spark.Response;
+import service.Service;
 
 public class ClearHandler extends Handler {
 
@@ -10,7 +10,7 @@ public class ClearHandler extends Handler {
     }
 
     public static String doHandle(Request req, Response res){
-        ClearService clearSer = new ClearService();
+        service.Service clearSer = new Service();
         clearSer.clear();
         return "{}";
     }

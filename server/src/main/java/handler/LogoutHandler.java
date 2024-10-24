@@ -1,7 +1,7 @@
 package handler;
 
 import request.LogoutRequest;
-import service.LogoutService;
+import service.UserService;
 import spark.Request;
 import spark.Response;
 import spark.*;
@@ -15,7 +15,7 @@ public class LogoutHandler extends Handler {
         String authToken = "";
         LogoutRequest logoutReq = new LogoutRequest(authToken);
 
-        LogoutService logoutSer = new LogoutService();
+        UserService logoutSer = new UserService();
 
         logoutSer.logout(logoutReq);
 

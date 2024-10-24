@@ -5,7 +5,7 @@ import model.AuthData;
 
 import java.util.Collection;
 
-public interface DataAccess {
+public interface DataAccess{
 
     //clear: A method for clearing all data from the database. This is used during testing.
     public void clear();
