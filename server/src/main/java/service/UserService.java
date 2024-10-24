@@ -11,14 +11,14 @@ public class UserService extends Service {
     public UserService() {
     }
 
-    public AuthData register(RegisterRequest r) throws ServiceException{
+    public AuthData register(RegisterRequest r) throws Exception{
         if (userDatabase.getUser(r.username()) == null){
             userDatabase.createUser(new UserData(r.username(), r.password(), r.email()));
             return authDatabase.createAuth(r.username());
         }
         else{
             System.out.println("reregister");
-            throw new ServiceException("Error: already taken");
+            throw new Exception("Error: already taken");
         }
     }
 

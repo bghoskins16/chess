@@ -26,7 +26,7 @@ public class RegisterServiceTest {
         RegisterRequest user = new RegisterRequest("user1" , "pass1", "mail1");
         try {
             service.register(user);
-        } catch (ServiceException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
