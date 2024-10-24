@@ -45,7 +45,6 @@ public class UserHandler extends Handler{
     }
 
     public static String logoutHandler(Request req, Response res){
-        System.out.println(req.headers("authorization"));
         LogoutRequest logoutReq = new LogoutRequest(req.headers("authorization"));
         UserService logoutSer = new UserService();
 

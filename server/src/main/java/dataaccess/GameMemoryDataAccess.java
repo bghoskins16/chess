@@ -1,6 +1,7 @@
 package dataaccess;
 
 import chess.ChessGame;
+import handler.GameHandler;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
@@ -12,7 +13,7 @@ import java.util.UUID;
 public class GameMemoryDataAccess implements GameDataAccess{
     final private Collection<GameData> games = new ArrayList<>();
 
-    int nextGameID = 0;
+    int nextGameID = 1234;
 
     //clear: A method for clearing all data from the database. This is used during testing.
     public void clear(){
@@ -22,7 +23,7 @@ public class GameMemoryDataAccess implements GameDataAccess{
     //createGame: Create a new game.
     public int createGame(String gameName){
         nextGameID++;
-        games.add(new GameData(nextGameID, "", "", gameName, new ChessGame()));
+        games.add(new GameData(nextGameID, null, null, gameName, new ChessGame()));
         return nextGameID;
     }
 
@@ -42,5 +43,8 @@ public class GameMemoryDataAccess implements GameDataAccess{
     }
 
     //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
-
+    public void updateGame(GameData oldGameData, GameData newGameData){
+        games.remove(oldGameData);
+        games.add(newGameData);
+    }
 }

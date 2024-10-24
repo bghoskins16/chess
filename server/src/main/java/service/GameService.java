@@ -1,10 +1,12 @@
 package service;
 
+import chess.ChessGame;
 import model.AuthData;
 import model.GameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.ListGamesRequest;
+import server.ResponseException;
 
 import java.util.Collection;
 
@@ -13,30 +15,39 @@ public class GameService extends Service {
     public GameService() {
     }
 
-    public int createGame(CreateGameRequest gameReq){
-        AuthData auth = authDatabase.getAuth(gameReq.authToken());
-        if (auth != null){
-            return gameDatabase.createGame(gameReq.gameName());
-        }
-        return -1;
+    public int createGame(CreateGameRequest gameReq) throws ResponseException {
+        authenticate(gameReq.authToken());
+        return gameDatabase.createGame(gameReq.gameName());
     }
 
-    public Collection<GameData> listGames(ListGamesRequest listReq){
-        AuthData auth = authDatabase.getAuth(listReq.authToken());
-        if (auth != null) {
-            return gameDatabase.listGames();
-        }
-        return null;
+    public Collection<GameData> listGames(ListGamesRequest listReq) throws ResponseException{
+        authenticate(listReq.authToken());
+        return gameDatabase.listGames();
     }
 
-    public void joinGame(JoinGameRequest joinReq){
-        AuthData auth = authDatabase.getAuth(joinReq.authToken());
-        if (auth != null) {
-            GameData game = gameDatabase.getGame(joinReq.gameID());
-            if (game != null){
-                // Check color is valid and that the color is open
-                //database.editGame ..
+    public void joinGame(JoinGameRequest joinReq) throws ResponseException{
+        AuthData auth = authenticate(joinReq.authToken());
+        GameData game = gameDatabase.getGame(joinReq.gameID());
+        GameData newGame;
+        if (game == null) {
+            throw new ResponseException(400, "Error: unauthorized");
+        }
+        if (joinReq.playerColor() == ChessGame.TeamColor.WHITE){
+            if (game.whiteUsername() != null){
+                throw new ResponseException(403, "Error: already taken");
             }
+            newGame = new GameData(game.gameID(), auth.username(), game.blackUsername(), game.gameName(), game.game());
         }
+        else if (joinReq.playerColor() == ChessGame.TeamColor.BLACK){
+            if (game.blackUsername() != null){
+                throw new ResponseException(403, "Error: already taken");
+            }
+            newGame = new GameData(game.gameID(), game.whiteUsername(), auth.username(), game.gameName(), game.game());
+        }
+        else {
+            throw new ResponseException(400, "Error: bad request" );
+        }
+
+        gameDatabase.updateGame(game, newGame);
     }
 }

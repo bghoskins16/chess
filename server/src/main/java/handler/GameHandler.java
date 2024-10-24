@@ -4,6 +4,11 @@ import model.GameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.ListGamesRequest;
+import request.LoginRequest;
+import response.CreateGameResponse;
+import response.ErrorResponse;
+import response.ListResponse;
+import server.ResponseException;
 import service.GameService;
 import spark.Request;
 import spark.Response;
@@ -15,38 +20,61 @@ public class GameHandler extends Handler {
     public GameHandler() {
     }
 
-    public static String createGameHandler(Request req, Response res){
-        String authToken = ""; String gameName = "";
-        CreateGameRequest gameReq = new CreateGameRequest(authToken, gameName);
+    public static String createGameHandler(Request req, Response res) {
+        CreateGameRequest gameReq = serializer.fromJson(req.body(), CreateGameRequest.class);
+        gameReq = new CreateGameRequest( req.headers("authorization"), gameReq.gameName());
         GameService gameSer = new GameService();
-        int gameID = gameSer.createGame(gameReq);
-        return "{gameID: " + gameID + "}";
+        try {
+            int gameID = gameSer.createGame(gameReq);
+            return serializer.toJson(new CreateGameResponse(gameID));
+        } catch (ResponseException ex) {
+            res.status(ex.StatusCode());
+            return serializer.toJson(new ErrorResponse(ex.getMessage()));
+        }
     }
 
     public static String joinGameHandler(Request req, Response res){
-        String authToken=""; String color=""; int gameID = 0;
-        JoinGameRequest joinReq = new JoinGameRequest(authToken, color, gameID);
+        JoinGameRequest joinReq = serializer.fromJson(req.body(), JoinGameRequest.class);
+        joinReq = new JoinGameRequest(req.headers("authorization"), joinReq.playerColor(), joinReq.gameID());
         GameService joinSer = new GameService();
-        joinSer.joinGame(joinReq);
-        return "{}";
+        try {
+            joinSer.joinGame(joinReq);
+            return "{}";
+        } catch (ResponseException ex) {
+            res.status(ex.StatusCode());
+            return serializer.toJson(new ErrorResponse(ex.getMessage()));
+        }
     }
 
     public static String listGamesHandler(Request req, Response res){
-        String authToken = "";
-        ListGamesRequest listReq = new ListGamesRequest(authToken);
+        ListGamesRequest listReq = new ListGamesRequest(req.headers("authorization"));
         GameService listSer = new GameService();
-        Collection<GameData> games = listSer.listGames(listReq);
-        StringBuilder retStr  = new StringBuilder("{");
-        boolean addComma = false;
-        for (GameData game: games){
-            if (addComma) {
-                retStr.append(", ");
-            }
-            addComma = true;
+        try {
+            Collection<GameData> games = listSer.listGames(listReq);
+            return serializer.toJson(new ListResponse(games));
 
-            retStr.append(game.toString());
+//            StringBuilder retStr = new StringBuilder("{");
+//            if (games != null) {
+//                boolean addComma = false;
+//
+//                for (GameData game : games) {
+//                    if (addComma) {
+//                        retStr.append(", ");
+//                    }
+//                    else {
+//                        retStr.append("\"games\": ");
+//                        addComma = true;
+//                    }
+//
+//                    retStr.append(serializer.toJson(game));
+//                }
+//            }
+//            retStr.append("}");      //add delete char to this
+//            //return retStr.toString();
         }
-        retStr.append("}");      //add delete char to this
-        return retStr.toString();
+        catch (ResponseException ex){
+            res.status(ex.StatusCode());
+            return serializer.toJson(new ErrorResponse(ex.getMessage()));
+        }
     }
 }
