@@ -1,16 +1,7 @@
 package service;
-import dataaccess.MemoryDataAccess;
-import dataaccess.UserDataAccess;
-import dataaccess.UserMemoryDataAccess;
-import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import request.RegisterRequest;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 public class RegisterServiceTest {
 
