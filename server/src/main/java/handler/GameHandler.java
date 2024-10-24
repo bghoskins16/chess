@@ -10,7 +10,7 @@ import spark.Response;
 
 import java.util.Collection;
 
-public class GameHandler {
+public class GameHandler extends Handler {
 
     public GameHandler() {
     }

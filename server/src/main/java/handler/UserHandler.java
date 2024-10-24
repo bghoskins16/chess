@@ -11,55 +11,52 @@ import service.UserService;
 import spark.Request;
 import spark.Response;
 
-public class UserHandler {
+public class UserHandler extends Handler{
 
     public UserHandler() {
     }
 
-    public static String loginHandler(Request req, Response res){
-        var serializer = new Gson();
-        LoginRequest loginRequest = serializer.fromJson(req.body(), LoginRequest.class);
-
-        //create a login request
-        LoginRequest loginReq = new LoginRequest(loginRequest.username(), loginRequest.password());
-
-        // Run the login service using the login request
-        UserService loginSer = new UserService();
-        AuthData auth = loginSer.login(loginReq);
-
-        // return json
-        //return "{\"username\": \"" + auth.username() + "\", \"authToken\": \"" + auth.authToken() + "\"}";
-        return serializer.toJson(auth);
-    }
-
-    public static String logoutHandler(Request req, Response res){
-        String authToken = "";
-        LogoutRequest logoutReq = new LogoutRequest(authToken);
-
-        UserService logoutSer = new UserService();
-
-        logoutSer.logout(logoutReq);
-
-        return "{}";
-    }
-
     public static String registerHandler(Request req, Response res){
-        var serializer = new Gson();
-        RegisterRequest registerRequest = serializer.fromJson(req.body(), RegisterRequest.class);
+        RegisterRequest registerReq = serializer.fromJson(req.body(), RegisterRequest.class);
 
-        //create a register request
-        RegisterRequest RegisterReq = new RegisterRequest(registerRequest.username(), registerRequest.password(), registerRequest.email());
-
-        // Run the register service using the register request
         UserService RegisterSer = new UserService();
         try {
-            AuthData auth = RegisterSer.register(RegisterReq);
-            // return json
+            AuthData auth = RegisterSer.register(registerReq);
             return serializer.toJson(auth);
 
         }catch (ResponseException ex){
             res.status(ex.StatusCode());
             return serializer.toJson(new ErrorResponse(ex.getMessage()));
         }
+    }
+
+    public static String loginHandler(Request req, Response res){
+        LoginRequest loginReq = serializer.fromJson(req.body(), LoginRequest.class);
+        UserService loginSer = new UserService();
+
+        try {
+            AuthData auth = loginSer.login(loginReq);
+            return serializer.toJson(auth);
+        }
+        catch (ResponseException ex) {
+            res.status(ex.StatusCode());
+            return serializer.toJson(new ErrorResponse(ex.getMessage()));
+        }
+    }
+
+    public static String logoutHandler(Request req, Response res){
+        System.out.println(req.headers("authorization"));
+        LogoutRequest logoutReq = new LogoutRequest(req.headers("authorization"));
+        UserService logoutSer = new UserService();
+
+        try {
+            logoutSer.logout(logoutReq);
+        }
+        catch (ResponseException ex){
+            res.status(ex.StatusCode());
+            return serializer.toJson(new ErrorResponse(ex.getMessage()));
+        }
+
+        return "{}";
     }
 }
