@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class GameMemoryDataAccess implements GameDataAccess{
-    final private Collection<GameData> games = new ArrayList<>();
+    static final private Collection<GameData> games = new ArrayList<>();
 
     int nextGameID = 1234;
 

@@ -3,7 +3,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import request.RegisterRequest;
 
-public class RegisterServiceTest {
+public class GameServiceTests {
 
     static final UserService service = new UserService();
 
@@ -14,12 +14,14 @@ public class RegisterServiceTest {
 
     @Test
     void createGame(){
-        RegisterRequest user = new RegisterRequest("user1" , "pass1", "mail1");
+        RegisterRequest userToRegister = new RegisterRequest("user1" , "pass1", "mail1");
+        RegisterRequest userRegistered;
         try {
-            service.register(user);
+            service.register(userToRegister);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
 
 //        assertEquals(1, pets.size());
 //        assertTrue(pets.contains(pet));

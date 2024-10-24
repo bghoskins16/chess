@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class AuthMemoryDataAccess implements AuthDataAccess{
-    final private Collection<AuthData> authTokens = new ArrayList<>();
+    static final private Collection<AuthData> authTokens = new ArrayList<>();
 
     int nextGameID = 0;
 
@@ -39,5 +39,9 @@ public class AuthMemoryDataAccess implements AuthDataAccess{
     //deleteAuth: Delete an authorization so that it is no longer valid.
     public void deleteAuth(AuthData authToken){
         authTokens.remove(authToken);
+    }
+
+    public Collection<AuthData> getAuthTokens() {
+        return authTokens;
     }
 }
