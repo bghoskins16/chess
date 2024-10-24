@@ -1,4 +1,5 @@
 package service;
+
 import dataaccess.AuthMemoryDataAccess;
 import dataaccess.UserMemoryDataAccess;
 import model.AuthData;
@@ -27,8 +28,8 @@ public class UserServiceTests {
     }
 
     @Test
-    void RegisterUserGood(){
-        RegisterRequest user = new RegisterRequest("user1" , "pass1", "mail1");
+    void RegisterUserGood() {
+        RegisterRequest user = new RegisterRequest("user1", "pass1", "mail1");
         AuthData auth;
         try {
             auth = service.register(user);
@@ -45,8 +46,8 @@ public class UserServiceTests {
     }
 
     @Test
-    void RegisterUserBad(){
-        RegisterRequest user = new RegisterRequest("user1" , "pass1", null);
+    void RegisterUserBad() {
+        RegisterRequest user = new RegisterRequest("user1", "pass1", null);
         AuthData auth;
         try {
             auth = service.register(user);
@@ -62,11 +63,11 @@ public class UserServiceTests {
 
 
     @Test
-    void LoginUserGood(){
-        UserData user = new UserData("user1" , "pass1", "mail1");
+    void LoginUserGood() {
+        UserData user = new UserData("user1", "pass1", "mail1");
         userDatabase.createUser(user);
 
-        LoginRequest loginRequest = new LoginRequest("user1" , "pass1");
+        LoginRequest loginRequest = new LoginRequest("user1", "pass1");
         AuthData auth;
         try {
             auth = service.login(loginRequest);
@@ -80,11 +81,11 @@ public class UserServiceTests {
     }
 
     @Test
-    void LoginUserBad(){
-        UserData user = new UserData("user1" , "pass1", "mail1");
+    void LoginUserBad() {
+        UserData user = new UserData("user1", "pass1", "mail1");
         userDatabase.createUser(user);
 
-        LoginRequest loginRequest = new LoginRequest("user1" , "pass2");
+        LoginRequest loginRequest = new LoginRequest("user1", "pass2");
         AuthData auth;
         try {
             auth = service.login(loginRequest);
@@ -97,8 +98,8 @@ public class UserServiceTests {
     }
 
     @Test
-    void LogoutUserGood(){
-        UserData user = new UserData("user1" , "pass1", "mail1");
+    void LogoutUserGood() {
+        UserData user = new UserData("user1", "pass1", "mail1");
         userDatabase.createUser(user);
         AuthData auth = authDatabase.createAuth(user.username());
 
@@ -114,8 +115,8 @@ public class UserServiceTests {
     }
 
     @Test
-    void LogoutUserBad(){
-        UserData user = new UserData("user1" , "pass1", "mail1");
+    void LogoutUserBad() {
+        UserData user = new UserData("user1", "pass1", "mail1");
         userDatabase.createUser(user);
         authDatabase.createAuth(user.username());
 

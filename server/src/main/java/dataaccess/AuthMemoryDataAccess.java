@@ -9,27 +9,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
-public class AuthMemoryDataAccess implements AuthDataAccess{
+public class AuthMemoryDataAccess implements AuthDataAccess {
     static final private Collection<AuthData> authTokens = new ArrayList<>();
 
     int nextGameID = 0;
 
     //clear: A method for clearing all data from the database. This is used during testing.
-    public void clear(){
+    public void clear() {
         authTokens.clear();
     }
 
     //createAuth: Create a new authorization.
-    public AuthData createAuth(String username){
-        AuthData newAuth = new AuthData(username,UUID.randomUUID().toString());
+    public AuthData createAuth(String username) {
+        AuthData newAuth = new AuthData(username, UUID.randomUUID().toString());
         authTokens.add(newAuth);
         return newAuth;
     }
 
     //getAuth: Retrieve an authorization given an authToken.
-    public AuthData getAuth(String authToken){
+    public AuthData getAuth(String authToken) {
         for (AuthData auth : authTokens) {
-            if (auth.authToken().equals(authToken)){
+            if (auth.authToken().equals(authToken)) {
                 return auth;
             }
         }
@@ -37,7 +37,7 @@ public class AuthMemoryDataAccess implements AuthDataAccess{
     }
 
     //deleteAuth: Delete an authorization so that it is no longer valid.
-    public void deleteAuth(AuthData authToken){
+    public void deleteAuth(AuthData authToken) {
         authTokens.remove(authToken);
     }
 

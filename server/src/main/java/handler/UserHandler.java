@@ -11,12 +11,12 @@ import service.UserService;
 import spark.Request;
 import spark.Response;
 
-public class UserHandler extends Handler{
+public class UserHandler extends Handler {
 
     public UserHandler() {
     }
 
-    public static String registerHandler(Request req, Response res){
+    public static String registerHandler(Request req, Response res) {
         RegisterRequest registerReq = serializer.fromJson(req.body(), RegisterRequest.class);
 
         UserService RegisterSer = new UserService();
@@ -24,34 +24,32 @@ public class UserHandler extends Handler{
             AuthData auth = RegisterSer.register(registerReq);
             return serializer.toJson(auth);
 
-        }catch (ResponseException ex){
+        } catch (ResponseException ex) {
             res.status(ex.StatusCode());
             return serializer.toJson(new ErrorResponse(ex.getMessage()));
         }
     }
 
-    public static String loginHandler(Request req, Response res){
+    public static String loginHandler(Request req, Response res) {
         LoginRequest loginReq = serializer.fromJson(req.body(), LoginRequest.class);
         UserService loginSer = new UserService();
 
         try {
             AuthData auth = loginSer.login(loginReq);
             return serializer.toJson(auth);
-        }
-        catch (ResponseException ex) {
+        } catch (ResponseException ex) {
             res.status(ex.StatusCode());
             return serializer.toJson(new ErrorResponse(ex.getMessage()));
         }
     }
 
-    public static String logoutHandler(Request req, Response res){
+    public static String logoutHandler(Request req, Response res) {
         LogoutRequest logoutReq = new LogoutRequest(req.headers("authorization"));
         UserService logoutSer = new UserService();
 
         try {
             logoutSer.logout(logoutReq);
-        }
-        catch (ResponseException ex){
+        } catch (ResponseException ex) {
             res.status(ex.StatusCode());
             return serializer.toJson(new ErrorResponse(ex.getMessage()));
         }

@@ -10,14 +10,14 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 
-public class ChessBoard implements Cloneable{
+public class ChessBoard implements Cloneable {
 
     private static final int BOARD_SIZE = 8;
 
     private ChessPiece[][] board = new ChessPiece[BOARD_SIZE][BOARD_SIZE];
 
     public ChessBoard() {
-        
+
     }
 
     /**
@@ -27,7 +27,7 @@ public class ChessBoard implements Cloneable{
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        board[position.getRow()-1][position.getColumn()-1] = piece;
+        board[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
     /**
@@ -38,7 +38,7 @@ public class ChessBoard implements Cloneable{
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return board[position.getRow()-1][position.getColumn()-1];
+        return board[position.getRow() - 1][position.getColumn() - 1];
     }
 
     /**
@@ -56,17 +56,17 @@ public class ChessBoard implements Cloneable{
         board[0][6] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
         board[0][7] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
 
-        for (int j = 0; j < BOARD_SIZE; j++){
+        for (int j = 0; j < BOARD_SIZE; j++) {
             board[1][j] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
         }
 
-        for (int i = 2; i < BOARD_SIZE - 2; i++){
+        for (int i = 2; i < BOARD_SIZE - 2; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 board[i][j] = null;
             }
         }
 
-        for (int j = 0; j < BOARD_SIZE; j++){
+        for (int j = 0; j < BOARD_SIZE; j++) {
             board[6][j] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
         }
 
@@ -97,7 +97,7 @@ public class ChessBoard implements Cloneable{
     protected Object clone() throws CloneNotSupportedException {
         ChessBoard newBoard = (ChessBoard) super.clone();
         newBoard.board = board.clone();
-        for (int i = 0; i < 8; i++){
+        for (int i = 0; i < 8; i++) {
             newBoard.board[i] = board[i].clone();
         }
         return newBoard;

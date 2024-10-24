@@ -8,7 +8,7 @@ public class RookMoveCalculator extends PieceMoveCalculator {
     @Override
     public Collection<ChessMove> pieceMoveCalculator(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type, ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new LinkedList<>();
-        
+
         int startRow = myPosition.getRow();
         int startCol = myPosition.getColumn();
 
@@ -31,8 +31,7 @@ public class RookMoveCalculator extends PieceMoveCalculator {
                     moves.add(new ChessMove(myPosition, endPos, null));
                 }
                 break;
-            }
-            else {
+            } else {
                 moves.add(new ChessMove(myPosition, endPos, null));
             }
         }
@@ -52,8 +51,7 @@ public class RookMoveCalculator extends PieceMoveCalculator {
                     moves.add(new ChessMove(myPosition, endPos, null));
                 }
                 break;
-            }
-            else {
+            } else {
                 moves.add(new ChessMove(myPosition, endPos, null));
             }
         }
@@ -73,8 +71,7 @@ public class RookMoveCalculator extends PieceMoveCalculator {
                     moves.add(new ChessMove(myPosition, endPos, null));
                 }
                 break;
-            }
-            else {
+            } else {
                 moves.add(new ChessMove(myPosition, endPos, null));
             }
         }
@@ -94,8 +91,7 @@ public class RookMoveCalculator extends PieceMoveCalculator {
                     moves.add(new ChessMove(myPosition, endPos, null));
                 }
                 break;
-            }
-            else {
+            } else {
                 moves.add(new ChessMove(myPosition, endPos, null));
             }
         }

@@ -1,4 +1,5 @@
 package service;
+
 import chess.ChessGame;
 import dataaccess.AuthMemoryDataAccess;
 import dataaccess.GameMemoryDataAccess;
@@ -32,13 +33,13 @@ public class GameServiceTests {
     @BeforeEach
     void clear() {
         service.clear();
-        user = new UserData("user1" , "pass1", "mail1");
+        user = new UserData("user1", "pass1", "mail1");
         userDatabase.createUser(user);
         auth = authDatabase.createAuth(user.username());
     }
 
     @Test
-    void createGameGood(){
+    void createGameGood() {
         CreateGameRequest game = new CreateGameRequest(auth.authToken(), "game1");
         int gameID;
 
@@ -54,7 +55,7 @@ public class GameServiceTests {
     }
 
     @Test
-    void createGameBad(){
+    void createGameBad() {
         CreateGameRequest game = new CreateGameRequest(auth.authToken(), null);
 
         try {
@@ -68,7 +69,7 @@ public class GameServiceTests {
     }
 
     @Test
-    void listGamesGood(){
+    void listGamesGood() {
         gameDatabase.createGame("game1");
         gameDatabase.createGame("game2");
         gameDatabase.createGame("game3");
@@ -88,7 +89,7 @@ public class GameServiceTests {
     }
 
     @Test
-    void listGamesBad(){
+    void listGamesBad() {
         gameDatabase.createGame("game1");
         gameDatabase.createGame("game2");
         gameDatabase.createGame("game3");
@@ -107,7 +108,7 @@ public class GameServiceTests {
     }
 
     @Test
-    void joinGameGood(){
+    void joinGameGood() {
         int gameID = gameDatabase.createGame("game1");
 
         JoinGameRequest joinGameRequest = new JoinGameRequest(auth.authToken(), ChessGame.TeamColor.WHITE, gameID);
@@ -122,7 +123,7 @@ public class GameServiceTests {
     }
 
     @Test
-    void joinGameBad(){
+    void joinGameBad() {
         int gameID = gameDatabase.createGame("game1");
         GameData gameData = gameDatabase.getGame(gameID);
         gameDatabase.updateGame(gameData, new GameData(gameID, "Another Player", "And his friend", "game1", gameData.game()));

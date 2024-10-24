@@ -22,7 +22,7 @@ public class GameHandler extends Handler {
 
     public static String createGameHandler(Request req, Response res) {
         CreateGameRequest gameReq = serializer.fromJson(req.body(), CreateGameRequest.class);
-        gameReq = new CreateGameRequest( req.headers("authorization"), gameReq.gameName());
+        gameReq = new CreateGameRequest(req.headers("authorization"), gameReq.gameName());
         GameService gameSer = new GameService();
         try {
             int gameID = gameSer.createGame(gameReq);
@@ -33,7 +33,7 @@ public class GameHandler extends Handler {
         }
     }
 
-    public static String joinGameHandler(Request req, Response res){
+    public static String joinGameHandler(Request req, Response res) {
         JoinGameRequest joinReq = serializer.fromJson(req.body(), JoinGameRequest.class);
         joinReq = new JoinGameRequest(req.headers("authorization"), joinReq.playerColor(), joinReq.gameID());
         GameService joinSer = new GameService();
@@ -46,7 +46,7 @@ public class GameHandler extends Handler {
         }
     }
 
-    public static String listGamesHandler(Request req, Response res){
+    public static String listGamesHandler(Request req, Response res) {
         ListGamesRequest listReq = new ListGamesRequest(req.headers("authorization"));
         GameService listSer = new GameService();
         try {
@@ -71,8 +71,7 @@ public class GameHandler extends Handler {
 //            }
 //            retStr.append("}");      //add delete char to this
 //            //return retStr.toString();
-        }
-        catch (ResponseException ex){
+        } catch (ResponseException ex) {
             res.status(ex.StatusCode());
             return serializer.toJson(new ErrorResponse(ex.getMessage()));
         }

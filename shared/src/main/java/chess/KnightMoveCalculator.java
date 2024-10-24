@@ -8,7 +8,7 @@ public class KnightMoveCalculator extends PieceMoveCalculator {
     @Override
     public Collection<ChessMove> pieceMoveCalculator(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type, ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new LinkedList<>();
-        
+
         int startRow = myPosition.getRow();
         int startCol = myPosition.getColumn();
 

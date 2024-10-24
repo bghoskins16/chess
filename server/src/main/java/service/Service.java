@@ -12,7 +12,7 @@ public class Service {
     public Service() {
     }
 
-    public void clear(){
+    public void clear() {
         userDatabase.clear();
         authDatabase.clear();
         gameDatabase.clear();
@@ -20,7 +20,7 @@ public class Service {
 
     AuthData authenticate(String authToken) throws ResponseException {
         AuthData auth = authDatabase.getAuth(authToken);
-        if (auth == null){
+        if (auth == null) {
             throw new ResponseException(401, "Error: unauthorized");
         }
         return auth;

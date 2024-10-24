@@ -1,7 +1,7 @@
 package request;
 
 public record CreateGameRequest(
-    String authToken,
-    String gameName){
+        String authToken,
+        String gameName) {
 }
 

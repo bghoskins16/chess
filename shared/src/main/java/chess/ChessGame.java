@@ -9,7 +9,7 @@ import java.util.Collection;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessGame implements Cloneable{
+public class ChessGame implements Cloneable {
 
     TeamColor teamTurn;
     ChessBoard gameBoard;
@@ -57,7 +57,7 @@ public class ChessGame implements Cloneable{
         if (piece == null) return null;
         Collection<ChessMove> allMoves = piece.pieceMoves(gameBoard, startPosition);
         Collection<ChessMove> validMoves = new ArrayList<>();
-        for (ChessMove move: allMoves){
+        for (ChessMove move : allMoves) {
             try {
                 // Clone game and board
                 ChessGame gameCopy = (ChessGame) clone();
@@ -66,8 +66,7 @@ public class ChessGame implements Cloneable{
                 // Try making the move
                 if (move.getPromotionPiece() == null) {
                     boardCopy.addPiece(move.getEndPosition(), piece);
-                }
-                else{
+                } else {
                     boardCopy.addPiece(move.getEndPosition(), new ChessPiece(piece.getTeamColor(), move.getPromotionPiece()));
                 }
                 boardCopy.addPiece(move.getStartPosition(), null);
@@ -75,8 +74,7 @@ public class ChessGame implements Cloneable{
 
                 // Don't add to if it makes the team become in check
                 if (gameCopy.isInCheck(piece.getTeamColor())) continue;
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 continue;
             }
 
@@ -96,23 +94,23 @@ public class ChessGame implements Cloneable{
         //TODO: Add invalid move handling
         //Check to see if this is a valid move (color and location)
         ChessPiece piece = gameBoard.getPiece(move.getStartPosition());
-        if (piece == null){
+        if (piece == null) {
             // No piece at start location
             throw new InvalidMoveException();
         }
-        if (piece.getTeamColor() != teamTurn){
+        if (piece.getTeamColor() != teamTurn) {
             // It's not your turn
             throw new InvalidMoveException();
         }
         Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
         boolean moveFound = false;
-        for (ChessMove validMove: validMoves){
-            if (move.equals(validMove)){
+        for (ChessMove validMove : validMoves) {
+            if (move.equals(validMove)) {
                 moveFound = true;
                 break;
             }
         }
-        if (!moveFound){
+        if (!moveFound) {
             // Not a valid move
             throw new InvalidMoveException();
         }
@@ -120,17 +118,15 @@ public class ChessGame implements Cloneable{
         // This is a good move so we can go ahead and make the move
         if (move.getPromotionPiece() == null) {
             gameBoard.addPiece(move.getEndPosition(), piece);
-        }
-        else{
+        } else {
             gameBoard.addPiece(move.getEndPosition(), new ChessPiece(piece.getTeamColor(), move.getPromotionPiece()));
         }
         gameBoard.addPiece(move.getStartPosition(), null);
 
         // Now we need to change whose turn it is
-        if (teamTurn == TeamColor.WHITE){
+        if (teamTurn == TeamColor.WHITE) {
             teamTurn = TeamColor.BLACK;
-        }
-        else {
+        } else {
             teamTurn = TeamColor.WHITE;
         }
     }
@@ -144,25 +140,26 @@ public class ChessGame implements Cloneable{
     public boolean isInCheck(TeamColor teamColor) {
         // Figure out where the king is
         ChessPosition kingPos = null;
-        FindKing: for (int i = 1; i <= 8; i++) {
+        FindKing:
+        for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 ChessPosition pos = new ChessPosition(i, j);
                 ChessPiece piece = gameBoard.getPiece(pos);
                 if (piece == null) continue;
-                if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == teamColor){
+                if (piece.getPieceType() == ChessPiece.PieceType.KING && piece.getTeamColor() == teamColor) {
                     kingPos = pos;
                     break FindKing;
                 }
             }
         }
-        if (kingPos == null){
+        if (kingPos == null) {
             return false;
         }
 
         //Loop through whole board and see if any move are in the kings spot
-        for (int i = 1; i <= 8; i++){
+        for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
-                ChessPosition pos = new ChessPosition(i,j);
+                ChessPosition pos = new ChessPosition(i, j);
                 ChessPiece piece = gameBoard.getPiece(pos);
 
                 // Move to next piece if ths piece is empty of same team
@@ -170,7 +167,7 @@ public class ChessGame implements Cloneable{
 
                 // Loop through all move and look for the kings position. If found return true.
                 Collection<ChessMove> moves = piece.pieceMoves(gameBoard, pos);
-                for (ChessMove move: moves){
+                for (ChessMove move : moves) {
                     if (move.getEndPosition().equals(kingPos)) {
                         return true;
                     }
