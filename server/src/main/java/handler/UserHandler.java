@@ -6,6 +6,7 @@ import request.LoginRequest;
 import request.LogoutRequest;
 import request.RegisterRequest;
 import response.ErrorResponse;
+import server.ResponseException;
 import service.UserService;
 import spark.Request;
 import spark.Response;
@@ -56,9 +57,9 @@ public class UserHandler {
             // return json
             return serializer.toJson(auth);
 
-        }catch (Exception e){
-            res.status(403);
-            return serializer.toJson(new ErrorResponse("Error: already taken"));
+        }catch (ResponseException ex){
+            res.status(ex.StatusCode());
+            return serializer.toJson(new ErrorResponse(ex.getMessage()));
         }
     }
 }

@@ -5,20 +5,24 @@ import model.UserData;
 import request.LoginRequest;
 import request.LogoutRequest;
 import request.RegisterRequest;
+import server.ResponseException;
 
 public class UserService extends Service {
 
     public UserService() {
     }
 
-    public AuthData register(RegisterRequest r) throws Exception{
+    public AuthData register(RegisterRequest r) throws ResponseException {
+        if (r.username() == null || r.password() == null || r.email() == null){
+            throw new ResponseException(400, "Error: bad request");
+        }
+
         if (userDatabase.getUser(r.username()) == null){
             userDatabase.createUser(new UserData(r.username(), r.password(), r.email()));
             return authDatabase.createAuth(r.username());
         }
         else{
-            System.out.println("reregister");
-            throw new Exception("Error: already taken");
+            throw new ResponseException(403, "Error: already taken");
         }
     }
 

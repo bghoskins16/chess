@@ -21,16 +21,12 @@ public class UserMemoryDataAccess implements UserDataAccess{
 
     //createUser: Create a new user.
     public void createUser(UserData newUser){
-        System.out.println("before create user with " + users.size() + " users");
         users.add(newUser);
-        System.out.println("after create user with " + users.size() + " users");
     }
 
     //getUser: Retrieve a user with the given username.
     public UserData getUser(String username){
-        System.out.println("get user with " + users.size() + " users");
         for (UserData user : users) {
-            System.out.println("compare " + user.username() + " to " + username);
             if (user.username().equals(username)){
                 return user;
             }
