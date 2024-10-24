@@ -28,7 +28,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void RegisterUserGood() {
+    void registerUserGood() {
         RegisterRequest user = new RegisterRequest("user1", "pass1", "mail1");
         AuthData auth;
         try {
@@ -46,7 +46,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void RegisterUserBad() {
+    void registerUserBad() {
         RegisterRequest user = new RegisterRequest("user1", "pass1", null);
         AuthData auth;
         try {
@@ -63,7 +63,7 @@ public class UserServiceTests {
 
 
     @Test
-    void LoginUserGood() {
+    void loginUserGood() {
         UserData user = new UserData("user1", "pass1", "mail1");
         userDatabase.createUser(user);
 
@@ -81,7 +81,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void LoginUserBad() {
+    void loginUserBad() {
         UserData user = new UserData("user1", "pass1", "mail1");
         userDatabase.createUser(user);
 
@@ -98,7 +98,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void LogoutUserGood() {
+    void logoutUserGood() {
         UserData user = new UserData("user1", "pass1", "mail1");
         userDatabase.createUser(user);
         AuthData auth = authDatabase.createAuth(user.username());
@@ -115,7 +115,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void LogoutUserBad() {
+    void logoutUserBad() {
         UserData user = new UserData("user1", "pass1", "mail1");
         userDatabase.createUser(user);
         authDatabase.createAuth(user.username());

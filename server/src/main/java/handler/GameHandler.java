@@ -53,24 +53,6 @@ public class GameHandler extends Handler {
             Collection<GameData> games = listSer.listGames(listReq);
             return serializer.toJson(new ListResponse(games));
 
-//            StringBuilder retStr = new StringBuilder("{");
-//            if (games != null) {
-//                boolean addComma = false;
-//
-//                for (GameData game : games) {
-//                    if (addComma) {
-//                        retStr.append(", ");
-//                    }
-//                    else {
-//                        retStr.append("\"games\": ");
-//                        addComma = true;
-//                    }
-//
-//                    retStr.append(serializer.toJson(game));
-//                }
-//            }
-//            retStr.append("}");      //add delete char to this
-//            //return retStr.toString();
         } catch (ResponseException ex) {
             res.status(ex.StatusCode());
             return serializer.toJson(new ErrorResponse(ex.getMessage()));
