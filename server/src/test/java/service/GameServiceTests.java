@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.ListGamesRequest;
-import request.RegisterRequest;
 import server.ResponseException;
 
 import java.util.Collection;
@@ -61,7 +60,7 @@ public class GameServiceTests {
         try {
             service.createGame(game);
         } catch (ResponseException e) {
-            assertEquals(e.StatusCode(), 400);
+            assertEquals(e.statusCode(), 400);
         }
 
         Collection<GameData> gameList = gameDatabase.listGames();
@@ -101,7 +100,7 @@ public class GameServiceTests {
         try {
             gameListReceived = service.listGames(listGamesRequest);
         } catch (ResponseException e) {
-            assertEquals(e.StatusCode(), 401);
+            assertEquals(e.statusCode(), 401);
         }
 
         assertNull(gameListReceived);
@@ -133,7 +132,7 @@ public class GameServiceTests {
         try {
             service.joinGame(joinGameRequest);
         } catch (ResponseException e) {
-            assertEquals(e.StatusCode(), 403);
+            assertEquals(e.statusCode(), 403);
         }
 
         assertNotEquals(gameDatabase.getGame(gameID).whiteUsername(), user.username());

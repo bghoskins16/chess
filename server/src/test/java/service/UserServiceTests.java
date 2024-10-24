@@ -52,7 +52,7 @@ public class UserServiceTests {
         try {
             auth = service.register(user);
         } catch (ResponseException e) {
-            assertEquals(e.StatusCode(), 400);
+            assertEquals(e.statusCode(), 400);
         }
 
         Collection<UserData> userList = userDatabase.getUsers();
@@ -90,7 +90,7 @@ public class UserServiceTests {
         try {
             auth = service.login(loginRequest);
         } catch (ResponseException e) {
-            assertEquals(e.StatusCode(), 401);
+            assertEquals(e.statusCode(), 401);
         }
 
         Collection<AuthData> authList = authDatabase.getAuthTokens();
@@ -124,7 +124,7 @@ public class UserServiceTests {
         try {
             service.logout(logoutRequest);
         } catch (ResponseException e) {
-            assertEquals(e.StatusCode(), 401);
+            assertEquals(e.statusCode(), 401);
         }
 
         Collection<AuthData> authList = authDatabase.getAuthTokens();

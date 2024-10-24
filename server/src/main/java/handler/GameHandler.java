@@ -4,7 +4,6 @@ import model.GameData;
 import request.CreateGameRequest;
 import request.JoinGameRequest;
 import request.ListGamesRequest;
-import request.LoginRequest;
 import response.CreateGameResponse;
 import response.ErrorResponse;
 import response.ListResponse;
@@ -28,7 +27,7 @@ public class GameHandler extends Handler {
             int gameID = gameSer.createGame(gameReq);
             return serializer.toJson(new CreateGameResponse(gameID));
         } catch (ResponseException ex) {
-            res.status(ex.StatusCode());
+            res.status(ex.statusCode());
             return serializer.toJson(new ErrorResponse(ex.getMessage()));
         }
     }
@@ -41,7 +40,7 @@ public class GameHandler extends Handler {
             joinSer.joinGame(joinReq);
             return "{}";
         } catch (ResponseException ex) {
-            res.status(ex.StatusCode());
+            res.status(ex.statusCode());
             return serializer.toJson(new ErrorResponse(ex.getMessage()));
         }
     }
@@ -54,7 +53,7 @@ public class GameHandler extends Handler {
             return serializer.toJson(new ListResponse(games));
 
         } catch (ResponseException ex) {
-            res.status(ex.StatusCode());
+            res.status(ex.statusCode());
             return serializer.toJson(new ErrorResponse(ex.getMessage()));
         }
     }
