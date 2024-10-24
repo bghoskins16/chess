@@ -117,7 +117,7 @@ public class UserServiceTests {
     void LogoutUserBad(){
         UserData user = new UserData("user1" , "pass1", "mail1");
         userDatabase.createUser(user);
-        AuthData auth = authDatabase.createAuth(user.username());
+        authDatabase.createAuth(user.username());
 
         LogoutRequest logoutRequest = new LogoutRequest("Random Token");
         try {

@@ -17,6 +17,9 @@ public class GameService extends Service {
 
     public int createGame(CreateGameRequest gameReq) throws ResponseException {
         authenticate(gameReq.authToken());
+        if (gameReq.gameName() == null){
+            throw new ResponseException(400, "Error: bad request");
+        }
         return gameDatabase.createGame(gameReq.gameName());
     }
 
