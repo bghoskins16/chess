@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserServiceTests {
 
-    static final UserService service = new UserService();
-    static final UserMemoryDataAccess userDatabase = new UserMemoryDataAccess();
-    static final AuthMemoryDataAccess authDatabase = new AuthMemoryDataAccess();
+    static UserService service = new UserService();
+    static UserMemoryDataAccess userDatabase = new UserMemoryDataAccess();
+    static AuthMemoryDataAccess authDatabase = new AuthMemoryDataAccess();
 
     @BeforeEach
     void clear() {

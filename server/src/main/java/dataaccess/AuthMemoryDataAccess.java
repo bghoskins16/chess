@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class AuthMemoryDataAccess implements AuthDataAccess {
-    static final private Collection<AuthData> authTokens = new ArrayList<>();
+    static private Collection<AuthData> authTokens = new ArrayList<>();
 
     int nextGameID = 0;
 

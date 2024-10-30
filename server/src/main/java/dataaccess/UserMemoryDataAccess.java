@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class UserMemoryDataAccess implements UserDataAccess {
-    static final private Collection<UserData> users = new ArrayList<>();
+    static private Collection<UserData> users = new ArrayList<>();
 
     int nextGameID = 0;
 

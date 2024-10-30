@@ -5,9 +5,9 @@ import model.AuthData;
 import server.ResponseException;
 
 public class Service {
-    static final UserDataAccess userDatabase = new UserMemoryDataAccess();
-    static final AuthDataAccess authDatabase = new AuthMemoryDataAccess();
-    static final GameDataAccess gameDatabase = new GameMemoryDataAccess();
+    static UserDataAccess userDatabase = new UserMemoryDataAccess();
+    static AuthDataAccess authDatabase = new AuthMemoryDataAccess();
+    static GameDataAccess gameDatabase = new GameMemoryDataAccess();
 
     public Service() {
     }

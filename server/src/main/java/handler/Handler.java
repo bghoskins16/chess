@@ -6,7 +6,7 @@ import service.Service;
 import spark.*;
 
 public class Handler {
-    static final Gson serializer = new Gson();
+    static Gson serializer = new Gson();
 
     public Handler() {
     }

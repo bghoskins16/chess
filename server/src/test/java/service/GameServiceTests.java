@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GameServiceTests {
 
 
-    static final GameService service = new GameService();
-    static final UserMemoryDataAccess userDatabase = new UserMemoryDataAccess();
-    static final AuthMemoryDataAccess authDatabase = new AuthMemoryDataAccess();
-    static final GameMemoryDataAccess gameDatabase = new GameMemoryDataAccess();
+    static GameService service = new GameService();
+    static UserMemoryDataAccess userDatabase = new UserMemoryDataAccess();
+    static AuthMemoryDataAccess authDatabase = new AuthMemoryDataAccess();
+    static GameMemoryDataAccess gameDatabase = new GameMemoryDataAccess();
 
     UserData user;
     AuthData auth;
