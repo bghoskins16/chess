@@ -2,6 +2,7 @@ package service;
 
 import model.AuthData;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 import request.LoginRequest;
 import request.LogoutRequest;
 import request.RegisterRequest;
@@ -18,7 +19,8 @@ public class UserService extends Service {
         }
 
         if (userDatabase.getUser(registerReq.username()) == null) {
-            userDatabase.createUser(new UserData(registerReq.username(), registerReq.password(), registerReq.email()));
+            String hashedPassword = BCrypt.hashpw(registerReq.password(), BCrypt.gensalt());
+            userDatabase.createUser(new UserData(registerReq.username(), hashedPassword, registerReq.email()));
             return authDatabase.createAuth(registerReq.username());
         } else {
             throw new ResponseException(403, "Error: already taken");
@@ -36,7 +38,8 @@ public class UserService extends Service {
             throw new ResponseException(401, "Error: unauthorized");
         }
 
-        if (!data.password().equals(loginReq.password())) {
+        // Check if hashed passwords are equal
+        if (!BCrypt.checkpw(loginReq.password(), data.password())) {
             throw new ResponseException(401, "Error: unauthorized");
         }
         return authDatabase.createAuth(loginReq.username());
@@ -46,4 +49,5 @@ public class UserService extends Service {
         AuthData auth = authenticate(logoutReq.authToken());
         authDatabase.deleteAuth(auth);
     }
+
 }
