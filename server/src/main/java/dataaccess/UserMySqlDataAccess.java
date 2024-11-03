@@ -17,4 +17,14 @@ public class UserMySqlDataAccess implements UserDataAccess {
         return null;
     }
 
+    private final String[] createStatements = {
+            """
+            CREATE TABLE IF NOT EXISTS  user (
+              `username` varchar(256) NOT NULL UNIQUE,
+              `password` varchar(256) NOT NULL,
+              `email` varchar(256) DEFAULT NULL,
+              PRIMARY KEY (`username`),
+            )
+            """
+    };
 }

@@ -21,4 +21,14 @@ public class AuthMySqlDataAccess implements AuthDataAccess {
     //deleteAuth: Delete an authorization so that it is no longer valid.
     public void deleteAuth(AuthData authToken) {
     }
+
+    private final String[] createStatements = {
+            """
+            CREATE TABLE IF NOT EXISTS  auth (
+              `username` varchar(256) NOT NULL UNIQUE,
+              `auth` varchar(256) NOT NULL,
+              PRIMARY KEY (`username`),
+            )
+            """
+    };
 }
