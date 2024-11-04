@@ -5,11 +5,18 @@ import model.AuthData;
 import server.ResponseException;
 
 public class Service {
-    static UserDataAccess userDatabase = new UserMemoryDataAccess();
-    static AuthDataAccess authDatabase = new AuthMemoryDataAccess();
-    static GameDataAccess gameDatabase = new GameMemoryDataAccess();
+    static UserDataAccess userDatabase;
+    static AuthDataAccess authDatabase;
+    static GameDataAccess gameDatabase;
 
-    public Service() {
+    public Service(UserDataAccess userDatabase, AuthDataAccess authDatabase, GameDataAccess gameDatabase) {
+        Service.authDatabase = authDatabase;
+        Service.gameDatabase = gameDatabase;
+        Service.userDatabase = userDatabase;
+    }
+
+    public Service(){
+
     }
 
     public void clear() {

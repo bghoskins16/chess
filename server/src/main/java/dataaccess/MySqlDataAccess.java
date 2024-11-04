@@ -2,6 +2,9 @@ package dataaccess;
 
 public class MySqlDataAccess {
 
+    public MySqlDataAccess() throws DataAccessException{
+        configureDatabase();
+    }
 
     public final String[] createStatements = {""};
 

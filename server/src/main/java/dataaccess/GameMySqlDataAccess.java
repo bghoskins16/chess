@@ -4,7 +4,11 @@ import model.GameData;
 
 import java.util.Collection;
 
-public class GameMySqlDataAccess implements GameDataAccess {
+public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAccess {
+
+    public GameMySqlDataAccess() throws DataAccessException {
+        super();
+    }
 
     //clear: A method for clearing all data from the database. This is used during testing.
     public void clear() {
@@ -30,15 +34,15 @@ public class GameMySqlDataAccess implements GameDataAccess {
     public void updateGame(GameData oldGameData, GameData newGameData) {
     }
 
-    private final String[] createStatements = {
+    public final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS  auth (
               `id` int NOT NULL AUTO_INCREMENT,
               `whiteUsername` varchar(256) DEFAULT NULL,
               `blackUsername` varchar(256) DEFAULT NULL,
               `gameName` varchar(256) NOT NULL,
-              `game` TEXT NOT NULL
-              PRIMARY KEY (`id`),
+              `game` TEXT NOT NULL,
+              PRIMARY KEY (`id`)
             )
             """
     };
