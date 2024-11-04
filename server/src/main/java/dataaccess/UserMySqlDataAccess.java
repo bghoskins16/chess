@@ -2,7 +2,11 @@ package dataaccess;
 
 import model.UserData;
 
-public class UserMySqlDataAccess implements UserDataAccess {
+public class UserMySqlDataAccess extends MySqlDataAccess implements UserDataAccess {
+
+    public UserMySqlDataAccess() throws DataAccessException {
+        super();
+    }
 
     //clear: A method for clearing all data from the database. This is used during testing.
     public void clear() {
@@ -23,7 +27,7 @@ public class UserMySqlDataAccess implements UserDataAccess {
               `username` varchar(256) NOT NULL UNIQUE,
               `password` varchar(256) NOT NULL,
               `email` varchar(256) DEFAULT NULL,
-              PRIMARY KEY (`username`),
+              PRIMARY KEY (`username`)
             )
             """
     };

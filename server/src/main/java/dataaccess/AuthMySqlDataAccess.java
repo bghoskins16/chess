@@ -2,7 +2,13 @@ package dataaccess;
 
 import model.AuthData;
 
-public class AuthMySqlDataAccess implements AuthDataAccess {
+import java.util.UUID;
+
+public class AuthMySqlDataAccess extends MySqlDataAccess implements AuthDataAccess {
+
+    public AuthMySqlDataAccess() throws DataAccessException {
+        super();
+    }
 
     //clear: A method for clearing all data from the database. This is used during testing.
     public void clear() {
@@ -10,7 +16,12 @@ public class AuthMySqlDataAccess implements AuthDataAccess {
 
     //createAuth: Create a new authorization.
     public AuthData createAuth(String username) {
-        return null;
+        String authToken = UUID.randomUUID().toString();
+        String statement = "INSERT INTO auth VALUES (\"" + username + "\", \"" + authToken + "\")";
+
+        // TODO: Add a try catch
+        executeUpdate(statement);
+        return new AuthData(username, authToken);
     }
 
     //getAuth: Retrieve an authorization given an authToken.
@@ -27,7 +38,7 @@ public class AuthMySqlDataAccess implements AuthDataAccess {
             CREATE TABLE IF NOT EXISTS  auth (
               `username` varchar(256) NOT NULL UNIQUE,
               `auth` varchar(256) NOT NULL,
-              PRIMARY KEY (`username`),
+              PRIMARY KEY (`username`)
             )
             """
     };
