@@ -9,8 +9,7 @@ import service.GameService;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class UserDataAccessTests {
 
@@ -36,7 +35,7 @@ public class UserDataAccessTests {
     }
 
     @Test
-    void createUserGood() {
+    void createUser() {
         UserData userRecv;
         try {
             userDatabase.createUser(user);
@@ -51,7 +50,7 @@ public class UserDataAccessTests {
     }
 
     @Test
-    void createUserBad() {
+    void createUserDuplicate() {
         UserData userRecv;
         try {
             userDatabase.createUser(user);
@@ -67,7 +66,7 @@ public class UserDataAccessTests {
     }
 
     @Test
-    void getUserGood() {
+    void getUsers() {
         UserData user1 = new UserData("user1", "pass1", "mail1");
         UserData user2 = new UserData("user2", "pass2", "mail2");
         UserData user3 = new UserData("user3", "pass3", "mail3");
@@ -96,7 +95,7 @@ public class UserDataAccessTests {
     }
 
     @Test
-    void getUserBad() {
+    void getUserNotAdded() {
         UserData userRecv;
 
         try {
@@ -108,4 +107,22 @@ public class UserDataAccessTests {
         assertNull(userRecv);
     }
 
+    @Test
+    void clearUsers() {
+        UserData userRecvBefore;
+        UserData userRecvAfter;
+
+        try {
+            userDatabase.createUser(user);
+            userRecvBefore = userDatabase.getUser(user.username());
+
+            userDatabase.clear();
+            userRecvAfter = userDatabase.getUser(user.username());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertNotEquals(userRecvBefore, userRecvAfter);
+        assertNull(userRecvAfter);
+    }
 }
