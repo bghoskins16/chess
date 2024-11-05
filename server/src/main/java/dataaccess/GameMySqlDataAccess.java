@@ -37,7 +37,7 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
             throw new RuntimeException(e);
         }
 
-        return 0;
+        return -1;
     }
 
     //getGame: Retrieve a specified game with the given game ID.
@@ -51,18 +51,19 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 var rs = preparedStatement.executeQuery();
-                rs.next();
-                whiteUser = rs.getString("whiteUsername");
-                blackUser = rs.getString("blackUsername");
-                gameName = rs.getString("gameName");
-                game = new Gson().fromJson(rs.getString("chesData"), ChessGame.class);
-
+                if (rs.next()) {
+                    whiteUser = rs.getString("whiteUsername");
+                    blackUser = rs.getString("blackUsername");
+                    gameName = rs.getString("gameName");
+                    game = new Gson().fromJson(rs.getString("chesData"), ChessGame.class);
+                    return new GameData(gameID, whiteUser, blackUser, gameName, game);
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        return new GameData(gameID, whiteUser, blackUser, gameName, game);
+        return null;
     }
 
     //listGames: Retrieve all games.

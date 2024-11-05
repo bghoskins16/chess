@@ -32,15 +32,17 @@ public class UserMySqlDataAccess extends MySqlDataAccess implements UserDataAcce
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 var rs = preparedStatement.executeQuery();
-                rs.next();
-                password = rs.getString("password");
-                email = rs.getString("email");
+                if(rs.next()) {
+                    password = rs.getString("password");
+                    email = rs.getString("email");
+                    return new UserData(username, password, email);
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        return null;
 
-        return new UserData(username, password, email);
     }
 
     private final String[] createStatements = {

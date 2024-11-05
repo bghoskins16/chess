@@ -30,14 +30,16 @@ public class AuthMySqlDataAccess extends MySqlDataAccess implements AuthDataAcce
     //getAuth: Retrieve an authorization given an authToken.
     public AuthData getAuth(String authToken) {
         String username;
-        String statement  = "SELECT * FROM auth WHERE authToken=\"" + authToken + "\"";
+        String statement = "SELECT * FROM auth WHERE authToken=\"" + authToken + "\"";
 
         //Send information if dataset comes back empty return null, otherwise return the dataset
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 var rs = preparedStatement.executeQuery();
-                rs.next();
-                username = rs.getString("username");
+                if (rs.next()) {
+                    username = rs.getString("username");
+                    return new AuthData(username, authToken);
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
