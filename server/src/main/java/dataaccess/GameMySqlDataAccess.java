@@ -10,6 +10,7 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
 
     public GameMySqlDataAccess() throws DataAccessException {
         super();
+        configureDatabase(createStatements);
     }
 
     //clear: A method for clearing all data from the database. This is used during testing.

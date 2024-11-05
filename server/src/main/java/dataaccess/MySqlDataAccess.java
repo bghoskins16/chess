@@ -3,12 +3,10 @@ package dataaccess;
 public class MySqlDataAccess {
 
     public MySqlDataAccess() throws DataAccessException{
-        configureDatabase();
+
     }
 
-    public final String[] createStatements = {""};
-
-    public void configureDatabase() throws DataAccessException {
+    public void configureDatabase(String[] createStatements) throws DataAccessException {
         DatabaseManager.createDatabase();
         try (var conn = DatabaseManager.getConnection()) {
             for (var statement : createStatements) {

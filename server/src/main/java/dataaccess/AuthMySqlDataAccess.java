@@ -8,6 +8,7 @@ public class AuthMySqlDataAccess extends MySqlDataAccess implements AuthDataAcce
 
     public AuthMySqlDataAccess() throws DataAccessException {
         super();
+        configureDatabase(createStatements);
     }
 
     //clear: A method for clearing all data from the database. This is used during testing.
