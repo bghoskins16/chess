@@ -44,6 +44,13 @@ public class MySqlDataAccess {
 //    }
     public void executeUpdate(String statement){
         // Establish connection and send write statement
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

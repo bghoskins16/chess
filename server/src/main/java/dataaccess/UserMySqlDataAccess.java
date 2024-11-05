@@ -14,27 +14,13 @@ public class UserMySqlDataAccess extends MySqlDataAccess implements UserDataAcce
     //clear: A method for clearing all data from the database. This is used during testing.
     public void clear() {
         String statement = "TRUNCATE TABLE user";
-
-        try (var conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement(statement)) {
-                preparedStatement.executeUpdate();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        executeUpdate(statement);
     }
 
     //createUser: Create a new user.
     public void createUser(UserData newUser) {
         String statement = "INSERT INTO user VALUES (\"" + newUser.username() + "\", \"" + newUser.password() + "\", \"" + newUser.email() + "\")";
-
-        try (var conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement(statement)) {
-                preparedStatement.executeUpdate();
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        executeUpdate(statement);
     }
 
     //getUser: Retrieve a user with the given username.

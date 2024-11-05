@@ -4,6 +4,7 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import model.GameData;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAccess {
@@ -16,31 +17,92 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
     //clear: A method for clearing all data from the database. This is used during testing.
     public void clear() {
         String statement = "TRUNCATE TABLE game";
+        executeUpdate(statement);
     }
 
     //createGame: Create a new game.
     public int createGame(String gameName) {
         String newGame = new Gson().toJson(new ChessGame());
         String statement = "INSERT INTO game (gameName, gameData) VALUES (\"" + gameName + "\", \"" + newGame + "\")";
+
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
+                var rs = preparedStatement.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt("id");
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         return 0;
     }
 
     //getGame: Retrieve a specified game with the given game ID.
     public GameData getGame(int gameID) {
+        String whiteUser, blackUser, gameName;
+        ChessGame game;
+
         String statement = "SELECT * FROM game WHERE id=\"" + gameID + "\"";
+
         //Send information if dataset comes back empty return null, otherwise return the dataset
-        return null;
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                var rs = preparedStatement.executeQuery();
+                rs.next();
+                whiteUser = rs.getString("whiteUsername");
+                blackUser = rs.getString("blackUsername");
+                gameName = rs.getString("gameName");
+                game = new Gson().fromJson(rs.getString("chesData"), ChessGame.class);
+
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return new GameData(gameID, whiteUser, blackUser, gameName, game);
     }
 
     //listGames: Retrieve all games.
     public Collection<GameData> listGames() {
+        Collection<GameData> games = new ArrayList<>();
         String statement = "SELECT * FROM game";
-        return null;
+
+        try (var conn = DatabaseManager.getConnection()) {
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                var rs = preparedStatement.executeQuery();
+                while (rs.next()) {
+                    games.add(new GameData(
+                                    rs.getInt("id"),
+                                    rs.getString("whiteUsername"),
+                                    rs.getString("blackUsername"),
+                                    rs.getString("gameName"),
+                                    new Gson().fromJson(rs.getString("chesData"), ChessGame.class)
+                            )
+                    );
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return games;
     }
 
     //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
     public void updateGame(GameData oldGameData, GameData newGameData) {
-        String statement = "UPDATE game SET whiteUsername = \"" + newGameData.whiteUsername() + "\", blackUsername = \"" + newGameData.blackUsername() + "\" WHERE id=" + oldGameData.gameID();
+        String statement =
+                "UPDATE game SET whiteUsername = \"" +
+                        newGameData.whiteUsername() +
+                        "\", blackUsername = \"" +
+                        newGameData.blackUsername() +
+                        "\", gameData = \"" +
+                        new Gson().toJson(newGameData.game()) +
+                        "\" WHERE id=" +
+                        oldGameData.gameID();
+        executeUpdate(statement);
     }
 
     public final String[] createStatements = {
