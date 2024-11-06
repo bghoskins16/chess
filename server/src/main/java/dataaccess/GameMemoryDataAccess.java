@@ -13,7 +13,7 @@ import java.util.UUID;
 public class GameMemoryDataAccess implements GameDataAccess {
     static private Collection<GameData> games = new ArrayList<>();
 
-    int nextGameID = 1234;
+    static int nextGameID = 1234;
 
     //clear: A method for clearing all data from the database. This is used during testing.
     public void clear() {
