@@ -15,12 +15,12 @@ public class Service {
         Service.userDatabase = userDatabase;
     }
 
-    public Service(){
+    public Service() {
         try {
             Service.authDatabase = new AuthMySqlDataAccess();
             Service.gameDatabase = new GameMySqlDataAccess();
             Service.userDatabase = new UserMySqlDataAccess();
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

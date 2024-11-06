@@ -2,7 +2,7 @@ package dataaccess;
 
 public class MySqlDataAccess {
 
-    public MySqlDataAccess() throws DataAccessException{
+    public MySqlDataAccess() throws DataAccessException {
 
     }
 
@@ -19,7 +19,7 @@ public class MySqlDataAccess {
         }
     }
 
-//    public int executeUpdate(String statement, Object... params) throws ResponseException {
+    //    public int executeUpdate(String statement, Object... params) throws ResponseException {
 //        try (var conn = DatabaseManager.getConnection()) {
 //            try (var ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
 //                for (var i = 0; i < params.length; i++) {
@@ -42,7 +42,7 @@ public class MySqlDataAccess {
 //            throw new ResponseException(500, String.format("unable to update database: %s, %s", statement, e.getMessage()));
 //        }
 //    }
-    public void executeUpdate(String statement){
+    public void executeUpdate(String statement) {
         // Establish connection and send write statement
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement)) {

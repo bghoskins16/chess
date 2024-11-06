@@ -26,5 +26,6 @@ public interface GameDataAccess {
 
     //addUser: Used when players join a game
     public void addUserWhite(int gameID, String username);
+
     public void addUserBlack(int gameID, String username);
 }

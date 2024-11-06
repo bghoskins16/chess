@@ -11,6 +11,19 @@ import static java.sql.Statement.RETURN_GENERATED_KEYS;
 
 public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAccess {
 
+    public final String[] createStatements = {
+            """
+            CREATE TABLE IF NOT EXISTS game (
+              `id` int NOT NULL AUTO_INCREMENT,
+              `whiteUsername` varchar(256) DEFAULT NULL,
+              `blackUsername` varchar(256) DEFAULT NULL,
+              `gameName` varchar(256) NOT NULL,
+              `gameData` TEXT NOT NULL,
+              PRIMARY KEY (`id`)
+            )
+            """
+    };
+
     public GameMySqlDataAccess() throws DataAccessException {
         super();
         configureDatabase(createStatements);
@@ -115,17 +128,4 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
                 "UPDATE game SET blackUsername = \"" + username + "\" WHERE id=" + gameID;
         executeUpdate(statement);
     }
-
-    public final String[] createStatements = {
-            """
-            CREATE TABLE IF NOT EXISTS game (
-              `id` int NOT NULL AUTO_INCREMENT,
-              `whiteUsername` varchar(256) DEFAULT NULL,
-              `blackUsername` varchar(256) DEFAULT NULL,
-              `gameName` varchar(256) NOT NULL,
-              `gameData` TEXT NOT NULL,
-              PRIMARY KEY (`id`)
-            )
-            """
-    };
 }

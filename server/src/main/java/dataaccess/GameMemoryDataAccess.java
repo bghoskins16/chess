@@ -11,9 +11,8 @@ import java.util.Collection;
 import java.util.UUID;
 
 public class GameMemoryDataAccess implements GameDataAccess {
-    static private Collection<GameData> games = new ArrayList<>();
-
     static int nextGameID = 1234;
+    static private Collection<GameData> games = new ArrayList<>();
 
     //clear: A method for clearing all data from the database. This is used during testing.
     public void clear() {
@@ -49,18 +48,19 @@ public class GameMemoryDataAccess implements GameDataAccess {
         replaceGame(oldGameData, newGameData);
     }
 
-    public void addUserWhite(int gameID, String username){
+    public void addUserWhite(int gameID, String username) {
         GameData oldGameData = this.getGame(gameID);
         GameData newGameData = new GameData(oldGameData.gameID(), username, oldGameData.blackUsername(), oldGameData.gameName(), oldGameData.game());
         replaceGame(oldGameData, newGameData);
     }
-    public void addUserBlack(int gameID, String username){
+
+    public void addUserBlack(int gameID, String username) {
         GameData oldGameData = this.getGame(gameID);
         GameData newGameData = new GameData(oldGameData.gameID(), oldGameData.whiteUsername(), username, oldGameData.gameName(), oldGameData.game());
         replaceGame(oldGameData, newGameData);
     }
 
-    private void replaceGame(GameData oldGameData, GameData newGameData){
+    private void replaceGame(GameData oldGameData, GameData newGameData) {
         games.remove(oldGameData);
         games.add(newGameData);
     }

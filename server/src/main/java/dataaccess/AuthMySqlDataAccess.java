@@ -6,6 +6,17 @@ import java.util.UUID;
 
 public class AuthMySqlDataAccess extends MySqlDataAccess implements AuthDataAccess {
 
+    private final String[] createStatements = {
+            """
+            CREATE TABLE IF NOT EXISTS  auth (
+              `id` int NOT NULL AUTO_INCREMENT,
+              `username` varchar(256) NOT NULL,
+              `authToken` varchar(256) NOT NULL,
+              PRIMARY KEY (`id`)
+            )
+            """
+    };
+
     public AuthMySqlDataAccess() throws DataAccessException {
         super();
         configureDatabase(createStatements);
@@ -53,15 +64,4 @@ public class AuthMySqlDataAccess extends MySqlDataAccess implements AuthDataAcce
         String statement = "DELETE FROM auth WHERE authToken=\"" + authToken.authToken() + "\"";
         executeUpdate(statement);
     }
-
-    private final String[] createStatements = {
-            """
-            CREATE TABLE IF NOT EXISTS  auth (
-              `id` int NOT NULL AUTO_INCREMENT,
-              `username` varchar(256) NOT NULL,
-              `authToken` varchar(256) NOT NULL,
-              PRIMARY KEY (`id`)
-            )
-            """
-    };
 }

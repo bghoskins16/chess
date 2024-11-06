@@ -6,6 +6,18 @@ import javax.swing.*;
 
 public class UserMySqlDataAccess extends MySqlDataAccess implements UserDataAccess {
 
+    private final String[] createStatements = {
+            """
+            CREATE TABLE IF NOT EXISTS  user (
+              `id` int NOT NULL AUTO_INCREMENT,
+              `username` varchar(256) NOT NULL,
+              `password` varchar(256) NOT NULL,
+              `email` varchar(256) DEFAULT NULL,
+              PRIMARY KEY (`id`)
+            )
+            """
+    };
+
     public UserMySqlDataAccess() throws DataAccessException {
         super();
         configureDatabase(createStatements);
@@ -32,7 +44,7 @@ public class UserMySqlDataAccess extends MySqlDataAccess implements UserDataAcce
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement)) {
                 var rs = preparedStatement.executeQuery();
-                if(rs.next()) {
+                if (rs.next()) {
                     password = rs.getString("password");
                     email = rs.getString("email");
                     return new UserData(username, password, email);
@@ -44,16 +56,4 @@ public class UserMySqlDataAccess extends MySqlDataAccess implements UserDataAcce
         return null;
 
     }
-
-    private final String[] createStatements = {
-            """
-            CREATE TABLE IF NOT EXISTS  user (
-              `id` int NOT NULL AUTO_INCREMENT,
-              `username` varchar(256) NOT NULL,
-              `password` varchar(256) NOT NULL,
-              `email` varchar(256) DEFAULT NULL,
-              PRIMARY KEY (`id`)
-            )
-            """
-    };
 }

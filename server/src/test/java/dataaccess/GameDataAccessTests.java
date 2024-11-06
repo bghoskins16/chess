@@ -134,8 +134,8 @@ public class GameDataAccessTests {
         try {
             id = gameDatabase.createGame("game1");
 
-            gameDatabase.addUserWhite(id,"user1");
-            gameDatabase.addUserBlack(id,"user2");
+            gameDatabase.addUserWhite(id, "user1");
+            gameDatabase.addUserBlack(id, "user2");
             gameDatabase.updateGame(id, editedGame);
 
             gameRecv = gameDatabase.getGame(id);
@@ -161,9 +161,9 @@ public class GameDataAccessTests {
         try {
             id = gameDatabase.createGame("game1");
 
-            gameDatabase.addUserWhite(id+1,"user1");
-            gameDatabase.addUserBlack(id-5,"user2");
-            gameDatabase.updateGame(id*3, editedGame);
+            gameDatabase.addUserWhite(id + 1, "user1");
+            gameDatabase.addUserBlack(id - 5, "user2");
+            gameDatabase.updateGame(id * 3, editedGame);
 
             gameRecv = gameDatabase.getGame(id);
         } catch (Exception e) {
