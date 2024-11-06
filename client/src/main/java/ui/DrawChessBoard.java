@@ -19,20 +19,21 @@ public class DrawChessBoard {
         board.resetBoard();
 
         setBoard(board);
-        drawBoard();
+        drawBoard(true);
+        drawBoard(false);
     }
 
     public static void setBoard(ChessBoard board) {
         DrawChessBoard.board = board;
     }
 
-    public static void drawBoard() {
+    public static void drawBoard(boolean whiteAtBottom) {
         PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
         out.print(ERASE_SCREEN);
 
         //When player view is black everything is reversed
-        boolean reversed = false;
+        boolean reversed = whiteAtBottom;
 
         drawEdgeRow(out, reversed);
         for (int i = 1; i <= 8; i++) {
@@ -42,40 +43,70 @@ public class DrawChessBoard {
 
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_WHITE);
+        out.println();
     }
 
     public static void drawEdgeRow(PrintStream out, boolean isReversed) {
         char[] headers = {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', ' '};
-        for (char header : headers) {
-            drawEdgeTile(out, header);
+
+        if (isReversed) {
+            for (char header : headers) {
+                drawEdgeTile(out, header);
+            }
+        } else {
+            for (int i = headers.length - 1; i >= 0; i--) {
+                drawEdgeTile(out, headers[i]);
+            }
         }
         out.println();
     }
 
     public static void drawBoardRow(PrintStream out, int row, boolean isReversed) {
-        drawEdgeTile(out, (char) ('0' + row));
+        char rowSymbol;
+        if (!isReversed) {
+            rowSymbol = (char) ('0' + row);
+        } else {
+            rowSymbol = (char) ('9' - row);
+        }
+
+
+        drawEdgeTile(out, rowSymbol);
         for (int col = 1; col <= 8; col++) {
             boolean isTileWhite = (row + col) % 2 == 0;
-            boolean isPieceWhite = true;
-            char pieceSymbol = ' ';
 
-            ChessPiece piece = board.getPiece(new ChessPosition(row, col));
-            if (piece != null) {
-                isPieceWhite = (piece.getTeamColor() == ChessGame.TeamColor.WHITE);
-                switch (piece.getPieceType()) {
-                    case KING -> pieceSymbol = 'K';
-                    case QUEEN -> pieceSymbol = 'Q';
-                    case ROOK -> pieceSymbol = 'R';
-                    case BISHOP -> pieceSymbol = 'B';
-                    case KNIGHT -> pieceSymbol = 'N';
-                    case PAWN -> pieceSymbol = 'P';
-                }
+            ChessPiece piece;
+            if (!isReversed) {
+                piece = board.getPiece(new ChessPosition(row, 9-col));
+            } else {
+                piece = board.getPiece(new ChessPosition(9 - row, col));
             }
+
+            boolean isPieceWhite = (piece == null) || (piece.getTeamColor() == ChessGame.TeamColor.WHITE);
+            char pieceSymbol = getChessSymbol(piece);
 
             drawBoardTile(out, pieceSymbol, isTileWhite, isPieceWhite);
         }
-        drawEdgeTile(out, (char) ('0' + row));
+        drawEdgeTile(out, rowSymbol);
         out.println();
+    }
+
+    public static char getChessSymbol(ChessPiece piece) {
+        char symbol = ' ';
+
+        if (piece == null) {
+            return symbol;
+        }
+
+        switch (piece.getPieceType()) {
+            case KING -> symbol = 'K';
+            case QUEEN -> symbol = 'Q';
+            case ROOK -> symbol = 'R';
+            case BISHOP -> symbol = 'B';
+            case KNIGHT -> symbol = 'N';
+            case PAWN -> symbol = 'P';
+        }
+
+        return symbol;
     }
 
     public static void drawEdgeTile(PrintStream out, char symbol) {
@@ -102,6 +133,4 @@ public class DrawChessBoard {
 
         out.print(" " + symbol + " ");
     }
-
-
 }
