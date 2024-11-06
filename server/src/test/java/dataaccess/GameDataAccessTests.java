@@ -13,29 +13,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class GameDataAccessTests {
 
-    static UserDataAccess userDatabase;
-    static AuthDataAccess authDatabase;
     static GameDataAccess gameDatabase;
-
-
-    UserData user;
-    AuthData auth;
 
     @BeforeEach
     void clear() {
         try {
-            userDatabase = new UserMySqlDataAccess();
-            authDatabase = new AuthMySqlDataAccess();
             gameDatabase = new GameMySqlDataAccess();
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }
         gameDatabase.clear();
 
-        userDatabase.clear();
-        user = new UserData("user", "pass", "mail");
-        userDatabase.createUser(user);
-        auth = authDatabase.createAuth(user.username());
     }
 
     @Test
