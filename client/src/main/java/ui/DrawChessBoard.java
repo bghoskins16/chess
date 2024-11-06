@@ -63,10 +63,10 @@ public class DrawChessBoard {
 
     public static void drawBoardRow(PrintStream out, int row, boolean isReversed) {
         char rowSymbol;
-        if (!isReversed) {
-            rowSymbol = (char) ('0' + row);
-        } else {
+        if (isReversed) {
             rowSymbol = (char) ('9' - row);
+        } else {
+            rowSymbol = (char) ('0' + row);
         }
 
 
@@ -75,10 +75,10 @@ public class DrawChessBoard {
             boolean isTileWhite = (row + col) % 2 == 0;
 
             ChessPiece piece;
-            if (!isReversed) {
-                piece = board.getPiece(new ChessPosition(row, 9-col));
-            } else {
+            if (isReversed) {
                 piece = board.getPiece(new ChessPosition(9 - row, col));
+            } else {
+                piece = board.getPiece(new ChessPosition(row, 9 - col));
             }
 
             boolean isPieceWhite = (piece == null) || (piece.getTeamColor() == ChessGame.TeamColor.WHITE);
