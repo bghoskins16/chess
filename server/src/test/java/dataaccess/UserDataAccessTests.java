@@ -14,24 +14,18 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UserDataAccessTests {
 
     static UserDataAccess userDatabase;
-    static AuthDataAccess authDatabase;
-
 
     UserData user;
-    AuthData auth;
 
     @BeforeEach
     void clear() {
         try {
             userDatabase = new UserMySqlDataAccess();
-            authDatabase = new AuthMySqlDataAccess();
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }
         userDatabase.clear();
         user = new UserData("user", "pass", "mail");
-//        userDatabase.createUser(user);
-//        auth = authDatabase.createAuth(user.username());
     }
 
     @Test

@@ -1,9 +1,13 @@
 package dataaccess;
 
+import chess.ChessGame;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,186 +30,181 @@ public class GameDataAccessTests {
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }
+        gameDatabase.clear();
+
         userDatabase.clear();
         user = new UserData("user", "pass", "mail");
-//        userDatabase.createUser(user);
-//        auth = authDatabase.createAuth(user.username());
+        userDatabase.createUser(user);
+        auth = authDatabase.createAuth(user.username());
     }
 
     @Test
     void createGameTest() {
-        UserData userRecv;
+        int gameId;
+        GameData gameRecv;
         try {
-            userDatabase.createUser(user);
-            userRecv = userDatabase.getUser(user.username());
+            gameId = gameDatabase.createGame("game1");
+            gameRecv = gameDatabase.getGame(gameId);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertEquals(user.username(), userRecv.username());
-        assertEquals(user.password(), userRecv.password());
-        assertEquals(user.email(), userRecv.email());
+        assertEquals(gameId, gameRecv.gameID());
+        assertEquals("game1", gameRecv.gameName());
+        assertNull(gameRecv.whiteUsername());
+        assertNull(gameRecv.blackUsername());
+        assertEquals(new ChessGame(), gameRecv.game());
     }
 
     @Test
     void createGameMissingInfoTest() {
-        UserData userRecv;
         try {
-            userDatabase.createUser(user);
-            userDatabase.createUser(user);
-            userRecv = userDatabase.getUser(user.username());
+            gameDatabase.createGame(null);
         } catch (Exception e) {
+            fail();
             throw new RuntimeException(e);
         }
-
-        assertEquals(user.username(), userRecv.username());
-        assertEquals(user.password(), userRecv.password());
-        assertEquals(user.email(), userRecv.email());
     }
 
     @Test
     void getGameTest() {
-        UserData user1 = new UserData("user1", "pass1", "mail1");
-        UserData user2 = new UserData("user2", "pass2", "mail2");
-        UserData user3 = new UserData("user3", "pass3", "mail3");
-
-
-        UserData userRecv1;
-        UserData userRecv2;
-        UserData userRecv3;
-
-
+        int gameId1;
+        int gameId2;
+        int gameId3;
+        GameData gameRecv1;
+        GameData gameRecv2;
+        GameData gameRecv3;
         try {
-            userDatabase.createUser(user1);
-            userDatabase.createUser(user2);
-            userDatabase.createUser(user3);
+            gameId1 = gameDatabase.createGame("game1");
+            gameId2 = gameDatabase.createGame("game2");
+            gameId3 = gameDatabase.createGame("game3");
 
-            userRecv1 = userDatabase.getUser(user1.username());
-            userRecv2 = userDatabase.getUser(user2.username());
-            userRecv3 = userDatabase.getUser(user3.username());
+            gameRecv3 = gameDatabase.getGame(gameId3);
+            gameRecv2 = gameDatabase.getGame(gameId2);
+            gameRecv1 = gameDatabase.getGame(gameId1);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertEquals(user1.username(), userRecv1.username());
-        assertEquals(user2.password(), userRecv2.password());
-        assertEquals(user3.email(), userRecv3.email());
+        assertEquals("game1", gameRecv1.gameName());
+        assertEquals("game2", gameRecv2.gameName());
+        assertEquals("game3", gameRecv3.gameName());
     }
 
     @Test
     void getGameNotAdded() {
-        UserData userRecv;
+        GameData gameRecv;
 
         try {
-            userRecv = userDatabase.getUser("Bad Username");
+            gameRecv = gameDatabase.getGame(9999);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertNull(userRecv);
+        assertNull(gameRecv);
     }
 
     @Test
     void listGamesTest() {
-        UserData user1 = new UserData("user1", "pass1", "mail1");
-        UserData user2 = new UserData("user2", "pass2", "mail2");
-        UserData user3 = new UserData("user3", "pass3", "mail3");
-
-
-        UserData userRecv1;
-        UserData userRecv2;
-        UserData userRecv3;
-
+        Collection<GameData> games;
 
         try {
-            userDatabase.createUser(user1);
-            userDatabase.createUser(user2);
-            userDatabase.createUser(user3);
+            gameDatabase.createGame("game1");
+            gameDatabase.createGame("game2");
+            gameDatabase.createGame("game3");
 
-            userRecv1 = userDatabase.getUser(user1.username());
-            userRecv2 = userDatabase.getUser(user2.username());
-            userRecv3 = userDatabase.getUser(user3.username());
+            games = gameDatabase.listGames();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertEquals(user1.username(), userRecv1.username());
-        assertEquals(user2.password(), userRecv2.password());
-        assertEquals(user3.email(), userRecv3.email());
+        assertEquals(3, games.size());
     }
 
     @Test
     void listGamesNone() {
-        UserData userRecv;
+        Collection<GameData> games;
 
         try {
-            userRecv = userDatabase.getUser("Bad Username");
+            games = gameDatabase.listGames();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertNull(userRecv);
+        assertEquals(0, games.size());
     }
 
 
     @Test
-    void UpdateGameTest() {
-        UserData user1 = new UserData("user1", "pass1", "mail1");
-        UserData user2 = new UserData("user2", "pass2", "mail2");
-        UserData user3 = new UserData("user3", "pass3", "mail3");
-
-
-        UserData userRecv1;
-        UserData userRecv2;
-        UserData userRecv3;
-
+    void updateGameTest() {
+        int id;
+        GameData gameRecv;
+        ChessGame editedGame = new ChessGame();
+        editedGame.setTeamTurn(ChessGame.TeamColor.BLACK);
 
         try {
-            userDatabase.createUser(user1);
-            userDatabase.createUser(user2);
-            userDatabase.createUser(user3);
+            id = gameDatabase.createGame("game1");
 
-            userRecv1 = userDatabase.getUser(user1.username());
-            userRecv2 = userDatabase.getUser(user2.username());
-            userRecv3 = userDatabase.getUser(user3.username());
+            gameDatabase.addUserWhite(id,"user1");
+            gameDatabase.addUserBlack(id,"user2");
+            gameDatabase.updateGame(id, editedGame);
+
+            gameRecv = gameDatabase.getGame(id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertEquals(user1.username(), userRecv1.username());
-        assertEquals(user2.password(), userRecv2.password());
-        assertEquals(user3.email(), userRecv3.email());
+        assertEquals(id, gameRecv.gameID());
+        assertEquals("game1", gameRecv.gameName());
+        assertEquals("user1", gameRecv.whiteUsername());
+        assertEquals("user2", gameRecv.blackUsername());
+        assertEquals(editedGame, gameRecv.game());
+        assertNotEquals(new ChessGame(), gameRecv.game());
     }
 
     @Test
-    void UpdateBadGameTest() {
-        UserData userRecv;
+    void updateBadGameTest() {
+        int id;
+        GameData gameRecv;
+        ChessGame editedGame = new ChessGame();
+        editedGame.setTeamTurn(ChessGame.TeamColor.BLACK);
 
         try {
-            userRecv = userDatabase.getUser("Bad Username");
+            id = gameDatabase.createGame("game1");
+
+            gameDatabase.addUserWhite(id+1,"user1");
+            gameDatabase.addUserBlack(id-5,"user2");
+            gameDatabase.updateGame(id*3, editedGame);
+
+            gameRecv = gameDatabase.getGame(id);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertNull(userRecv);
+        assertEquals(id, gameRecv.gameID());
+        assertEquals("game1", gameRecv.gameName());
+        assertNotEquals("user1", gameRecv.whiteUsername());
+        assertNotEquals("user2", gameRecv.blackUsername());
+        assertNotEquals(editedGame, gameRecv.game());
     }
 
     @Test
-    void clearUsers() {
-        UserData userRecvBefore;
-        UserData userRecvAfter;
+    void clearGamesTest() {
+        Collection<GameData> games;
 
         try {
-            userDatabase.createUser(user);
-            userRecvBefore = userDatabase.getUser(user.username());
+            gameDatabase.createGame("game1");
+            gameDatabase.createGame("game2");
+            gameDatabase.createGame("game3");
 
-            userDatabase.clear();
-            userRecvAfter = userDatabase.getUser(user.username());
+            gameDatabase.clear();
+
+            games = gameDatabase.listGames();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertNotEquals(userRecvBefore, userRecvAfter);
-        assertNull(userRecvAfter);
+        assertEquals(0, games.size());
     }
 }

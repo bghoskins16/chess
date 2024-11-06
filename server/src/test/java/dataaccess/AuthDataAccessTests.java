@@ -9,158 +9,139 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class AuthDataAccessTests {
 
-    static UserDataAccess userDatabase;
     static AuthDataAccess authDatabase;
-
-
-    UserData user;
-    AuthData auth;
 
     @BeforeEach
     void clear() {
         try {
-            userDatabase = new UserMySqlDataAccess();
             authDatabase = new AuthMySqlDataAccess();
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }
-        userDatabase.clear();
-        user = new UserData("user", "pass", "mail");
-//        userDatabase.createUser(user);
-//        auth = authDatabase.createAuth(user.username());
+        authDatabase.clear();
     }
 
     @Test
     void createAuth() {
-        UserData userRecv;
+        AuthData authRecv1;
+        AuthData authRecv2;
         try {
-            userDatabase.createUser(user);
-            userRecv = userDatabase.getUser(user.username());
+            authRecv1 = authDatabase.createAuth("user1");
+            authRecv2 = authDatabase.getAuth(authRecv1.authToken());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertEquals(user.username(), userRecv.username());
-        assertEquals(user.password(), userRecv.password());
-        assertEquals(user.email(), userRecv.email());
+        assertEquals(authRecv1.authToken(), authRecv2.authToken());
+        assertEquals(authRecv1.username(), authRecv2.username());
+        assertEquals("user1", authRecv2.username());
     }
 
     @Test
     void createAuthDuplicate() {
-        UserData userRecv;
+        AuthData authRecv1 = null;
+        AuthData authRecv2 = null;
         try {
-            userDatabase.createUser(user);
-            userDatabase.createUser(user);
-            userRecv = userDatabase.getUser(user.username());
+            authRecv1 = authDatabase.createAuth("User1");
+            authRecv2 = authDatabase.createAuth("User1");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            assertNull(authRecv2);
         }
 
-        assertEquals(user.username(), userRecv.username());
-        assertEquals(user.password(), userRecv.password());
-        assertEquals(user.email(), userRecv.email());
+        assertNotEquals(authRecv1, authRecv2);
     }
 
     @Test
-    void getAuth() {
-        UserData user1 = new UserData("user1", "pass1", "mail1");
-        UserData user2 = new UserData("user2", "pass2", "mail2");
-        UserData user3 = new UserData("user3", "pass3", "mail3");
-
-
-        UserData userRecv1;
-        UserData userRecv2;
-        UserData userRecv3;
-
-
+    void getAuthtest() {
+        AuthData authRecv1;
+        AuthData authRecv2;
+        AuthData authRecv3;
         try {
-            userDatabase.createUser(user1);
-            userDatabase.createUser(user2);
-            userDatabase.createUser(user3);
+            authRecv1 = authDatabase.createAuth("User1");
+            authRecv2 = authDatabase.createAuth("User2");
+            authRecv3 = authDatabase.createAuth("User3");
 
-            userRecv1 = userDatabase.getUser(user1.username());
-            userRecv2 = userDatabase.getUser(user2.username());
-            userRecv3 = userDatabase.getUser(user3.username());
+            authRecv3 = authDatabase.getAuth(authRecv3.authToken());
+            authRecv2 = authDatabase.getAuth(authRecv2.authToken());
+            authRecv1 = authDatabase.getAuth(authRecv1.authToken());
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertEquals(user1.username(), userRecv1.username());
-        assertEquals(user2.password(), userRecv2.password());
-        assertEquals(user3.email(), userRecv3.email());
+        assertEquals("User1", authRecv1.username());
+        assertEquals("User2", authRecv2.username());
+        assertEquals("User3", authRecv3.username());
     }
 
     @Test
     void getAuthNotAdded() {
-        UserData userRecv;
+        AuthData authRecv;
 
         try {
-            userRecv = userDatabase.getUser("Bad Username");
+            authRecv = authDatabase.getAuth("Not a Real Auth Token");
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertNull(userRecv);
+        assertNull(authRecv);
     }
 
     @Test
     void deleteAuth() {
-        UserData user1 = new UserData("user1", "pass1", "mail1");
-        UserData user2 = new UserData("user2", "pass2", "mail2");
-        UserData user3 = new UserData("user3", "pass3", "mail3");
-
-
-        UserData userRecv1;
-        UserData userRecv2;
-        UserData userRecv3;
-
+        AuthData auth;
+        AuthData authRecv1;
+        AuthData authRecv2;
 
         try {
-            userDatabase.createUser(user1);
-            userDatabase.createUser(user2);
-            userDatabase.createUser(user3);
+            auth = authDatabase.createAuth("User1");
+            authRecv1 = authDatabase.getAuth(auth.authToken());
+            authDatabase.deleteAuth(auth);
+            authRecv2 = authDatabase.getAuth(auth.authToken());
 
-            userRecv1 = userDatabase.getUser(user1.username());
-            userRecv2 = userDatabase.getUser(user2.username());
-            userRecv3 = userDatabase.getUser(user3.username());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertEquals(user1.username(), userRecv1.username());
-        assertEquals(user2.password(), userRecv2.password());
-        assertEquals(user3.email(), userRecv3.email());
+        assertEquals("User1", authRecv1.username());
+        assertNull(authRecv2);
     }
 
     @Test
     void deleteAuthNotAdded() {
-        UserData userRecv;
+        AuthData auth = new AuthData("Not Real User", "With No Auth");
 
         try {
-            userRecv = userDatabase.getUser("Bad Username");
+            authDatabase.deleteAuth(auth);
         } catch (Exception e) {
+            fail();
             throw new RuntimeException(e);
         }
-
-        assertNull(userRecv);
     }
 
     @Test
-    void clearUsers() {
+    void clearAuthsTest() {
         UserData userRecvBefore;
-        UserData userRecvAfter;
+        AuthData authRecv1;
+        AuthData authRecv2;
+        AuthData authRecv3;
 
         try {
-            userDatabase.createUser(user);
-            userRecvBefore = userDatabase.getUser(user.username());
+            authRecv1 = authDatabase.createAuth("User1");
+            authRecv2 = authDatabase.createAuth("User2");
+            authRecv3 = authDatabase.createAuth("User3");
 
-            userDatabase.clear();
-            userRecvAfter = userDatabase.getUser(user.username());
+            authDatabase.clear();
+
+            authRecv3 = authDatabase.getAuth(authRecv3.authToken());
+            authRecv2 = authDatabase.getAuth(authRecv2.authToken());
+            authRecv1 = authDatabase.getAuth(authRecv1.authToken());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        assertNotEquals(userRecvBefore, userRecvAfter);
-        assertNull(userRecvAfter);
+        assertNull(authRecv1);
+        assertNull(authRecv2);
+        assertNull(authRecv3);
     }
 }
