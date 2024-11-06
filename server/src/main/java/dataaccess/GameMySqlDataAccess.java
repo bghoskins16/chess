@@ -95,28 +95,26 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
     }
 
     //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
-    public void updateGame(GameData oldGameData, GameData newGameData) {
+    public void updateGame(int gameID, ChessGame newGame) {
         String statement =
-                "UPDATE game SET whiteUsername = \"" +
-                        newGameData.whiteUsername() +
-                        "\", blackUsername = \"" +
-                        newGameData.blackUsername() +
-                        "\" WHERE id=" +
-                        oldGameData.gameID();
+                "UPDATE game SET gameData = '" +
+                        new Gson().toJson(newGame) +
+                        "' WHERE id=" +
+                        gameID;
         executeUpdate(statement);
     }
 
-//    public void addUserWhite(int gameID, String username){
-//        String statement =
-//                "UPDATE game SET whiteUsername = \"" + username + "\" WHERE id=" + gameID;
-//        executeUpdate(statement);
-//    }
-//
-//    public void addUserBlack(int gameID, String username){
-//        String statement =
-//                "UPDATE game SET blackUsername = \"" + username + "\" WHERE id=" + gameID;
-//        executeUpdate(statement);
-//    }
+    public void addUserWhite(int gameID, String username) {
+        String statement =
+                "UPDATE game SET whiteUsername = \"" + username + "\" WHERE id=" + gameID;
+        executeUpdate(statement);
+    }
+
+    public void addUserBlack(int gameID, String username) {
+        String statement =
+                "UPDATE game SET blackUsername = \"" + username + "\" WHERE id=" + gameID;
+        executeUpdate(statement);
+    }
 
     public final String[] createStatements = {
             """

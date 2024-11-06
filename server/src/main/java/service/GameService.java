@@ -39,16 +39,16 @@ public class GameService extends Service {
             if (game.whiteUsername() != null) {
                 throw new ResponseException(403, "Error: already taken");
             }
-            newGame = new GameData(game.gameID(), auth.username(), game.blackUsername(), game.gameName(), game.game());
+            gameDatabase.addUserWhite(joinReq.gameID(), auth.username());
         } else if (joinReq.playerColor() == ChessGame.TeamColor.BLACK) {
             if (game.blackUsername() != null) {
                 throw new ResponseException(403, "Error: already taken");
             }
-            newGame = new GameData(game.gameID(), game.whiteUsername(), auth.username(), game.gameName(), game.game());
+            gameDatabase.addUserBlack(joinReq.gameID(), auth.username());
         } else {
             throw new ResponseException(400, "Error: bad request");
         }
 
-        gameDatabase.updateGame(game, newGame);
+        //gameDatabase.updateGame(game, newGame);
     }
 }

@@ -17,9 +17,9 @@ public class Service {
 
     public Service(){
         try {
-            Service.authDatabase = new AuthMemoryDataAccess();
-            Service.gameDatabase = new GameMemoryDataAccess();
-            Service.userDatabase = new UserMemoryDataAccess();
+            Service.authDatabase = new AuthMySqlDataAccess();
+            Service.gameDatabase = new GameMySqlDataAccess();
+            Service.userDatabase = new UserMySqlDataAccess();
         }catch(Exception e){
             throw new RuntimeException(e);
         }

@@ -125,7 +125,8 @@ public class GameServiceTests {
     void joinGameBad() {
         int gameID = gameDatabase.createGame("game1");
         GameData gameData = gameDatabase.getGame(gameID);
-        gameDatabase.updateGame(gameData, new GameData(gameID, "Another Player", "And his friend", "game1", gameData.game()));
+        gameDatabase.addUserWhite(gameID, "Another Player");
+        gameDatabase.addUserBlack(gameID, "And his friend");
 
         JoinGameRequest joinGameRequest = new JoinGameRequest(auth.authToken(), ChessGame.TeamColor.WHITE, gameID);
 

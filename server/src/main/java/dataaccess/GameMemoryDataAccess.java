@@ -43,7 +43,24 @@ public class GameMemoryDataAccess implements GameDataAccess {
     }
 
     //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
-    public void updateGame(GameData oldGameData, GameData newGameData) {
+    public void updateGame(int gameID, ChessGame newGame) {
+        GameData oldGameData = this.getGame(gameID);
+        GameData newGameData = new GameData(oldGameData.gameID(), oldGameData.whiteUsername(), oldGameData.blackUsername(), oldGameData.gameName(), newGame);
+        replaceGame(oldGameData, newGameData);
+    }
+
+    public void addUserWhite(int gameID, String username){
+        GameData oldGameData = this.getGame(gameID);
+        GameData newGameData = new GameData(oldGameData.gameID(), username, oldGameData.blackUsername(), oldGameData.gameName(), oldGameData.game());
+        replaceGame(oldGameData, newGameData);
+    }
+    public void addUserBlack(int gameID, String username){
+        GameData oldGameData = this.getGame(gameID);
+        GameData newGameData = new GameData(oldGameData.gameID(), oldGameData.whiteUsername(), username, oldGameData.gameName(), oldGameData.game());
+        replaceGame(oldGameData, newGameData);
+    }
+
+    private void replaceGame(GameData oldGameData, GameData newGameData){
         games.remove(oldGameData);
         games.add(newGameData);
     }

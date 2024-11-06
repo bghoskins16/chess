@@ -1,5 +1,6 @@
 package dataaccess;
 
+import chess.ChessGame;
 import model.AuthData;
 import model.GameData;
 import model.UserData;
@@ -20,6 +21,10 @@ public interface GameDataAccess {
     //listGames: Retrieve all games.
     public Collection<GameData> listGames();
 
-    //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
-    public void updateGame(GameData oldGameData, GameData newGameData);
+    //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when a move is made.
+    public void updateGame(int gameID, ChessGame newGame);
+
+    //addUser: Used when players join a game
+    public void addUserWhite(int gameID, String username);
+    public void addUserBlack(int gameID, String username);
 }
