@@ -20,7 +20,7 @@ public class AuthMySqlDataAccess extends MySqlDataAccess implements AuthDataAcce
     //createAuth: Create a new authorization.
     public AuthData createAuth(String username) {
         String authToken = UUID.randomUUID().toString();
-        String statement = "INSERT INTO auth VALUES (\"" + username + "\", \"" + authToken + "\")";
+        String statement = "INSERT INTO auth (username, AuthToken) VALUES (\"" + username + "\", \"" + authToken + "\")";
 
         // TODO: Add a try catch
         executeUpdate(statement);
@@ -57,9 +57,10 @@ public class AuthMySqlDataAccess extends MySqlDataAccess implements AuthDataAcce
     private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS  auth (
-              `username` varchar(256) NOT NULL UNIQUE,
+              `id` int NOT NULL AUTO_INCREMENT,
+              `username` varchar(256) NOT NULL,
               `authToken` varchar(256) NOT NULL,
-              PRIMARY KEY (`username`)
+              PRIMARY KEY (`id`)
             )
             """
     };

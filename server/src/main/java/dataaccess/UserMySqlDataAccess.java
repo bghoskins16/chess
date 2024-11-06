@@ -19,7 +19,7 @@ public class UserMySqlDataAccess extends MySqlDataAccess implements UserDataAcce
 
     //createUser: Create a new user.
     public void createUser(UserData newUser) {
-        String statement = "INSERT INTO user VALUES (\"" + newUser.username() + "\", \"" + newUser.password() + "\", \"" + newUser.email() + "\")";
+        String statement = "INSERT INTO user (username, password, email) VALUES (\"" + newUser.username() + "\", \"" + newUser.password() + "\", \"" + newUser.email() + "\")";
         executeUpdate(statement);
     }
 
@@ -48,10 +48,11 @@ public class UserMySqlDataAccess extends MySqlDataAccess implements UserDataAcce
     private final String[] createStatements = {
             """
             CREATE TABLE IF NOT EXISTS  user (
-              `username` varchar(256) NOT NULL UNIQUE,
+              `id` int NOT NULL AUTO_INCREMENT,
+              `username` varchar(256) NOT NULL,
               `password` varchar(256) NOT NULL,
               `email` varchar(256) DEFAULT NULL,
-              PRIMARY KEY (`username`)
+              PRIMARY KEY (`id`)
             )
             """
     };

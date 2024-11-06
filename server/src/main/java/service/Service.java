@@ -5,9 +5,9 @@ import model.AuthData;
 import server.ResponseException;
 
 public class Service {
-    static UserDataAccess userDatabase = new UserMemoryDataAccess();
-    static AuthDataAccess authDatabase = new AuthMemoryDataAccess();
-    static GameDataAccess gameDatabase = new GameMemoryDataAccess();
+    static UserDataAccess userDatabase;// = new UserMemoryDataAccess();
+    static AuthDataAccess authDatabase;// = new AuthMemoryDataAccess();
+    static GameDataAccess gameDatabase;// = new GameMemoryDataAccess();
 
     public Service(UserDataAccess userDatabase, AuthDataAccess authDatabase, GameDataAccess gameDatabase) {
         Service.authDatabase = authDatabase;
@@ -16,7 +16,13 @@ public class Service {
     }
 
     public Service(){
-
+        try {
+            Service.authDatabase = new AuthMySqlDataAccess();
+            Service.gameDatabase = new GameMySqlDataAccess();
+            Service.userDatabase = new UserMySqlDataAccess();
+        }catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
     public void clear() {

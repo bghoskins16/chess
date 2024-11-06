@@ -7,6 +7,8 @@ import model.GameData;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static java.sql.Statement.RETURN_GENERATED_KEYS;
+
 public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAccess {
 
     public GameMySqlDataAccess() throws DataAccessException {
@@ -23,14 +25,14 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
     //createGame: Create a new game.
     public int createGame(String gameName) {
         String newGame = new Gson().toJson(new ChessGame());
-        String statement = "INSERT INTO game (gameName, gameData) VALUES (\"" + gameName + "\", \"" + newGame + "\")";
+        String statement = "INSERT INTO game (gameName, gameData) VALUES (\"" + gameName + "\", '" + newGame + "')";
 
         try (var conn = DatabaseManager.getConnection()) {
-            try (var preparedStatement = conn.prepareStatement(statement)) {
+            try (var preparedStatement = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
                 preparedStatement.executeUpdate();
                 var rs = preparedStatement.getGeneratedKeys();
                 if (rs.next()) {
-                    return rs.getInt("id");
+                    return rs.getInt(1);
                 }
             }
         } catch (Exception e) {
@@ -55,7 +57,7 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
                     whiteUser = rs.getString("whiteUsername");
                     blackUser = rs.getString("blackUsername");
                     gameName = rs.getString("gameName");
-                    game = new Gson().fromJson(rs.getString("chesData"), ChessGame.class);
+                    game = new Gson().fromJson(rs.getString("gameData"), ChessGame.class);
                     return new GameData(gameID, whiteUser, blackUser, gameName, game);
                 }
             }
@@ -80,7 +82,7 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
                                     rs.getString("whiteUsername"),
                                     rs.getString("blackUsername"),
                                     rs.getString("gameName"),
-                                    new Gson().fromJson(rs.getString("chesData"), ChessGame.class)
+                                    new Gson().fromJson(rs.getString("gameData"), ChessGame.class)
                             )
                     );
                 }
@@ -99,9 +101,9 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
                         newGameData.whiteUsername() +
                         "\", blackUsername = \"" +
                         newGameData.blackUsername() +
-                        "\", gameData = \"" +
+                        "\", gameData = '" +
                         new Gson().toJson(newGameData.game()) +
-                        "\" WHERE id=" +
+                        "' WHERE id=" +
                         oldGameData.gameID();
         executeUpdate(statement);
     }
