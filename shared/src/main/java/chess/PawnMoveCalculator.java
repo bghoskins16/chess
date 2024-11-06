@@ -34,14 +34,7 @@ public class PawnMoveCalculator extends PieceMoveCalculator {
             if (board.getPiece(endPos) != null) {
                 ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
                 if (color != pieceColor) {
-                    if (promotion) {
-                        moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.QUEEN));
-                        moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.ROOK));
-                        moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.BISHOP));
-                        moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.KNIGHT));
-                    } else {
-                        moves.add(new ChessMove(myPosition, endPos, null));
-                    }
+                    addMoveWithPromotions(promotion, moves, myPosition, endPos);
                 }
             }
         }
@@ -53,14 +46,7 @@ public class PawnMoveCalculator extends PieceMoveCalculator {
             if (board.getPiece(endPos) != null) {
                 ChessGame.TeamColor color = board.getPiece(endPos).getTeamColor();
                 if (color != pieceColor) {
-                    if (promotion) {
-                        moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.QUEEN));
-                        moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.ROOK));
-                        moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.BISHOP));
-                        moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.KNIGHT));
-                    } else {
-                        moves.add(new ChessMove(myPosition, endPos, null));
-                    }
+                    addMoveWithPromotions(promotion, moves, myPosition, endPos);
                 }
             }
         }
@@ -69,14 +55,7 @@ public class PawnMoveCalculator extends PieceMoveCalculator {
         if (startRow > 1 && startCol > 1) {
             endPos = new ChessPosition(endRow, startCol);
             if (board.getPiece(endPos) == null) {
-                if (promotion) {
-                    moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.QUEEN));
-                    moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.ROOK));
-                    moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.BISHOP));
-                    moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.KNIGHT));
-                } else {
-                    moves.add(new ChessMove(myPosition, endPos, null));
-                }
+                addMoveWithPromotions(promotion, moves, myPosition, endPos);
 
                 // check to see if it can move twice
                 if (pieceColor == ChessGame.TeamColor.WHITE && startRow == 2) {
@@ -94,5 +73,17 @@ public class PawnMoveCalculator extends PieceMoveCalculator {
         }
 
         return moves;
+    }
+
+    public void addMoveWithPromotions(boolean promotion, Collection<ChessMove> moves, ChessPosition myPosition, ChessPosition endPos){
+        if (promotion) {
+            moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.QUEEN));
+            moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.ROOK));
+            moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.BISHOP));
+            moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.KNIGHT));
+        }
+        else {
+            moves.add(new ChessMove(myPosition, endPos, null));
+        }
     }
 }
