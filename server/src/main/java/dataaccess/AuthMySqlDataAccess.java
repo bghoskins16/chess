@@ -33,7 +33,7 @@ public class AuthMySqlDataAccess extends MySqlDataAccess implements AuthDataAcce
         String authToken = UUID.randomUUID().toString();
         String statement = "INSERT INTO auth (username, AuthToken) VALUES (\"" + username + "\", \"" + authToken + "\")";
 
-        // TODO: Add a try catch
+        // Maybe should add a try catch
         executeUpdate(statement);
         return new AuthData(username, authToken);
     }

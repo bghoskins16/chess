@@ -31,7 +31,10 @@ public class UserMySqlDataAccess extends MySqlDataAccess implements UserDataAcce
 
     //createUser: Create a new user.
     public void createUser(UserData newUser) {
-        String statement = "INSERT INTO user (username, password, email) VALUES (\"" + newUser.username() + "\", \"" + newUser.password() + "\", \"" + newUser.email() + "\")";
+        String statement = "INSERT INTO user (username, password, email) VALUES (\"" +
+                newUser.username() + "\", \"" +
+                newUser.password() + "\", \"" +
+                newUser.email() + "\")";
         executeUpdate(statement);
     }
 

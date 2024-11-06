@@ -107,7 +107,9 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
         return games;
     }
 
-    //updateGame: Updates a chess game. It should replace the chess game string corresponding to a given gameID. This is used when players join a game or when a move is made.
+    //updateGame: Updates a chess game.
+    // It should replace the chess game string corresponding to a given gameID.
+    // This is used when players join a game or when a move is made.
     public void updateGame(int gameID, ChessGame newGame) {
         String statement =
                 "UPDATE game SET gameData = '" +
