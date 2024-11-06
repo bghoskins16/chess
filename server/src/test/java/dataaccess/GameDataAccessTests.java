@@ -11,6 +11,7 @@ public class GameDataAccessTests {
 
     static UserDataAccess userDatabase;
     static AuthDataAccess authDatabase;
+    static GameDataAccess gameDatabase;
 
 
     UserData user;
@@ -21,6 +22,7 @@ public class GameDataAccessTests {
         try {
             userDatabase = new UserMySqlDataAccess();
             authDatabase = new AuthMySqlDataAccess();
+            gameDatabase = new GameMySqlDataAccess();
         } catch (DataAccessException e) {
             throw new RuntimeException(e);
         }
@@ -31,7 +33,7 @@ public class GameDataAccessTests {
     }
 
     @Test
-    void createUser() {
+    void createGameTest() {
         UserData userRecv;
         try {
             userDatabase.createUser(user);
@@ -46,7 +48,7 @@ public class GameDataAccessTests {
     }
 
     @Test
-    void createUserDuplicate() {
+    void createGameMissingInfoTest() {
         UserData userRecv;
         try {
             userDatabase.createUser(user);
@@ -62,7 +64,7 @@ public class GameDataAccessTests {
     }
 
     @Test
-    void getUsers() {
+    void getGameTest() {
         UserData user1 = new UserData("user1", "pass1", "mail1");
         UserData user2 = new UserData("user2", "pass2", "mail2");
         UserData user3 = new UserData("user3", "pass3", "mail3");
@@ -91,7 +93,92 @@ public class GameDataAccessTests {
     }
 
     @Test
-    void getUserNotAdded() {
+    void getGameNotAdded() {
+        UserData userRecv;
+
+        try {
+            userRecv = userDatabase.getUser("Bad Username");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertNull(userRecv);
+    }
+
+    @Test
+    void listGamesTest() {
+        UserData user1 = new UserData("user1", "pass1", "mail1");
+        UserData user2 = new UserData("user2", "pass2", "mail2");
+        UserData user3 = new UserData("user3", "pass3", "mail3");
+
+
+        UserData userRecv1;
+        UserData userRecv2;
+        UserData userRecv3;
+
+
+        try {
+            userDatabase.createUser(user1);
+            userDatabase.createUser(user2);
+            userDatabase.createUser(user3);
+
+            userRecv1 = userDatabase.getUser(user1.username());
+            userRecv2 = userDatabase.getUser(user2.username());
+            userRecv3 = userDatabase.getUser(user3.username());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(user1.username(), userRecv1.username());
+        assertEquals(user2.password(), userRecv2.password());
+        assertEquals(user3.email(), userRecv3.email());
+    }
+
+    @Test
+    void listGamesNone() {
+        UserData userRecv;
+
+        try {
+            userRecv = userDatabase.getUser("Bad Username");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertNull(userRecv);
+    }
+
+
+    @Test
+    void UpdateGameTest() {
+        UserData user1 = new UserData("user1", "pass1", "mail1");
+        UserData user2 = new UserData("user2", "pass2", "mail2");
+        UserData user3 = new UserData("user3", "pass3", "mail3");
+
+
+        UserData userRecv1;
+        UserData userRecv2;
+        UserData userRecv3;
+
+
+        try {
+            userDatabase.createUser(user1);
+            userDatabase.createUser(user2);
+            userDatabase.createUser(user3);
+
+            userRecv1 = userDatabase.getUser(user1.username());
+            userRecv2 = userDatabase.getUser(user2.username());
+            userRecv3 = userDatabase.getUser(user3.username());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(user1.username(), userRecv1.username());
+        assertEquals(user2.password(), userRecv2.password());
+        assertEquals(user3.email(), userRecv3.email());
+    }
+
+    @Test
+    void UpdateBadGameTest() {
         UserData userRecv;
 
         try {
