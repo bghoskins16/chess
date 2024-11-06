@@ -4,7 +4,11 @@ import java.util.Collection;
 
 public class PieceMoveCalculator {
 
-    public Collection<ChessMove> pieceMoveCalculator(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type, ChessBoard board, ChessPosition myPosition) {
+    public Collection<ChessMove> pieceMoveCalculator(
+            ChessGame.TeamColor pieceColor,
+            ChessPiece.PieceType type,
+            ChessBoard board,
+            ChessPosition myPosition) {
         return null;
     }
 
@@ -12,13 +16,19 @@ public class PieceMoveCalculator {
     // used in queen, bishop  and rook
     // types 1-4 are diagonals
     // types 5-8 are orthogonals
-    public void sequenceCalc(int type, Collection<ChessMove> moves, ChessGame.TeamColor pieceColor, ChessBoard board, ChessPosition myPosition){
+    public void sequenceCalc(
+            int type,
+            Collection<ChessMove> moves,
+            ChessGame.TeamColor pieceColor,
+            ChessBoard board,
+            ChessPosition myPosition) {
+
         int endRow = myPosition.getRow();
         int endCol = myPosition.getColumn();
 
         while (true) {
             // Change the move Location
-            switch (type){
+            switch (type) {
                 case 1:
                     endRow--;
                     endCol++;
@@ -52,7 +62,7 @@ public class PieceMoveCalculator {
             }
 
             // Check if in bounds
-            if (endRow < 1 || endRow > 8 || endCol < 1 || endCol > 8){
+            if (endRow < 1 || endRow > 8 || endCol < 1 || endCol > 8) {
                 return;
             }
 
@@ -72,7 +82,14 @@ public class PieceMoveCalculator {
 
     }
 
-    public void singleCalc(int endRow, int endCol, Collection<ChessMove> moves, ChessGame.TeamColor pieceColor, ChessBoard board, ChessPosition myPosition){
+    public void singleCalc(
+            int endRow,
+            int endCol,
+            Collection<ChessMove> moves,
+            ChessGame.TeamColor pieceColor,
+            ChessBoard board,
+            ChessPosition myPosition) {
+
         if (endRow >= 1 && endRow <= 8 && endCol >= 1 && endCol <= 8) {
             ChessPosition endPos = new ChessPosition(endRow, endCol);
             // if this is not my own piece add to Collection

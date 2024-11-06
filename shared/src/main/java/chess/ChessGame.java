@@ -191,26 +191,7 @@ public class ChessGame implements Cloneable {
             return false;
         }
 
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                ChessPosition pos = new ChessPosition(i, j);
-                ChessPiece piece = gameBoard.getPiece(pos);
-
-                // Move to next piece if ths piece is empty or on the other team
-                if (piece == null || piece.getTeamColor() != teamColor) {
-                    continue;
-                }
-
-                //Check Valid moves. If there is any valid moves then it isn't checkmate
-                Collection<ChessMove> moves = validMoves(pos);
-                if (!moves.isEmpty()) {
-                    return false;
-                }
-            }
-        }
-
-        // It will reach here if color is in check and has no valid moves, so return true (Checkmate!)
-        return true;
+        return isAnyValidMoves(teamColor);
     }
 
     /**
@@ -226,26 +207,7 @@ public class ChessGame implements Cloneable {
             return false;
         }
 
-        for (int i = 1; i <= 8; i++) {
-            for (int j = 1; j <= 8; j++) {
-                ChessPosition pos = new ChessPosition(i, j);
-                ChessPiece piece = gameBoard.getPiece(pos);
-
-                // Move to next piece if ths piece is empty or on the other team
-                if (piece == null || piece.getTeamColor() != teamColor) {
-                    continue;
-                }
-
-                //Check Valid moves. If there is any valid moves then it isn't a stalemate
-                Collection<ChessMove> moves = validMoves(pos);
-                if (!moves.isEmpty()) {
-                    return false;
-                }
-            }
-        }
-
-        // It will reach here if color is not in check and has no valid moves, so return true (stalemate)
-        return true;
+        return isAnyValidMoves(teamColor);
     }
 
     /**
@@ -298,5 +260,28 @@ public class ChessGame implements Cloneable {
     @Override
     public int hashCode() {
         return Objects.hash(teamTurn, gameBoard);
+    }
+
+    private boolean isAnyValidMoves(TeamColor teamColor){
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                ChessPosition pos = new ChessPosition(i, j);
+                ChessPiece piece = gameBoard.getPiece(pos);
+
+                // Move to next piece if ths piece is empty or on the other team
+                if (piece == null || piece.getTeamColor() != teamColor) {
+                    continue;
+                }
+
+                //Check Valid moves. If there is any valid moves then it isn't checkmate
+                Collection<ChessMove> moves = validMoves(pos);
+                if (!moves.isEmpty()) {
+                    return false;
+                }
+            }
+        }
+
+        // It will reach here if color is in check and has no valid moves, so return true (Checkmate!)
+        return true;
     }
 }
