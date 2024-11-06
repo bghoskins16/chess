@@ -50,7 +50,7 @@ public class AuthMySqlDataAccess extends MySqlDataAccess implements AuthDataAcce
 
     //deleteAuth: Delete an authorization so that it is no longer valid.
     public void deleteAuth(AuthData authToken) {
-        String statement = "DELETE FROM auth WHERE authToken=\"" + authToken + "\"";
+        String statement = "DELETE FROM auth WHERE authToken=\"" + authToken.authToken() + "\"";
         executeUpdate(statement);
     }
 

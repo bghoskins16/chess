@@ -101,12 +101,22 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
                         newGameData.whiteUsername() +
                         "\", blackUsername = \"" +
                         newGameData.blackUsername() +
-                        "\", gameData = '" +
-                        new Gson().toJson(newGameData.game()) +
-                        "' WHERE id=" +
+                        "\" WHERE id=" +
                         oldGameData.gameID();
         executeUpdate(statement);
     }
+
+//    public void addUserWhite(int gameID, String username){
+//        String statement =
+//                "UPDATE game SET whiteUsername = \"" + username + "\" WHERE id=" + gameID;
+//        executeUpdate(statement);
+//    }
+//
+//    public void addUserBlack(int gameID, String username){
+//        String statement =
+//                "UPDATE game SET blackUsername = \"" + username + "\" WHERE id=" + gameID;
+//        executeUpdate(statement);
+//    }
 
     public final String[] createStatements = {
             """
