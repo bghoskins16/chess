@@ -14,7 +14,10 @@ public class DrawChessBoard {
 
     static ChessBoard board;
 
-    public static void main(String[] args) {
+    public DrawChessBoard() {
+    }
+
+    public void printStartingBoard(){
         ChessBoard board = new ChessBoard();
         board.resetBoard();
 
