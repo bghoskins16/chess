@@ -1,6 +1,10 @@
 package communication;
 
+import request.*;
+
 public class ServerFacade {
+
+    ClientCommunicator com = new ClientCommunicator();
 
     public ServerFacade() {
     }
@@ -10,17 +14,20 @@ public class ServerFacade {
     }
 
     public String register(String username, String password, String email) {
-        System.out.println("register: " + username + ", " + password + ", " + email);
-        return "auth";
+        RegisterRequest registerRequest = new RegisterRequest(username, password, email);
+        String auth = com.register(registerRequest);
+        System.out.println("Successfully registered " + username);
+        return auth;
     }
 
     public String login(String username, String password) {
-        System.out.println("login: " + username + ", " + password);
+        LoginRequest loginRequest = new LoginRequest(username, password);
+        System.out.println("Successfully logged in " + username);
         return "auth";
     }
 
-    public void logout() {
-
+    public boolean logout() {
+        return true;
     }
 
     public void listGames() {

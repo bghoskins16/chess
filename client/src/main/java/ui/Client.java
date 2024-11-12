@@ -42,15 +42,31 @@ public class Client {
             String cmd = args[0];
             switch (cmd) {
                 case "register":
-                    currAuthToken = facade.register(args[1], args[2], args[3]);
-                    printLoginScreen();
+                    if (args.length == 4) {
+                        currAuthToken = facade.register(args[1], args[2], args[3]);
+                        if (currAuthToken != null) {
+                            printLoginScreen();
+                        }
+                        break;
+                    }
+                    printPreLoginHelp();
                     break;
                 case "login":
-                    currAuthToken = facade.login(args[1], args[2]);
-                    printLoginScreen();
+                    if (args.length == 3) {
+                        currAuthToken = facade.login(args[1], args[2]);
+                        if (currAuthToken != null) {
+                            printLoginScreen();
+                        }
+                        break;
+                    }
+                    printPreLoginHelp();
                     break;
                 case "quit":
-                    stopUI = true;
+                    if (args.length == 1) {
+                        stopUI = true;
+                        break;
+                    }
+                    printPreLoginHelp();
                     break;
                 case "help":
                 default:
@@ -81,9 +97,10 @@ public class Client {
                     drawChessBoard.printStartingBoard();
                     break;
                 case "logout":
-                    facade.logout();
-                    currAuthToken = null;
-                    printStartScreen();
+                    if (facade.logout()) {
+                        currAuthToken = null;
+                        printStartScreen();
+                    }
                     break;
                 case "quit":
                     stopUI = true;
@@ -124,7 +141,6 @@ public class Client {
     }
 
     private void printLoginScreen() {
-        System.out.println("You have successfully logged in!!");
         System.out.println(" To play type your command. Type 'help' to see possible commands.");
         System.out.println(" You'll need to join a game to play!");
     }
