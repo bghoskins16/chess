@@ -10,11 +10,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ServerFacade {
-
-    ClientCommunicator com = new ClientCommunicator();
+    int DefaultPort = 8080;
+    ClientCommunicator com;
     Collection<GameData> currGameList = new ArrayList<>();
 
     public ServerFacade() {
+        com = new ClientCommunicator(DefaultPort);
+    }
+
+    public ServerFacade(int port) {
+        com = new ClientCommunicator(port);
     }
 
     public void clear() {
@@ -63,31 +68,38 @@ public class ServerFacade {
         return true;
     }
 
-    public void listGames(String authToken) {
+    public String listGames(String authToken) {
         ListGamesRequest listGamesRequest = new ListGamesRequest(authToken);
         String response = com.listGames(listGamesRequest);
         currGameList = new Gson().fromJson(response, ListResponse.class).games();
 
+        StringBuilder output = new StringBuilder();
         int i = 1;
         for (GameData game : currGameList) {
-            System.out.println("  id -> " + i + ":" +
-                    "   Game Name -> " + game.gameName() +
-                    "   White Player -> " + ((game.whiteUsername() == null) ? "'AVAILABLE'" : game.whiteUsername()) +
-                    "   Black Player -> " + ((game.blackUsername() == null) ? "'AVAILABLE'" : game.blackUsername()));
+            output.append("  id -> ").append(i).append(":");
+            output.append("   Game Name -> ").append(game.gameName());
+            output.append("   White Player -> ").append((game.whiteUsername() == null) ? "'AVAILABLE'" : game.whiteUsername());
+            output.append("   Black Player -> ").append((game.blackUsername() == null) ? "'AVAILABLE'" : game.blackUsername());
+            output.append("\n");
             i++;
         }
 
+        System.out.print(output);
+        return output.toString();
+
     }
 
-    public void createGame(String authToken, String name) {
+    public boolean createGame(String authToken, String name) {
         CreateGameRequest createGameRequest = new CreateGameRequest(authToken, name);
         String response = com.createGame(createGameRequest);
 
         if (response.startsWith("Error")) {
             System.out.println(response);
+            return false;
         }
 
         System.out.println(name + " has been created! List games to view the id.");
+        return true;
     }
 
     public boolean joinGame(String authToken, String id, String color) {

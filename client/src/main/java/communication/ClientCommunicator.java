@@ -16,9 +16,10 @@ import java.nio.charset.StandardCharsets;
 
 public class ClientCommunicator {
     static Gson serializer = new Gson();
-    String path = "http://localhost:8080";
+    String path = "http://localhost:";
 
-    public ClientCommunicator() {
+    public ClientCommunicator(int port) {
+        path = "http://localhost:" + port;
     }
 
     public String clear() {
