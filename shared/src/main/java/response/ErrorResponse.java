@@ -1,4 +1,4 @@
-package communication.response;
+package response;
 
 public record ErrorResponse(String message) {
 }

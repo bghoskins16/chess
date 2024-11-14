@@ -1,4 +1,4 @@
-package communication.response;
+package response;
 
 import model.GameData;
 

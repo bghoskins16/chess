@@ -1,4 +1,4 @@
-package communication.request;
+package request;
 
 public record ListGamesRequest(
         String authToken) {

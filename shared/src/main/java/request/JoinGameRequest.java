@@ -1,4 +1,4 @@
-package communication.request;
+package request;
 
 import chess.ChessGame;
 
