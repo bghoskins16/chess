@@ -86,20 +86,20 @@ public class Client {
             String cmd = args[0];
             switch (cmd) {
                 case "create":
-                    facade.createGame(args[1]);
+                    facade.createGame(currAuthToken, args[1]);
                     break;
                 case "list":
-                    facade.listGames();
+                    facade.listGames(currAuthToken);
                     break;
                 case "join":
-                    facade.joinGame(args[1], args[2]);
+                    facade.joinGame(currAuthToken, args[1], args[2]);
                     drawChessBoard.printStartingBoard();
                     break;
                 case "observe":
                     drawChessBoard.printStartingBoard();
                     break;
                 case "logout":
-                    if (facade.logout()) {
+                    if (facade.logout(currAuthToken)) {
                         currAuthToken = null;
                         printStartScreen();
                     }

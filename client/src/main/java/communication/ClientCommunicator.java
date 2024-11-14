@@ -27,7 +27,7 @@ public class ClientCommunicator {
             String responseText = httpDelete(url, null);
 
             ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
-            if (errorResponse.message() != null){
+            if (errorResponse.message() != null) {
                 return errorResponse.message();
             }
             return responseText;
@@ -46,7 +46,7 @@ public class ClientCommunicator {
             String responseText = httpPost(url, message, null);
             AuthData authData = serializer.fromJson(responseText, AuthData.class);
 
-            if (authData.authToken() == null){
+            if (authData.authToken() == null) {
                 ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
                 return errorResponse.message();
             }
@@ -59,11 +59,42 @@ public class ClientCommunicator {
         return null;
     }
 
-    public String login(LoginRequest loginReq) {
+    public String login(LoginRequest req) {
+        try {
+            URL url = new URL(path + "/session");
+            String message = serializer.toJson(req);
+
+            String responseText = httpPost(url, message, null);
+            AuthData authData = serializer.fromJson(responseText, AuthData.class);
+
+            if (authData.authToken() == null) {
+                ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
+                return errorResponse.message();
+            }
+
+            return authData.authToken();
+
+        } catch (Exception ex) {
+            System.out.println("exception in register");
+        }
         return null;
     }
 
-    public String logout(LogoutRequest logoutReq) {
+    public String logout(LogoutRequest req) {
+        try {
+            URL url = new URL(path + "/session");
+
+            String responseText = httpDelete(url, req.authToken());
+
+            ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
+            if (errorResponse.message() != null){
+                return errorResponse.message();
+            }
+            return responseText;
+
+        } catch (Exception ex) {
+            System.out.println("exception in register");
+        }
         return null;
     }
 

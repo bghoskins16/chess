@@ -31,23 +31,39 @@ public class ServerFacade {
 
     public String login(String username, String password) {
         LoginRequest loginRequest = new LoginRequest(username, password);
+        String response = com.login(loginRequest);
+
+        if (response.startsWith("Error")){
+            System.out.println(response);
+            return null;
+        }
+
         System.out.println("Successfully logged in " + username);
-        return "auth";
+        return response;
     }
 
-    public boolean logout() {
+    public boolean logout(String authToken) {
+        LogoutRequest logoutRequest = new LogoutRequest(authToken);
+        String response = com.logout(logoutRequest);
+
+        if (response.startsWith("Error")){
+            System.out.println(response);
+            return false;
+        }
+
+        System.out.println("Successfully Logged Out");
         return true;
     }
 
-    public void listGames() {
+    public void listGames(String authToken) {
 
     }
 
-    public void createGame(String name) {
+    public void createGame(String authToken, String name) {
 
     }
 
-    public void joinGame(String id, String color) {
+    public void joinGame(String authToken, String id, String color) {
         //convert id to an int
     }
 }
