@@ -7,10 +7,8 @@ import response.CreateGameResponse;
 import response.ErrorResponse;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
@@ -75,19 +73,17 @@ public class ClientCommunicator {
             URL url = new URL(path + "/session");
             String message = serializer.toJson(req);
             String responseText = httpPost(url, message, null);
-
             if (responseText == null) {
                 return null;
             }
 
-            AuthData authData = serializer.fromJson(responseText, AuthData.class);
-
-            if (authData.authToken() == null) {
+            AuthData auth = serializer.fromJson(responseText, AuthData.class);
+            if (auth.authToken() == null) {
                 ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
                 return errorResponse.message();
             }
 
-            return authData.authToken();
+            return auth.authToken();
 
         } catch (Exception ex) {
             System.out.println("Error: Problem with connection, please try again");

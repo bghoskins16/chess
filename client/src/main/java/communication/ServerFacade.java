@@ -10,12 +10,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ServerFacade {
-    int DefaultPort = 8080;
+    int defaultPort = 8080;
     ClientCommunicator com;
     Collection<GameData> currGameList = new ArrayList<>();
 
     public ServerFacade() {
-        com = new ClientCommunicator(DefaultPort);
+        com = new ClientCommunicator(defaultPort);
     }
 
     public ServerFacade(int port) {
