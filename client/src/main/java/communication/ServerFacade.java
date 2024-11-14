@@ -15,9 +15,15 @@ public class ServerFacade {
 
     public String register(String username, String password, String email) {
         RegisterRequest registerRequest = new RegisterRequest(username, password, email);
-        String auth = com.register(registerRequest);
+        String response = com.register(registerRequest);
+
+        if (response.startsWith("Error")){
+            System.out.println(response);
+            return null;
+        }
+
         System.out.println("Successfully registered " + username);
-        return auth;
+        return response;
     }
 
     public String login(String username, String password) {
