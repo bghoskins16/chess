@@ -128,11 +128,6 @@ public class Client {
                     }
                     printPostLoginHelp();
                     break;
-                case "quit":
-                    if (args.length == 1) {
-                        stopUI = true;
-                        break;
-                    }
                 case "help":
                 default:
                     printPostLoginHelp();
@@ -150,7 +145,6 @@ public class Client {
         System.out.println(" join <id> [black OR white]  --  Join the chess game with the given id and color");
         System.out.println(" observe <id>  --  Observe the chess game with the given id");
         System.out.println(" logout  --  Logout of your account");
-        System.out.println(" quit  --  Exit chess program");
         System.out.println(" help  --  Display the help message");
     }
 
