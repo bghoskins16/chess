@@ -9,18 +9,38 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
 public class ClientCommunicator {
     static Gson serializer = new Gson();
+    String path = "http://localhost:8080";
 
     public ClientCommunicator() {
     }
 
+    public String clear() {
+
+        try {
+            URL url = new URL(path + "/db");
+            String responseText = httpDelete(url, null);
+
+            ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
+            if (errorResponse.message() != null){
+                return errorResponse.message();
+            }
+            return responseText;
+
+        } catch (MalformedURLException e) {
+            System.out.println("exception in clear");
+        }
+        return null;
+    }
+
     public String register(RegisterRequest req) {
         try {
-            URL url = new URL("http://localhost:8080/user");
+            URL url = new URL(path + "/user");
             String message = serializer.toJson(req);
 
             String responseText = httpPost(url, message, null);
@@ -36,6 +56,26 @@ public class ClientCommunicator {
         } catch (Exception ex) {
             System.out.println("exception in register");
         }
+        return null;
+    }
+
+    public String login(LoginRequest loginReq) {
+        return null;
+    }
+
+    public String logout(LogoutRequest logoutReq) {
+        return null;
+    }
+
+    public String listGames(ListGamesRequest listReq) {
+        return null;
+    }
+
+    public String createGame(CreateGameRequest gameReq) {
+        return null;
+    }
+
+    public String joinGame(JoinGameRequest joinReq) {
         return null;
     }
 
@@ -74,7 +114,40 @@ public class ClientCommunicator {
         } catch (Exception ex) {
             System.out.println("exception in http");
         }
-
         return null;
     }
+
+
+    String httpDelete(URL url, String authToken) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            connection.setReadTimeout(5000);
+            connection.setRequestMethod("DELETE");
+            connection.setDoOutput(true);
+
+            // Set HTTP auth header, if necessary
+            if (authToken != null) {
+                connection.addRequestProperty("Authorization", authToken);
+            }
+
+            connection.connect();
+
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                InputStream responseBody = connection.getInputStream();
+                // Read response body from InputStream ...
+                return new String(responseBody.readAllBytes(), StandardCharsets.UTF_8);
+            } else {
+                // SERVER RETURNED AN HTTP ERROR
+                InputStream responseBody = connection.getErrorStream();
+                // Read and process error response body from InputStream ...
+                return new String(responseBody.readAllBytes(), StandardCharsets.UTF_8);
+
+            }
+        } catch (Exception ex) {
+            System.out.println("exception in http");
+        }
+        return null;
+    }
+
 }

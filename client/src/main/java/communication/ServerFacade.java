@@ -10,7 +10,10 @@ public class ServerFacade {
     }
 
     public void clear() {
-
+        String response = com.clear();
+        if (response.startsWith("Error")) {
+            System.out.println(response);
+        }
     }
 
     public String register(String username, String password, String email) {

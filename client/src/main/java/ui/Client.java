@@ -66,6 +66,8 @@ public class Client {
                         stopUI = true;
                         break;
                     }
+                    facade.clear();
+                    System.out.println("clearing");
                     printPreLoginHelp();
                     break;
                 case "help":
