@@ -1,10 +1,17 @@
 package communication;
 
+import com.google.gson.Gson;
+import model.GameData;
 import request.*;
+import response.ListResponse;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class ServerFacade {
 
     ClientCommunicator com = new ClientCommunicator();
+    Collection<GameData> currGameList = new ArrayList<>();
 
     public ServerFacade() {
     }
@@ -56,11 +63,31 @@ public class ServerFacade {
     }
 
     public void listGames(String authToken) {
+        ListGamesRequest listGamesRequest = new ListGamesRequest(authToken);
+        String response = com.listGames(listGamesRequest);
+        currGameList = new Gson().fromJson(response, ListResponse.class).games();
+
+        int i = 1;
+        for (GameData game : currGameList){
+            System.out.println(i + ":" +
+                    " name -> " + game.gameName() +
+                    " white -> " + game.whiteUsername() +
+                    " black -> " + game.blackUsername());
+            i++;
+        }
+
 
     }
 
     public void createGame(String authToken, String name) {
+        CreateGameRequest createGameRequest = new CreateGameRequest(authToken, name);
+        String response = com.createGame(createGameRequest);
 
+        if (response.startsWith("Error")) {
+            System.out.println(response);
+        }
+
+        System.out.println(name + " has been created! List games to view the id.");
     }
 
     public void joinGame(String authToken, String id, String color) {

@@ -3,6 +3,7 @@ package communication;
 import com.google.gson.Gson;
 import model.AuthData;
 import request.*;
+import response.CreateGameResponse;
 import response.ErrorResponse;
 
 import java.io.InputStream;
@@ -87,7 +88,7 @@ public class ClientCommunicator {
             String responseText = httpDelete(url, req.authToken());
 
             ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
-            if (errorResponse.message() != null){
+            if (errorResponse.message() != null) {
                 return errorResponse.message();
             }
             return responseText;
@@ -98,11 +99,43 @@ public class ClientCommunicator {
         return null;
     }
 
-    public String listGames(ListGamesRequest listReq) {
+    public String listGames(ListGamesRequest req) {
+        try {
+            URL url = new URL(path + "/game");
+
+            String responseText = httpGet(url, req.authToken());
+
+            ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
+            if (errorResponse.message() != null) {
+                return errorResponse.message();
+            }
+
+            return responseText;
+
+        } catch (Exception ex) {
+            System.out.println("exception in register");
+        }
         return null;
     }
 
-    public String createGame(CreateGameRequest gameReq) {
+    public String createGame(CreateGameRequest req) {
+        try {
+            URL url = new URL(path + "/game");
+            String message = serializer.toJson(new CreateGameRequest(null, req.gameName()));
+
+            String responseText = httpPost(url, message, req.authToken());
+
+            ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
+            if (errorResponse.message() != null) {
+                return errorResponse.message();
+            }
+
+            CreateGameResponse createGameResponse = serializer.fromJson(responseText, CreateGameResponse.class);
+            return "" + createGameResponse.gameID();
+
+        } catch (Exception ex) {
+            System.out.println("exception in register");
+        }
         return null;
     }
 
@@ -130,6 +163,37 @@ public class ClientCommunicator {
             if (message != null) {
                 requestBody.write(message.getBytes());
             }
+
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                InputStream responseBody = connection.getInputStream();
+                // Read response body from InputStream ...
+                return new String(responseBody.readAllBytes(), StandardCharsets.UTF_8);
+            } else {
+                // SERVER RETURNED AN HTTP ERROR
+                InputStream responseBody = connection.getErrorStream();
+                // Read and process error response body from InputStream ...
+                return new String(responseBody.readAllBytes(), StandardCharsets.UTF_8);
+
+            }
+        } catch (Exception ex) {
+            System.out.println("exception in http");
+        }
+        return null;
+    }
+
+    String httpGet(URL url, String authToken) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            connection.setReadTimeout(5000);
+            connection.setRequestMethod("GET");
+
+            // Set HTTP auth header, if necessary
+            if (authToken != null) {
+                connection.addRequestProperty("Authorization", authToken);
+            }
+
+            connection.connect();
 
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 InputStream responseBody = connection.getInputStream();
