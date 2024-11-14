@@ -70,13 +70,12 @@ public class ServerFacade {
 
         int i = 1;
         for (GameData game : currGameList) {
-            System.out.println(i + ":" +
-                    " name -> " + game.gameName() +
-                    " white -> " + game.whiteUsername() +
-                    " black -> " + game.blackUsername());
+            System.out.println("  id -> " + i + ":" +
+                    "   Game Name -> " + game.gameName() +
+                    "   White Player -> " + ((game.whiteUsername() == null) ? "'AVAILABLE'" : game.whiteUsername()) +
+                    "   Black Player -> " + ((game.blackUsername() == null) ? "'AVAILABLE'" : game.blackUsername()));
             i++;
         }
-
 
     }
 
@@ -93,7 +92,12 @@ public class ServerFacade {
 
     public boolean joinGame(String authToken, String id, String color) {
         //verify id and color
-        int idInt = Integer.parseInt(id); // Need to verify it is an int first
+        int idInt;
+        try {
+            idInt = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            idInt = -1;
+        }
         if (idInt < 1 || idInt > currGameList.size()) {
             System.out.println("Please enter a valid game id (List games to view ids)");
             return false;

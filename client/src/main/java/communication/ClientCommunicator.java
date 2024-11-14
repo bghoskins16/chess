@@ -27,14 +27,18 @@ public class ClientCommunicator {
             URL url = new URL(path + "/db");
             String responseText = httpDelete(url, null);
 
+            if (responseText == null) {
+                return null;
+            }
+
             ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
             if (errorResponse.message() != null) {
                 return errorResponse.message();
             }
             return responseText;
 
-        } catch (MalformedURLException e) {
-            System.out.println("exception in clear");
+        } catch (Exception e) {
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }
@@ -45,6 +49,11 @@ public class ClientCommunicator {
             String message = serializer.toJson(req);
 
             String responseText = httpPost(url, message, null);
+
+            if (responseText == null) {
+                return null;
+            }
+
             AuthData authData = serializer.fromJson(responseText, AuthData.class);
 
             if (authData.authToken() == null) {
@@ -55,7 +64,7 @@ public class ClientCommunicator {
             return authData.authToken();
 
         } catch (Exception ex) {
-            System.out.println("exception in register");
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }
@@ -64,8 +73,12 @@ public class ClientCommunicator {
         try {
             URL url = new URL(path + "/session");
             String message = serializer.toJson(req);
-
             String responseText = httpPost(url, message, null);
+
+            if (responseText == null) {
+                return null;
+            }
+
             AuthData authData = serializer.fromJson(responseText, AuthData.class);
 
             if (authData.authToken() == null) {
@@ -76,7 +89,7 @@ public class ClientCommunicator {
             return authData.authToken();
 
         } catch (Exception ex) {
-            System.out.println("exception in register");
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }
@@ -87,6 +100,10 @@ public class ClientCommunicator {
 
             String responseText = httpDelete(url, req.authToken());
 
+            if (responseText == null) {
+                return null;
+            }
+
             ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
             if (errorResponse.message() != null) {
                 return errorResponse.message();
@@ -94,7 +111,7 @@ public class ClientCommunicator {
             return responseText;
 
         } catch (Exception ex) {
-            System.out.println("exception in register");
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }
@@ -105,6 +122,10 @@ public class ClientCommunicator {
 
             String responseText = httpGet(url, req.authToken());
 
+            if (responseText == null) {
+                return null;
+            }
+
             ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
             if (errorResponse.message() != null) {
                 return errorResponse.message();
@@ -113,7 +134,7 @@ public class ClientCommunicator {
             return responseText;
 
         } catch (Exception ex) {
-            System.out.println("exception in register");
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }
@@ -124,6 +145,9 @@ public class ClientCommunicator {
             String message = serializer.toJson(new CreateGameRequest(null, req.gameName()));
 
             String responseText = httpPost(url, message, req.authToken());
+            if (responseText == null) {
+                return null;
+            }
 
             ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
             if (errorResponse.message() != null) {
@@ -134,7 +158,7 @@ public class ClientCommunicator {
             return "" + createGameResponse.gameID();
 
         } catch (Exception ex) {
-            System.out.println("exception in register");
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }
@@ -145,6 +169,9 @@ public class ClientCommunicator {
             String message = serializer.toJson(new JoinGameRequest(null, req.playerColor(), req.gameID()));
 
             String responseText = httpPut(url, message, req.authToken());
+            if (responseText == null) {
+                return null;
+            }
 
             ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
             if (errorResponse.message() != null) {
@@ -154,7 +181,7 @@ public class ClientCommunicator {
             return responseText;
 
         } catch (Exception ex) {
-            System.out.println("exception in join");
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }
@@ -192,7 +219,7 @@ public class ClientCommunicator {
 
             }
         } catch (Exception ex) {
-            System.out.println("exception in http");
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }
@@ -223,7 +250,7 @@ public class ClientCommunicator {
 
             }
         } catch (Exception ex) {
-            System.out.println("exception in http");
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }
@@ -256,7 +283,7 @@ public class ClientCommunicator {
 
             }
         } catch (Exception ex) {
-            System.out.println("exception in http");
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }
@@ -294,7 +321,7 @@ public class ClientCommunicator {
 
             }
         } catch (Exception ex) {
-            System.out.println("exception in http");
+            System.out.println("Error: Problem with connection, please try again");
         }
         return null;
     }

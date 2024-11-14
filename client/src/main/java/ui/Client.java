@@ -89,28 +89,50 @@ public class Client {
             String cmd = args[0];
             switch (cmd) {
                 case "create":
-                    facade.createGame(currAuthToken, args[1]);
+                    if (args.length == 2) {
+                        facade.createGame(currAuthToken, args[1]);
+                        break;
+                    }
+                    printPostLoginHelp();
                     break;
                 case "list":
-                    facade.listGames(currAuthToken);
+                    if (args.length == 1) {
+                        facade.listGames(currAuthToken);
+                        break;
+                    }
+                    printPostLoginHelp();
                     break;
                 case "join":
-                    if (facade.joinGame(currAuthToken, args[1], args[2])) {
-                        drawChessBoard.printStartingBoard();
+                    if (args.length == 3) {
+                        if (facade.joinGame(currAuthToken, args[1], args[2])) {
+                            drawChessBoard.printStartingBoard();
+                        }
+                        break;
                     }
+                    printPostLoginHelp();
                     break;
                 case "observe":
-                    drawChessBoard.printStartingBoard();
+                    if (args.length == 2) {
+                        drawChessBoard.printStartingBoard();
+                        break;
+                    }
+                    printPostLoginHelp();
                     break;
                 case "logout":
-                    if (facade.logout(currAuthToken)) {
-                        currAuthToken = null;
-                        printStartScreen();
+                    if (args.length == 1) {
+                        if (facade.logout(currAuthToken)) {
+                            currAuthToken = null;
+                            printStartScreen();
+                        }
+                        break;
                     }
+                    printPostLoginHelp();
                     break;
                 case "quit":
-                    stopUI = true;
-                    break;
+                    if (args.length == 1) {
+                        stopUI = true;
+                        break;
+                    }
                 case "help":
                 default:
                     printPostLoginHelp();
