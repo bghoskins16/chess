@@ -1,5 +1,6 @@
 package communication;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import model.GameData;
 import request.*;
@@ -27,7 +28,7 @@ public class ServerFacade {
         RegisterRequest registerRequest = new RegisterRequest(username, password, email);
         String response = com.register(registerRequest);
 
-        if (response.startsWith("Error")){
+        if (response.startsWith("Error")) {
             System.out.println(response);
             return null;
         }
@@ -40,7 +41,7 @@ public class ServerFacade {
         LoginRequest loginRequest = new LoginRequest(username, password);
         String response = com.login(loginRequest);
 
-        if (response.startsWith("Error")){
+        if (response.startsWith("Error")) {
             System.out.println(response);
             return null;
         }
@@ -53,7 +54,7 @@ public class ServerFacade {
         LogoutRequest logoutRequest = new LogoutRequest(authToken);
         String response = com.logout(logoutRequest);
 
-        if (response.startsWith("Error")){
+        if (response.startsWith("Error")) {
             System.out.println(response);
             return false;
         }
@@ -68,7 +69,7 @@ public class ServerFacade {
         currGameList = new Gson().fromJson(response, ListResponse.class).games();
 
         int i = 1;
-        for (GameData game : currGameList){
+        for (GameData game : currGameList) {
             System.out.println(i + ":" +
                     " name -> " + game.gameName() +
                     " white -> " + game.whiteUsername() +
@@ -90,7 +91,32 @@ public class ServerFacade {
         System.out.println(name + " has been created! List games to view the id.");
     }
 
-    public void joinGame(String authToken, String id, String color) {
-        //convert id to an int
+    public boolean joinGame(String authToken, String id, String color) {
+        //verify id and color
+        int idInt = Integer.parseInt(id); // Need to verify it is an int first
+        if (idInt < 1 || idInt > currGameList.size()) {
+            System.out.println("Please enter a valid game id (List games to view ids)");
+            return false;
+        }
+
+        ChessGame.TeamColor teamColor = null;
+        if (color.equals("white")) {
+            teamColor = ChessGame.TeamColor.WHITE;
+        } else if (color.equals("black")) {
+            teamColor = ChessGame.TeamColor.BLACK;
+        } else {
+            System.out.println("Please select either 'white' or 'black'");
+            return false;
+        }
+
+        JoinGameRequest joinGameRequest = new JoinGameRequest(authToken, teamColor, idInt);
+        String response = com.joinGame(joinGameRequest);
+
+        if (response.startsWith("Error")) {
+            System.out.println(response);
+            return false;
+        }
+
+        return true;
     }
 }

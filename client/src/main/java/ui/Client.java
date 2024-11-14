@@ -66,8 +66,11 @@ public class Client {
                         stopUI = true;
                         break;
                     }
-                    facade.clear();
-                    System.out.println("clearing");
+                    if (args[1].equals("clear")) {
+                        facade.clear();
+                        System.out.println("Clearing database instead of quitting :)");
+                        break;
+                    }
                     printPreLoginHelp();
                     break;
                 case "help":
@@ -92,8 +95,9 @@ public class Client {
                     facade.listGames(currAuthToken);
                     break;
                 case "join":
-                    facade.joinGame(currAuthToken, args[1], args[2]);
-                    drawChessBoard.printStartingBoard();
+                    if (facade.joinGame(currAuthToken, args[1], args[2])) {
+                        drawChessBoard.printStartingBoard();
+                    }
                     break;
                 case "observe":
                     drawChessBoard.printStartingBoard();

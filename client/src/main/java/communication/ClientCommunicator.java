@@ -139,7 +139,23 @@ public class ClientCommunicator {
         return null;
     }
 
-    public String joinGame(JoinGameRequest joinReq) {
+    public String joinGame(JoinGameRequest req) {
+        try {
+            URL url = new URL(path + "/game");
+            String message = serializer.toJson(new JoinGameRequest(null, req.playerColor(), req.gameID()));
+
+            String responseText = httpPut(url, message, req.authToken());
+
+            ErrorResponse errorResponse = serializer.fromJson(responseText, ErrorResponse.class);
+            if (errorResponse.message() != null) {
+                return errorResponse.message();
+            }
+
+            return responseText;
+
+        } catch (Exception ex) {
+            System.out.println("exception in join");
+        }
         return null;
     }
 
@@ -227,6 +243,44 @@ public class ClientCommunicator {
             }
 
             connection.connect();
+
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                InputStream responseBody = connection.getInputStream();
+                // Read response body from InputStream ...
+                return new String(responseBody.readAllBytes(), StandardCharsets.UTF_8);
+            } else {
+                // SERVER RETURNED AN HTTP ERROR
+                InputStream responseBody = connection.getErrorStream();
+                // Read and process error response body from InputStream ...
+                return new String(responseBody.readAllBytes(), StandardCharsets.UTF_8);
+
+            }
+        } catch (Exception ex) {
+            System.out.println("exception in http");
+        }
+        return null;
+    }
+
+    String httpPut(URL url, String message, String authToken) {
+        try {
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+
+            connection.setReadTimeout(5000);
+            connection.setRequestMethod("PUT");
+            connection.setDoOutput(true);
+
+            // Set HTTP auth header, if necessary
+            if (authToken != null) {
+                connection.addRequestProperty("Authorization", authToken);
+            }
+
+            connection.connect();
+
+            OutputStream requestBody = connection.getOutputStream();
+            // Write request body to OutputStream ...
+            if (message != null) {
+                requestBody.write(message.getBytes());
+            }
 
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 InputStream responseBody = connection.getInputStream();
