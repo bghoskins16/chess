@@ -12,11 +12,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class ClientCommunicator {
+public class HTTPCommunicator {
     static Gson serializer = new Gson();
     String path = "http://localhost:";
 
-    public ClientCommunicator(int port) {
+    public HTTPCommunicator(int port) {
         path = "http://localhost:" + port;
     }
 

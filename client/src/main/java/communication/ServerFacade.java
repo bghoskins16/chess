@@ -11,15 +11,15 @@ import java.util.Collection;
 
 public class ServerFacade {
     int defaultPort = 8080;
-    ClientCommunicator com;
+    HTTPCommunicator com;
     Collection<GameData> currGameList = new ArrayList<>();
 
     public ServerFacade() {
-        com = new ClientCommunicator(defaultPort);
+        com = new HTTPCommunicator(defaultPort);
     }
 
     public ServerFacade(int port) {
-        com = new ClientCommunicator(port);
+        com = new HTTPCommunicator(port);
     }
 
     public void clear() {
