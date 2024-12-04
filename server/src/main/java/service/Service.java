@@ -31,7 +31,7 @@ public class Service {
         gameDatabase.clear();
     }
 
-    AuthData authenticate(String authToken) throws ResponseException {
+    public AuthData authenticate(String authToken) throws ResponseException {
         AuthData auth = authDatabase.getAuth(authToken);
         if (auth == null) {
             throw new ResponseException(401, "Error: unauthorized");

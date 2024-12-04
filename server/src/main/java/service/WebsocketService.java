@@ -15,13 +15,11 @@ public class WebsocketService extends Service {
     public WebsocketService() {
     }
 
-    public String connect(String authToken, Integer gameID) throws ResponseException {
-
-        AuthData auth = authenticate(authToken);
+    public GameData connect(Integer gameID) throws ResponseException {
         GameData game = gameDatabase.getGame(gameID);
         if (game == null) {
-            throw new ResponseException(400, "Error: unauthorized");
+            throw new ResponseException(400, "Error: problem retrieving game");
         }
-        return auth.username();
+        return game;
     }
 }

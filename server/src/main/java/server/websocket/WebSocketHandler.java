@@ -2,12 +2,15 @@ package server.websocket;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import model.AuthData;
+import model.GameData;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.api.*;
 import response.ErrorResponse;
 import server.ResponseException;
 import service.WebsocketService;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
 import websocket.messages.ServerMessage;
 
@@ -36,18 +39,19 @@ public class WebSocketHandler {
         session.getRemote().sendString(message);
     }
 
-    private void connect(String auth, Integer gameID, Session session) throws IOException {
+    private void connect(String authToken, Integer gameID, Session session) throws IOException {
         System.out.println("Received a connect" +session.toString());
 
         try{
-            String username = service.connect(auth,gameID);
-            connections.add(username, gameID, session);
+            AuthData authData = service.authenticate(authToken);
+            GameData gameData = service.connect(gameID);
+            connections.add(authData.username(), gameID, session);
             // Send a join notification to all other users in the game
-            connections.broadcast(username, gameID, "{ \"Notification\": \""+ username + " is now in the game\" }");
+            connections.broadcast(authData.username(), gameID, "{ \"Notification\": \""+ authData.username() + " is now in the game\" }");
             // Send a LOAD_GAME command back to the root client
-            session.getRemote().sendString(serializer.toJson(new LoadGameMessage(new ChessGame())));
+            session.getRemote().sendString(serializer.toJson(new LoadGameMessage(gameData.game())));
         } catch (ResponseException ex) {
-            session.getRemote().sendString(serializer.toJson(new ErrorResponse(ex.getMessage())));
+            session.getRemote().sendString(serializer.toJson(new ErrorMessage(ex.getMessage())));
         }
     }
 }
