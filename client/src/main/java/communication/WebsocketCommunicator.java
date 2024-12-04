@@ -14,30 +14,28 @@ package communication;
 
 import com.google.gson.Gson;
 import websocket.commands.UserGameCommand;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
 import java.net.URI;
-import java.util.Scanner;
 
 public class WebsocketCommunicator extends Endpoint {
 
-    public static void main(String[] args) throws Exception {
-        var ws = new WebsocketCommunicator();
-        Scanner scanner = new Scanner(System.in);
+    Session session;
+    ServerMessageObserver serverMessageObserver;
 
-        ws.connect(1, "05a827ba-e74f-46cb-999a-a3a929488783");
-    }
-
-    public Session session;
-
-    public WebsocketCommunicator() throws Exception {
+    public WebsocketCommunicator(ServerMessageObserver serverMessageObserver) throws Exception {
         URI uri = new URI("ws://localhost:8080/ws");
         WebSocketContainer container = ContainerProvider.getWebSocketContainer();
         this.session = container.connectToServer(this, uri);
+        this.serverMessageObserver = serverMessageObserver;
 
+        //set message handler
         this.session.addMessageHandler(new MessageHandler.Whole<String>() {
             public void onMessage(String message) {
-                System.out.println(message);
+                LoadGameMessage serverMessage = new Gson().fromJson(message, LoadGameMessage.class);
+                serverMessageObserver.notify(serverMessage);
             }
         });
     }

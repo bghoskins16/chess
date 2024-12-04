@@ -105,7 +105,7 @@ public class Client {
                 case "join":
                     if (args.length == 3) {
                         if (facade.joinGame(currAuthToken, args[1], args[2])) {
-                            drawChessBoard.printStartingBoard();
+                            System.out.println("need to move to next screen");
                         }
                         break;
                     }

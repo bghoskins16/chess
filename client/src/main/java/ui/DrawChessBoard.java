@@ -12,9 +12,10 @@ import static ui.EscapeSequences.*;
 
 public class DrawChessBoard {
 
-    static ChessBoard board;
+    ChessBoard board;
 
     public DrawChessBoard() {
+        board = new ChessBoard();
     }
 
     public void printStartingBoard(){
@@ -26,30 +27,29 @@ public class DrawChessBoard {
         drawBoard(false);
     }
 
-    public static void setBoard(ChessBoard board) {
-        DrawChessBoard.board = board;
+    public void setBoard(ChessBoard board) {
+        this.board = board;
     }
 
-    public static void drawBoard(boolean whiteAtBottom) {
+    public void drawBoard(boolean whiteAtBottom) {
         PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
         out.print(ERASE_SCREEN);
 
         //When player view is black everything is reversed
-        boolean reversed = whiteAtBottom;
 
-        drawEdgeRow(out, reversed);
+        drawEdgeRow(out, whiteAtBottom);
         for (int i = 1; i <= 8; i++) {
-            drawBoardRow(out, i, reversed);
+            drawBoardRow(out, i, whiteAtBottom);
         }
-        drawEdgeRow(out, reversed);
+        drawEdgeRow(out, whiteAtBottom);
 
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_WHITE);
         out.println();
     }
 
-    public static void drawEdgeRow(PrintStream out, boolean isReversed) {
+    public void drawEdgeRow(PrintStream out, boolean isReversed) {
         char[] headers = {' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', ' '};
 
         if (isReversed) {
@@ -64,7 +64,7 @@ public class DrawChessBoard {
         out.println();
     }
 
-    public static void drawBoardRow(PrintStream out, int row, boolean isReversed) {
+    public void drawBoardRow(PrintStream out, int row, boolean isReversed) {
         char rowSymbol;
         if (isReversed) {
             rowSymbol = (char) ('9' - row);
@@ -93,7 +93,7 @@ public class DrawChessBoard {
         out.println();
     }
 
-    public static char getChessSymbol(ChessPiece piece) {
+    public char getChessSymbol(ChessPiece piece) {
         char symbol = ' ';
 
         if (piece == null) {
@@ -112,7 +112,7 @@ public class DrawChessBoard {
         return symbol;
     }
 
-    public static void drawEdgeTile(PrintStream out, char symbol) {
+    public void drawEdgeTile(PrintStream out, char symbol) {
         out.print(SET_BG_COLOR_WHITE);
         out.print(SET_TEXT_COLOR_DARK_GREY);
 
@@ -122,7 +122,7 @@ public class DrawChessBoard {
         out.print(SET_TEXT_COLOR_BLACK);
     }
 
-    public static void drawBoardTile(PrintStream out, char symbol, boolean isTileWhite, boolean isPieceWhite) {
+    public void drawBoardTile(PrintStream out, char symbol, boolean isTileWhite, boolean isPieceWhite) {
         if (isTileWhite) {
             out.print(SET_BG_COLOR_LIGHT_GREY);
         } else {

@@ -5,12 +5,17 @@ import com.google.gson.Gson;
 import model.GameData;
 import request.*;
 import response.ListResponse;
+import ui.DrawChessBoard;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.ServerMessage;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 public class ServerFacade {
     int defaultPort = 8080;
+    boolean isConnectedWhite = false;
+    WebsocketCommunicator ws = null;
     HTTPCommunicator com;
     Collection<GameData> currGameList = new ArrayList<>();
 
@@ -21,6 +26,20 @@ public class ServerFacade {
     public ServerFacade(int port) {
         com = new HTTPCommunicator(port);
     }
+
+    ServerMessageObserver serverMessageObserver = new ServerMessageObserver() {
+        @Override
+        public void notify(ServerMessage message) {
+            if (message.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME){
+                LoadGameMessage m = (LoadGameMessage) message;
+
+                DrawChessBoard drawChessBoard = new DrawChessBoard();
+                drawChessBoard.setBoard(m.getGame().getBoard());
+                drawChessBoard.drawBoard(isConnectedWhite);
+
+            }
+        }
+    };
 
     public void clear() {
         String response = com.clear();
@@ -118,8 +137,10 @@ public class ServerFacade {
         ChessGame.TeamColor teamColor = null;
         if (color.equals("white")) {
             teamColor = ChessGame.TeamColor.WHITE;
+            isConnectedWhite = true;
         } else if (color.equals("black")) {
             teamColor = ChessGame.TeamColor.BLACK;
+            isConnectedWhite = false;
         } else {
             System.out.println("Please select either 'white' or 'black'");
             return false;
@@ -135,7 +156,7 @@ public class ServerFacade {
 
         //Add websocket CONNECT here
         try {
-            var ws = new WebsocketCommunicator();
+            ws = new WebsocketCommunicator(serverMessageObserver);
             ws.connect(idInt, authToken);
         } catch (Exception e) {
             throw new RuntimeException(e);
