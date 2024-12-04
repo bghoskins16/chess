@@ -39,8 +39,8 @@ public class WebSocketHandler {
 
         try{
             String username = service.connect(auth,gameID);
-            connections.add(username, session);
-            connections.broadcast(username, "{ \"Notification\": \""+ username + " is now in the game\" }");
+            connections.add(username, gameID, session);
+            connections.broadcast(username, gameID, "{ \"Notification\": \""+ username + " is now in the game\" }");
         } catch (ResponseException ex) {
             session.getRemote().sendString(serializer.toJson(new ErrorResponse(ex.getMessage())));
         }
