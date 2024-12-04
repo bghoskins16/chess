@@ -134,6 +134,12 @@ public class ServerFacade {
         }
 
         //Add websocket CONNECT here
+        try {
+            var ws = new WebsocketCommunicator();
+            ws.connect(idInt, authToken);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
 
         return true;
     }

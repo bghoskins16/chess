@@ -26,7 +26,7 @@ public class WebSocketHandler {
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws IOException  {
         System.out.printf("Received: %s\n", message);
-
+        session.getRemote().sendString(message);  // TODO: need to delete
 
         UserGameCommand action = new Gson().fromJson(message, UserGameCommand.class);
         switch (action.getCommandType()) {
