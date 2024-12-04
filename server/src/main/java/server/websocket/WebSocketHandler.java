@@ -1,5 +1,6 @@
 package server.websocket;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.api.*;
@@ -7,6 +8,7 @@ import response.ErrorResponse;
 import server.ResponseException;
 import service.WebsocketService;
 import websocket.commands.UserGameCommand;
+import websocket.messages.LoadGameMessage;
 import websocket.messages.ServerMessage;
 
 import java.io.IOException;
@@ -40,7 +42,10 @@ public class WebSocketHandler {
         try{
             String username = service.connect(auth,gameID);
             connections.add(username, gameID, session);
+            // Send a join notification to all other users in the game
             connections.broadcast(username, gameID, "{ \"Notification\": \""+ username + " is now in the game\" }");
+            // Send a LOAD_GAME command back to the root client
+            session.getRemote().sendString(serializer.toJson(new LoadGameMessage(new ChessGame())));
         } catch (ResponseException ex) {
             session.getRemote().sendString(serializer.toJson(new ErrorResponse(ex.getMessage())));
         }
