@@ -133,6 +133,8 @@ public class ServerFacade {
             return false;
         }
 
+        //Add websocket CONNECT here
+
         return true;
     }
 }
