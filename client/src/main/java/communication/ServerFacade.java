@@ -184,6 +184,19 @@ public class ServerFacade {
 
     public boolean makeMove(String authToken, ChessMove move){
         try {
+            // Just check if it is your turn to move
+            if (isConnectedWhite == null){
+                System.out.println("Must join a game to make moves");
+                return false;
+            }
+
+//            ChessGame.TeamColor whoseTurn = ((ArrayList<GameData>) currGameList).get(connectedGameId).game().getTeamTurn();
+//            if ((isConnectedWhite && whoseTurn != ChessGame.TeamColor.WHITE) ||
+//                    (!isConnectedWhite && whoseTurn != ChessGame.TeamColor.BLACK)){
+//                System.out.println("Please wait for your turn");
+//                return false;
+//            }
+
             ws.makeMove(connectedGameId, authToken, move);
         } catch (Exception e) {
             throw new RuntimeException(e);

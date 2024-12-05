@@ -107,7 +107,7 @@ public class Client {
                 case "join":
                     if (args.length == 3) {
                         if (facade.joinGame(currAuthToken, args[1], args[2])) {
-                            System.out.println("need to move to next screen");
+                            System.out.println("You have joined game " + args[1]);
                             inGame = true;
                         }
                         break;
@@ -228,7 +228,7 @@ public class Client {
                     break;
             }
         } catch (Exception e) {
-            printPreLoginHelp();
+            printGamePlayHelp();
         }
     }
 

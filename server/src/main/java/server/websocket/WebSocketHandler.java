@@ -1,5 +1,6 @@
 package server.websocket;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import model.AuthData;
 import model.GameData;
@@ -11,6 +12,7 @@ import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
 
 import java.io.IOException;
 
@@ -62,6 +64,21 @@ public class WebSocketHandler {
             connections.broadcast(authData.username(), action.getGameID(), "{ \"Notification\": \""+ authData.username() + " made a move\" }");
             // Send a LOAD_GAME command to ALL users
             connections.broadcast("", action.getGameID(), serializer.toJson(new LoadGameMessage(gameData.game())));
+
+            //check for checks, checkmates, and stalemates
+            if (gameData.game().isInCheckmate(ChessGame.TeamColor.WHITE)) {
+                connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.whiteUsername() + " WINS!")));
+            }
+            else if (gameData.game().isInCheckmate(ChessGame.TeamColor.BLACK)) {
+                connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.blackUsername() + " WINS!")));
+            }
+            else if (gameData.game().isInCheck(ChessGame.TeamColor.WHITE) || gameData.game().isInCheck(ChessGame.TeamColor.BLACK)){
+                connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECK!")));
+            }
+            else if (gameData.game().isInCheckmate(ChessGame.TeamColor.WHITE) || gameData.game().isInStalemate(ChessGame.TeamColor.BLACK)) {
+                connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("STALEMATE. GAME OVER")));
+            }
+
         } catch (ResponseException ex) {
             System.out.println("error " + ex.getMessage());
             session.getRemote().sendString("message");
