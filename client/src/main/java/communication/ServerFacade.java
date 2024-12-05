@@ -2,6 +2,7 @@ package communication;
 
 import chess.ChessGame;
 import chess.ChessMove;
+import chess.ChessPosition;
 import com.google.gson.Gson;
 import model.GameData;
 import request.*;
@@ -17,6 +18,7 @@ public class ServerFacade {
     int defaultPort = 8080;
     Boolean isConnectedWhite = null;
     int connectedGameId = -1;
+    ChessGame connectedGame;
     WebsocketCommunicator ws = null;
     HTTPCommunicator com;
     Collection<GameData> currGameList = new ArrayList<>();
@@ -37,9 +39,8 @@ public class ServerFacade {
             if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME){
                 LoadGameMessage m = new Gson().fromJson(message, LoadGameMessage.class);
 
-                DrawChessBoard drawChessBoard = new DrawChessBoard();
-                drawChessBoard.setBoard(m.getGame().getBoard());
-                drawChessBoard.drawBoard(Objects.requireNonNullElse(isConnectedWhite, true));
+                connectedGame = m.getGame();
+                drawBoard();
             }
             else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.ERROR){
                 ErrorMessage m = new Gson().fromJson(message, ErrorMessage.class);
@@ -167,8 +168,8 @@ public class ServerFacade {
         try {
             ws = new WebsocketCommunicator(serverMessageObserver);
             ws.connect(idInt, authToken);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (Exception ex) {
+            System.out.println("Error: Problem with connection, please try again");
         }
 
         // Save these values to use for websocket commands
@@ -190,12 +191,12 @@ public class ServerFacade {
                 return false;
             }
 
-//            ChessGame.TeamColor whoseTurn = ((ArrayList<GameData>) currGameList).get(connectedGameId).game().getTeamTurn();
-//            if ((isConnectedWhite && whoseTurn != ChessGame.TeamColor.WHITE) ||
-//                    (!isConnectedWhite && whoseTurn != ChessGame.TeamColor.BLACK)){
-//                System.out.println("Please wait for your turn");
-//                return false;
-//            }
+            ChessGame.TeamColor whoseTurn = connectedGame.getTeamTurn();
+            if ((isConnectedWhite && whoseTurn != ChessGame.TeamColor.WHITE) ||
+                    (!isConnectedWhite && whoseTurn != ChessGame.TeamColor.BLACK)){
+                System.out.println("Please wait for your turn");
+                return false;
+            }
 
             ws.makeMove(connectedGameId, authToken, move);
         } catch (Exception e) {
@@ -203,5 +204,49 @@ public class ServerFacade {
         }
 
         return true;
+    }
+
+    public boolean observe(String authToken, String id){
+        //verify id and color
+        int idInt;
+        try {
+            idInt = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            idInt = -1;
+        }
+        if (idInt < 1 || idInt > currGameList.size()) {
+            System.out.println("Please enter a valid game id (List games to view ids)");
+            return false;
+        }
+
+        try {
+            ws = new WebsocketCommunicator(serverMessageObserver);
+            ws.connect(idInt, authToken);
+        } catch (Exception ex) {
+            System.out.println("Error: Problem with connection, please try again");
+            return false;
+        }
+
+        isConnectedWhite = null;
+        connectedGameId = idInt;
+        return true;
+    }
+
+
+    public void drawBoard(){
+        DrawChessBoard drawChessBoard = new DrawChessBoard();
+        drawChessBoard.setBoard(connectedGame.getBoard());
+        drawChessBoard.drawBoard(Objects.requireNonNullElse(isConnectedWhite, true));
+    }
+
+    public void drawBoardWithMoves(ChessPosition position){
+        if (connectedGame.getBoard().getPiece(position) == null){
+            System.out.println("No piece at that location");
+            return;
+        }
+        DrawChessBoard drawChessBoard = new DrawChessBoard();
+        drawChessBoard.setGame(connectedGame);
+        drawChessBoard.setHighlightPiece(position);
+        drawChessBoard.drawBoardHighlighted(Objects.requireNonNullElse(isConnectedWhite, true));
     }
 }

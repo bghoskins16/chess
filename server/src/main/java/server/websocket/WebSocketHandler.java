@@ -44,7 +44,7 @@ public class WebSocketHandler {
             GameData gameData = service.getGame(gameID);
             connections.add(authData.username(), gameID, session);
             // Send a join notification to all other users in the game
-            connections.broadcast(authData.username(), gameID, "{ \"Notification\": \""+ authData.username() + " is now in the game\" }");
+            connections.broadcast(authData.username(), gameID, serializer.toJson(new NotificationMessage(authData.username() + " is now in the game")));
             // Send a LOAD_GAME command back to the root client
             session.getRemote().sendString(serializer.toJson(new LoadGameMessage(gameData.game())));
         } catch (ResponseException ex) {
@@ -61,21 +61,21 @@ public class WebSocketHandler {
             AuthData authData = service.authenticate(action.getAuthToken());
             GameData gameData = service.makeMove(action.getGameID(), action.getMove());
             // Send a move notification to all other users in the game
-            connections.broadcast(authData.username(), action.getGameID(), "{ \"Notification\": \""+ authData.username() + " made a move\" }");
+            connections.broadcast(authData.username(), action.getGameID(), serializer.toJson(new NotificationMessage(authData.username() + " made a move")));
             // Send a LOAD_GAME command to ALL users
             connections.broadcast("", action.getGameID(), serializer.toJson(new LoadGameMessage(gameData.game())));
 
-            //check for checks, checkmates, and stalemates
+            //check for check, checkmate, and stalemate
             if (gameData.game().isInCheckmate(ChessGame.TeamColor.WHITE)) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.whiteUsername() + " WINS!")));
             }
             else if (gameData.game().isInCheckmate(ChessGame.TeamColor.BLACK)) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.blackUsername() + " WINS!")));
             }
-            else if (gameData.game().isInCheck(ChessGame.TeamColor.WHITE) || gameData.game().isInCheck(ChessGame.TeamColor.BLACK)){
+            else if (gameData.game().isInCheck(gameData.game().getTeamTurn())){
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECK!")));
             }
-            else if (gameData.game().isInCheckmate(ChessGame.TeamColor.WHITE) || gameData.game().isInStalemate(ChessGame.TeamColor.BLACK)) {
+            else if (gameData.game().isInCheckmate(gameData.game().getTeamTurn())) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("STALEMATE. GAME OVER")));
             }
 

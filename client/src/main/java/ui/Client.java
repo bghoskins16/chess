@@ -3,13 +3,8 @@ package ui;
 import chess.*;
 import communication.ServerFacade;
 
-import java.io.PrintStream;
-import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Scanner;
-
-import static ui.EscapeSequences.*;
 
 public class Client {
     Scanner scanner = new Scanner(System.in);
@@ -18,7 +13,8 @@ public class Client {
 
     boolean stopUI = false;
     String currAuthToken = null;
-    boolean inGame = false;
+    boolean inGamePlayer = false;
+    boolean inGameObserver = false;
 
     public Client() {
     }
@@ -27,7 +23,7 @@ public class Client {
         printStartScreen();
         while (!stopUI) {
             String line = scanner.nextLine();
-            if (inGame){
+            if (inGamePlayer || inGameObserver){
                 gamePlayParse(line);
             }
             else if (currAuthToken == null) {
@@ -108,7 +104,7 @@ public class Client {
                     if (args.length == 3) {
                         if (facade.joinGame(currAuthToken, args[1], args[2])) {
                             System.out.println("You have joined game " + args[1]);
-                            inGame = true;
+                            inGamePlayer = true;
                         }
                         break;
                     }
@@ -116,7 +112,10 @@ public class Client {
                     break;
                 case "observe":
                     if (args.length == 2) {
-                        drawChessBoard.printStartingBoard();
+                        if (facade.observe(currAuthToken, args[1])){
+                            System.out.println("You are now observing game " + args[1]);
+                            inGameObserver = true;
+                        }
                         break;
                     }
                     printPostLoginHelp();
@@ -158,7 +157,7 @@ public class Client {
                             break;
                         }
                         if (args[1].length() != 2 || args[3].length() != 2){
-                            printGamePlayHelp();
+                            System.out.println("Please enter valid positions in a form like this: 'b2'");
                             break;
                         }
                         int startCol = args[1].charAt(0) - 96;
@@ -170,7 +169,12 @@ public class Client {
                             startCol > 8 || startCol < 1 ||
                             endRow > 8 || endRow < 1 ||
                             endCol > 8 || endCol < 1) {
-                            System.out.println("Please enter a valid position in a form like this: 'b2'");
+                            System.out.println("Please enter valid positions in a form like this: 'b2'");
+                            break;
+                        }
+
+                        if (inGameObserver){
+                            System.out.println("Observers can't make moves");
                             break;
                         }
 
@@ -183,7 +187,7 @@ public class Client {
                     break;
                 case "redraw":
                     if (args.length == 1) {
-                        System.out.println("redraw ...");
+                        facade.drawBoard();
                         break;
                     }
                     printGamePlayHelp();
@@ -191,7 +195,8 @@ public class Client {
                 case "leave":
                     if (args.length == 1) {
                         // todo:: need to remove from game
-                        inGame = false;
+                        inGamePlayer = false;
+                        inGameObserver = false;
                         System.out.println("You have left the game");
                         printLoginScreen();
                         break;
@@ -200,6 +205,10 @@ public class Client {
                     break;
                 case "resign":
                     if (args.length == 1) {
+                        if (inGameObserver){
+                            System.out.println("Observers can't resign");
+                            break;
+                        }
                         while (true){
                             System.out.println("Are you sure you want to accept defeat and resign? [y/n]");
                             String confirm = scanner.nextLine();
