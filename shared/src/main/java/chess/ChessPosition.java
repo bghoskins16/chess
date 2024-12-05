@@ -43,6 +43,11 @@ public class ChessPosition {
         return row;
     }
 
+    @Override
+    public String toString() {
+        return  "(" + row + "," + col + ")";
+    }
+
     /**
      * @return which column this position is in
      * 1 codes for the left row

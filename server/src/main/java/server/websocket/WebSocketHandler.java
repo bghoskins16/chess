@@ -74,7 +74,7 @@ public class WebSocketHandler {
             connections.broadcast(
                     authData.username(),
                     action.getGameID(),
-                    serializer.toJson(new NotificationMessage(authData.username() + " made a move"))
+                    serializer.toJson(new NotificationMessage(authData.username() + " made move " + action.getMove()))
             );
 
             // Send a LOAD_GAME command to ALL users
