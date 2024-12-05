@@ -14,6 +14,7 @@ public class ChessGame implements Cloneable {
 
     TeamColor teamTurn;
     ChessBoard gameBoard;
+    boolean gameOver = false;
 
 
     public ChessGame() {
@@ -227,6 +228,14 @@ public class ChessGame implements Cloneable {
     public void setBoard(ChessBoard board) {
         gameBoard = board;
         // Might need to copy one piece at a time
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+
+    public boolean isGameOver(){
+        return gameOver;
     }
 
     @Override

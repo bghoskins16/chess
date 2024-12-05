@@ -23,11 +23,21 @@ public class WebsocketService extends Service {
         GameData oldData = getGame(gameID);
         ChessGame game = oldData.game();
         try {
+            if (game.isGameOver()){
+                throw new ResponseException(0, "Error: Game is over");
+            }
             game.makeMove(move);
             gameDatabase.updateGame(gameID,game);
             return new GameData(oldData.gameID(), oldData.whiteUsername(), oldData.blackUsername(), oldData.gameName(), game);
         } catch (InvalidMoveException e) {
             throw new ResponseException(0, "Error: Invalid Move");
         }
+    }
+
+    public void endGame(Integer gameID) throws ResponseException {
+        GameData oldData = getGame(gameID);
+        ChessGame game = oldData.game();
+        game.setGameOver(true);
+        gameDatabase.updateGame(gameID,game);
     }
 }

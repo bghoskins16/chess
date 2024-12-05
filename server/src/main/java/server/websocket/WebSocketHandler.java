@@ -31,8 +31,8 @@ public class WebSocketHandler {
         switch (action.getCommandType()) {
             case CONNECT -> connect(action.getAuthToken(), action.getGameID(), session);
             case MAKE_MOVE -> makeMove(message, session);
-            case LEAVE -> System.out.println("Received a leave");
-            case RESIGN -> message = "{ \"Notification\": \"resigned\" }";
+            case LEAVE -> leave(action.getAuthToken(), action.getGameID(), session);
+            case RESIGN -> resign(action.getAuthToken(), action.getGameID(), session);
         }
     }
 
@@ -68,20 +68,50 @@ public class WebSocketHandler {
             //check for check, checkmate, and stalemate
             if (gameData.game().isInCheckmate(ChessGame.TeamColor.WHITE)) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.whiteUsername() + " WINS!")));
+                service.endGame(action.getGameID());
             }
             else if (gameData.game().isInCheckmate(ChessGame.TeamColor.BLACK)) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.blackUsername() + " WINS!")));
+                service.endGame(action.getGameID());
             }
             else if (gameData.game().isInCheck(gameData.game().getTeamTurn())){
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECK!")));
             }
             else if (gameData.game().isInCheckmate(gameData.game().getTeamTurn())) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("STALEMATE. GAME OVER")));
+                service.endGame(action.getGameID());
             }
 
         } catch (ResponseException ex) {
             System.out.println("error " + ex.getMessage());
             session.getRemote().sendString("message");
+            session.getRemote().sendString(serializer.toJson(new ErrorMessage(ex.getMessage())));
+        }
+    }
+
+    private void leave(String authToken, Integer gameID, Session session) throws IOException {
+        System.out.println("Received a leave");
+
+        try{
+            AuthData authData = service.authenticate(authToken);
+            GameData gameData = service.getGame(gameID);
+            connections.remove(authData.username());
+            // Send a leave notification to all other users in the game
+            connections.broadcast(authData.username(), gameID, serializer.toJson(new NotificationMessage(authData.username() + " left the game")));
+        } catch (ResponseException ex) {
+            session.getRemote().sendString(serializer.toJson(new ErrorMessage(ex.getMessage())));
+        }
+    }
+
+    private void resign(String authToken, Integer gameID, Session session) throws IOException {
+        System.out.println("Received a resign");
+
+        try{
+            AuthData authData = service.authenticate(authToken);
+            service.endGame(gameID);
+            // Send a resignation notification to ALL users in the game
+            connections.broadcast("", gameID, serializer.toJson(new NotificationMessage(authData.username() + " has resigned from the game")));
+        } catch (ResponseException ex) {
             session.getRemote().sendString(serializer.toJson(new ErrorMessage(ex.getMessage())));
         }
     }

@@ -180,6 +180,11 @@ public class ServerFacade {
     }
 
     public boolean resign(String authToken){
+        try {
+            ws.resign(connectedGameId, authToken);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return true;
     }
 

@@ -232,7 +232,6 @@ public class Client {
                                 //Resigns
                                 facade.resign(currAuthToken);
                                 System.out.println("You have resigned");
-                                printGamePlayHelp();
                                 break;
                             }
                             else if (Objects.equals(confirm, "n")){
