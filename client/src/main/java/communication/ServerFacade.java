@@ -11,10 +11,12 @@ import websocket.messages.ServerMessage;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class ServerFacade {
     int defaultPort = 8080;
-    boolean isConnectedWhite = false;
+    Boolean isConnectedWhite = null;
+    int connectedGameId = -1;
     WebsocketCommunicator ws = null;
     HTTPCommunicator com;
     Collection<GameData> currGameList = new ArrayList<>();
@@ -35,7 +37,7 @@ public class ServerFacade {
 
                 DrawChessBoard drawChessBoard = new DrawChessBoard();
                 drawChessBoard.setBoard(m.getGame().getBoard());
-                drawChessBoard.drawBoard(isConnectedWhite);
+                drawChessBoard.drawBoard(Objects.requireNonNullElse(isConnectedWhite, true));
 
             }
         }
@@ -137,10 +139,8 @@ public class ServerFacade {
         ChessGame.TeamColor teamColor = null;
         if (color.equals("white")) {
             teamColor = ChessGame.TeamColor.WHITE;
-            isConnectedWhite = true;
         } else if (color.equals("black")) {
             teamColor = ChessGame.TeamColor.BLACK;
-            isConnectedWhite = false;
         } else {
             System.out.println("Please select either 'white' or 'black'");
             return false;
@@ -162,6 +162,14 @@ public class ServerFacade {
             throw new RuntimeException(e);
         }
 
+        // Save these values to use for websocket commands
+        isConnectedWhite = color.equals("white");
+        connectedGameId = idInt;
+
+        return true;
+    }
+
+    public boolean resign(String authToken){
         return true;
     }
 }
