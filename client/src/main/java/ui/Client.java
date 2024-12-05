@@ -147,7 +147,23 @@ public class Client {
             switch (cmd) {
                 case "move":
                     if (args.length == 2) {
-                        System.out.println("possible moves ...");
+                        System.out.println("possible moves of that piece are now highlighted in yellow");
+
+                        if (args[1].length() != 2){
+                            System.out.println("Please enter a valid position in a form like this: 'b2'");
+                            break;
+                        }
+                        int col = args[1].charAt(0) - 96;
+                        int row = args[1].charAt(1) - 48;
+
+                        if (row > 8 || row < 1 ||
+                                col > 8 || col < 1){
+                            System.out.println("Please enter a valid position in a form like this: 'b2'");
+                            break;
+                        }
+
+                        facade.drawBoardWithMoves(new ChessPosition(row,col));
+
                         break;
                     }
                     else if(args.length == 4){

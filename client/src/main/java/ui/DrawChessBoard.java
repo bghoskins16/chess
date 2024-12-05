@@ -1,18 +1,21 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import static ui.EscapeSequences.*;
 
 public class DrawChessBoard {
 
     ChessBoard board;
+    ChessGame game;
+    ChessPosition highlightPiece;
+    boolean highlight = false;
+    Collection<ChessPosition> positionsToHighlight;
 
     public DrawChessBoard() {
         board = new ChessBoard();
@@ -29,6 +32,14 @@ public class DrawChessBoard {
 
     public void setBoard(ChessBoard board) {
         this.board = board;
+    }
+
+    public void setGame(ChessGame game) {
+        this.game = game;
+    }
+
+    public void setHighlightPiece(ChessPosition highlightPiece){
+        this.highlightPiece = highlightPiece;
     }
 
     public void drawBoard(boolean whiteAtBottom) {
@@ -87,7 +98,32 @@ public class DrawChessBoard {
             boolean isPieceWhite = (piece == null) || (piece.getTeamColor() == ChessGame.TeamColor.WHITE);
             char pieceSymbol = getChessSymbol(piece);
 
-            drawBoardTile(out, pieceSymbol, isTileWhite, isPieceWhite);
+            if (!highlight) {
+                drawBoardTile(out, pieceSymbol, isTileWhite, isPieceWhite);
+            }
+            else{
+                // Added logic to highlight valid moves of a specific piece
+                ChessPosition currentPosition;
+                if (isReversed) {
+                    currentPosition = new ChessPosition(9-row, col);
+                }else {
+                    currentPosition = new ChessPosition(row, 9-col);
+                }
+                boolean highlightHere = false;
+                for (ChessPosition pos: positionsToHighlight){
+                    if (currentPosition.equals(pos)){
+                        highlightHere = true;
+                        break;
+                    }
+                }
+
+                if (highlightHere){
+                    drawHighlightTile(out, pieceSymbol, isPieceWhite);
+                } else {
+                    drawBoardTile(out, pieceSymbol, isTileWhite, isPieceWhite);
+                }
+
+            }
         }
         drawEdgeTile(out, rowSymbol);
         out.println();
@@ -128,6 +164,34 @@ public class DrawChessBoard {
         } else {
             out.print(SET_BG_COLOR_DARK_GREY);
         }
+        if (isPieceWhite) {
+            out.print(SET_TEXT_COLOR_WHITE);
+        } else {
+            out.print(SET_TEXT_COLOR_BLACK);
+        }
+
+        out.print(" " + symbol + " ");
+    }
+
+    public void drawBoardHighlighted(boolean whiteAtBottom) {
+        highlight = true;
+        Collection<ChessMove> moves = game.validMoves(highlightPiece);
+
+        positionsToHighlight = new ArrayList<>();
+        for (ChessMove move: moves){
+            positionsToHighlight.add(move.getEndPosition());
+        }
+
+        board = game.getBoard();
+        drawBoard(whiteAtBottom);
+
+        highlight = false;
+
+    }
+
+    public void drawHighlightTile(PrintStream out, char symbol, boolean isPieceWhite) {
+        out.print(SET_BG_COLOR_YELLOW);
+
         if (isPieceWhite) {
             out.print(SET_TEXT_COLOR_WHITE);
         } else {
