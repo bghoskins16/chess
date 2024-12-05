@@ -1,9 +1,6 @@
 package ui;
 
-import chess.ChessBoard;
-import chess.ChessGame;
-import chess.ChessPiece;
-import chess.ChessPosition;
+import chess.*;
 import communication.ServerFacade;
 
 import java.io.PrintStream;
@@ -155,10 +152,32 @@ public class Client {
                         break;
                     }
                     else if(args.length == 4){
-                        if (Objects.equals(args[2], "to")) {
-                            System.out.println("make move ...");
+                        // First check format
+                        if (!Objects.equals(args[2], "to")) {
+                            printGamePlayHelp();
                             break;
                         }
+                        if (args[1].length() != 2 || args[3].length() != 2){
+                            printGamePlayHelp();
+                            break;
+                        }
+                        int startCol = args[1].charAt(0) - 64;
+                        int startRow = args[1].charAt(1) - 48;
+                        int endCol = args[3].charAt(0) - 64;
+                        int endRow = args[3].charAt(1) - 48;
+
+                        if (startRow > 8 || startRow < 1 ||
+                            startCol > 8 || startCol < 1 ||
+                            endRow > 8 || endRow < 1 ||
+                            endCol > 8 || endCol < 1) {
+                            System.out.println("Please enter a valid position in a form like this: 'B2'");
+                            break;
+                        }
+
+                        ChessMove move = new ChessMove(new ChessPosition(startRow, startCol), new ChessPosition(endRow,endCol), null);
+                        facade.makeMove(currAuthToken, move);
+
+                        break;
                     }
                     printGamePlayHelp();
                     break;

@@ -1,6 +1,7 @@
 package communication;
 
 import chess.ChessGame;
+import chess.ChessMove;
 import com.google.gson.Gson;
 import model.GameData;
 import request.*;
@@ -170,6 +171,16 @@ public class ServerFacade {
     }
 
     public boolean resign(String authToken){
+        return true;
+    }
+
+    public boolean makeMove(String authToken, ChessMove move){
+        try {
+            ws.makeMove(connectedGameId, authToken, move);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         return true;
     }
 }
