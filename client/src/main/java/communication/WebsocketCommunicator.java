@@ -24,8 +24,7 @@ public class WebsocketCommunicator extends Endpoint {
         //set message handler
         this.session.addMessageHandler(new MessageHandler.Whole<String>() {
             public void onMessage(String message) {
-                LoadGameMessage serverMessage = new Gson().fromJson(message, LoadGameMessage.class);
-                serverMessageObserver.notify(serverMessage);
+                serverMessageObserver.notify(message);
             }
         });
     }

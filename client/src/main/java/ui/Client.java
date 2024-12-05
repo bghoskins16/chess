@@ -161,16 +161,16 @@ public class Client {
                             printGamePlayHelp();
                             break;
                         }
-                        int startCol = args[1].charAt(0) - 64;
+                        int startCol = args[1].charAt(0) - 96;
                         int startRow = args[1].charAt(1) - 48;
-                        int endCol = args[3].charAt(0) - 64;
+                        int endCol = args[3].charAt(0) - 96;
                         int endRow = args[3].charAt(1) - 48;
 
                         if (startRow > 8 || startRow < 1 ||
                             startCol > 8 || startCol < 1 ||
                             endRow > 8 || endRow < 1 ||
                             endCol > 8 || endCol < 1) {
-                            System.out.println("Please enter a valid position in a form like this: 'B2'");
+                            System.out.println("Please enter a valid position in a form like this: 'b2'");
                             break;
                         }
 
@@ -207,6 +207,8 @@ public class Client {
                                 //Resigns
                                 facade.resign(currAuthToken);
                                 System.out.println("You have resigned");
+                                printGamePlayHelp();
+                                break;
                             }
                             else if (Objects.equals(confirm, "n")){
                                 //Exits resign (what should I send?)
@@ -250,8 +252,8 @@ public class Client {
 
     private void printGamePlayHelp() {
         System.out.println("POSSIBLE COMMANDS:");
-        System.out.println(" move <position>  --  Show the valid moves of the piece at that position [ex: move B2]");
-        System.out.println(" move <position> to <position>  --  Move your piece from one position to another [ex: move B2 to B4]");
+        System.out.println(" move <position>  --  Show the valid moves of the piece at that position [ex: move b2]");
+        System.out.println(" move <position> to <position>  --  Move your piece from one position to another [ex: move b2 to b4]");
         System.out.println(" redraw  --  Redraw the chess board");
         System.out.println(" leave  --  Exit the chess game");
         System.out.println(" resign  --  Give up, the other player will win");

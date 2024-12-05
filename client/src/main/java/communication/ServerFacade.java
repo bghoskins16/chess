@@ -7,8 +7,7 @@ import model.GameData;
 import request.*;
 import response.ListResponse;
 import ui.DrawChessBoard;
-import websocket.messages.LoadGameMessage;
-import websocket.messages.ServerMessage;
+import websocket.messages.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,14 +31,23 @@ public class ServerFacade {
 
     ServerMessageObserver serverMessageObserver = new ServerMessageObserver() {
         @Override
-        public void notify(ServerMessage message) {
-            if (message.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME){
-                LoadGameMessage m = (LoadGameMessage) message;
+        public void notify(String message) {
+
+            ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
+            if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME){
+                LoadGameMessage m = new Gson().fromJson(message, LoadGameMessage.class);
 
                 DrawChessBoard drawChessBoard = new DrawChessBoard();
                 drawChessBoard.setBoard(m.getGame().getBoard());
                 drawChessBoard.drawBoard(Objects.requireNonNullElse(isConnectedWhite, true));
-
+            }
+            else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.ERROR){
+                ErrorMessage m = new Gson().fromJson(message, ErrorMessage.class);
+                System.out.println(m.getErrorMessage());
+            }
+            else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION){
+                NotificationMessage m = new Gson().fromJson(message, NotificationMessage.class);
+                System.out.println(m.getMessage());
             }
         }
     };

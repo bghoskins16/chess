@@ -1,19 +1,16 @@
 package server.websocket;
 
-import chess.ChessGame;
 import com.google.gson.Gson;
 import model.AuthData;
 import model.GameData;
 import org.eclipse.jetty.websocket.api.annotations.*;
 import org.eclipse.jetty.websocket.api.*;
-import response.ErrorResponse;
 import server.ResponseException;
 import service.WebsocketService;
 import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
 import websocket.messages.LoadGameMessage;
-import websocket.messages.ServerMessage;
 
 import java.io.IOException;
 
@@ -35,8 +32,6 @@ public class WebSocketHandler {
             case LEAVE -> System.out.println("Received a leave");
             case RESIGN -> message = "{ \"Notification\": \"resigned\" }";
         }
-
-        session.getRemote().sendString(message);
     }
 
     private void connect(String authToken, Integer gameID, Session session) throws IOException {
@@ -62,12 +57,14 @@ public class WebSocketHandler {
 
         try{
             AuthData authData = service.authenticate(action.getAuthToken());
-            GameData gameData = service.mokeMove(action.getGameID(), action.getMove());
+            GameData gameData = service.makeMove(action.getGameID(), action.getMove());
             // Send a move notification to all other users in the game
             connections.broadcast(authData.username(), action.getGameID(), "{ \"Notification\": \""+ authData.username() + " made a move\" }");
             // Send a LOAD_GAME command to ALL users
             connections.broadcast("", action.getGameID(), serializer.toJson(new LoadGameMessage(gameData.game())));
         } catch (ResponseException ex) {
+            System.out.println("error " + ex.getMessage());
+            session.getRemote().sendString("message");
             session.getRemote().sendString(serializer.toJson(new ErrorMessage(ex.getMessage())));
         }
     }

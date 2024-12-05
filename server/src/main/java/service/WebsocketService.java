@@ -3,14 +3,8 @@ package service;
 import chess.ChessGame;
 import chess.ChessMove;
 import chess.InvalidMoveException;
-import model.AuthData;
 import model.GameData;
-import request.CreateGameRequest;
-import request.JoinGameRequest;
-import request.ListGamesRequest;
 import server.ResponseException;
-
-import java.util.Collection;
 
 public class WebsocketService extends Service {
 
@@ -25,11 +19,12 @@ public class WebsocketService extends Service {
         return game;
     }
 
-    public GameData mokeMove(Integer gameID, ChessMove move) throws ResponseException {
+    public GameData makeMove(Integer gameID, ChessMove move) throws ResponseException {
         GameData oldData = getGame(gameID);
         ChessGame game = oldData.game();
         try {
             game.makeMove(move);
+            gameDatabase.updateGame(gameID,game);
             return new GameData(oldData.gameID(), oldData.whiteUsername(), oldData.blackUsername(), oldData.gameName(), game);
         } catch (InvalidMoveException e) {
             throw new ResponseException(0, "Error: Invalid Move");

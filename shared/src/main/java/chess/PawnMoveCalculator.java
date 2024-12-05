@@ -52,25 +52,24 @@ public class PawnMoveCalculator extends PieceMoveCalculator {
         }
 
         // Try up
-        if (startRow > 1 && startCol > 1) {
-            endPos = new ChessPosition(endRow, startCol);
-            if (board.getPiece(endPos) == null) {
-                addMoveWithPromotions(promotion, moves, myPosition, endPos);
+        endPos = new ChessPosition(endRow, startCol);
+        if (board.getPiece(endPos) == null) {
+            addMoveWithPromotions(promotion, moves, myPosition, endPos);
 
-                // check to see if it can move twice
-                if (pieceColor == ChessGame.TeamColor.WHITE && startRow == 2) {
-                    endPos = new ChessPosition(endRow + 1, startCol);
-                    if (board.getPiece(endPos) == null) {
-                        moves.add(new ChessMove(myPosition, endPos, null));
-                    }
-                } else if (pieceColor == ChessGame.TeamColor.BLACK && startRow == 7) {
-                    endPos = new ChessPosition(endRow - 1, startCol);
-                    if (board.getPiece(endPos) == null) {
-                        moves.add(new ChessMove(myPosition, endPos, null));
-                    }
+            // check to see if it can move twice
+            if (pieceColor == ChessGame.TeamColor.WHITE && startRow == 2) {
+                endPos = new ChessPosition(endRow + 1, startCol);
+                if (board.getPiece(endPos) == null) {
+                    moves.add(new ChessMove(myPosition, endPos, null));
+                }
+            } else if (pieceColor == ChessGame.TeamColor.BLACK && startRow == 7) {
+                endPos = new ChessPosition(endRow - 1, startCol);
+                if (board.getPiece(endPos) == null) {
+                    moves.add(new ChessMove(myPosition, endPos, null));
                 }
             }
         }
+
 
         return moves;
     }
