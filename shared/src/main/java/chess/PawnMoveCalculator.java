@@ -74,14 +74,13 @@ public class PawnMoveCalculator extends PieceMoveCalculator {
         return moves;
     }
 
-    public void addMoveWithPromotions(boolean promotion, Collection<ChessMove> moves, ChessPosition myPosition, ChessPosition endPos){
+    public void addMoveWithPromotions(boolean promotion, Collection<ChessMove> moves, ChessPosition myPosition, ChessPosition endPos) {
         if (promotion) {
             moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.QUEEN));
             moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.ROOK));
             moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.BISHOP));
             moves.add(new ChessMove(myPosition, endPos, ChessPiece.PieceType.KNIGHT));
-        }
-        else {
+        } else {
             moves.add(new ChessMove(myPosition, endPos, null));
         }
     }

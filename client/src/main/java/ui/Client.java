@@ -23,10 +23,9 @@ public class Client {
         printStartScreen();
         while (!stopUI) {
             String line = scanner.nextLine();
-            if (inGamePlayer || inGameObserver){
+            if (inGamePlayer || inGameObserver) {
                 gamePlayParse(line);
-            }
-            else if (currAuthToken == null) {
+            } else if (currAuthToken == null) {
                 preLoginParse(line);
             } else {
                 postLoginParse(line);
@@ -112,7 +111,7 @@ public class Client {
                     break;
                 case "observe":
                     if (args.length == 2) {
-                        if (facade.observe(currAuthToken, args[1])){
+                        if (facade.observe(currAuthToken, args[1])) {
                             System.out.println("You are now observing game " + args[1]);
                             inGameObserver = true;
                         }
@@ -149,7 +148,7 @@ public class Client {
                     if (args.length == 2) {
                         System.out.println("possible moves of that piece are now highlighted in yellow");
 
-                        if (args[1].length() != 2){
+                        if (args[1].length() != 2) {
                             System.out.println("Please enter a valid position in a form like this: 'b2'");
                             break;
                         }
@@ -157,22 +156,21 @@ public class Client {
                         int row = args[1].charAt(1) - 48;
 
                         if (row > 8 || row < 1 ||
-                                col > 8 || col < 1){
+                                col > 8 || col < 1) {
                             System.out.println("Please enter a valid position in a form like this: 'b2'");
                             break;
                         }
 
-                        facade.drawBoardWithMoves(new ChessPosition(row,col));
+                        facade.drawBoardWithMoves(new ChessPosition(row, col));
 
                         break;
-                    }
-                    else if(args.length == 4){
+                    } else if (args.length == 4) {
                         // First check format
                         if (!Objects.equals(args[2], "to")) {
                             printGamePlayHelp();
                             break;
                         }
-                        if (args[1].length() != 2 || args[3].length() != 2){
+                        if (args[1].length() != 2 || args[3].length() != 2) {
                             System.out.println("Please enter valid positions in a form like this: 'b2'");
                             break;
                         }
@@ -182,19 +180,19 @@ public class Client {
                         int endRow = args[3].charAt(1) - 48;
 
                         if (startRow > 8 || startRow < 1 ||
-                            startCol > 8 || startCol < 1 ||
-                            endRow > 8 || endRow < 1 ||
-                            endCol > 8 || endCol < 1) {
+                                startCol > 8 || startCol < 1 ||
+                                endRow > 8 || endRow < 1 ||
+                                endCol > 8 || endCol < 1) {
                             System.out.println("Please enter valid positions in a form like this: 'b2'");
                             break;
                         }
 
-                        if (inGameObserver){
+                        if (inGameObserver) {
                             System.out.println("Observers can't make moves");
                             break;
                         }
 
-                        ChessMove move = new ChessMove(new ChessPosition(startRow, startCol), new ChessPosition(endRow,endCol), null);
+                        ChessMove move = new ChessMove(new ChessPosition(startRow, startCol), new ChessPosition(endRow, endCol), null);
                         facade.makeMove(currAuthToken, move);
 
                         break;
@@ -210,7 +208,7 @@ public class Client {
                     break;
                 case "leave":
                     if (args.length == 1) {
-                        // todo:: need to remove from game
+                        facade.leave(currAuthToken);
                         inGamePlayer = false;
                         inGameObserver = false;
                         System.out.println("You have left the game");
@@ -221,27 +219,24 @@ public class Client {
                     break;
                 case "resign":
                     if (args.length == 1) {
-                        if (inGameObserver){
+                        if (inGameObserver) {
                             System.out.println("Observers can't resign");
                             break;
                         }
-                        while (true){
+                        while (true) {
                             System.out.println("Are you sure you want to accept defeat and resign? [y/n]");
                             String confirm = scanner.nextLine();
-                            if (Objects.equals(confirm, "y")){
+                            if (Objects.equals(confirm, "y")) {
                                 //Resigns
                                 facade.resign(currAuthToken);
-                                System.out.println("You have resigned");
                                 break;
-                            }
-                            else if (Objects.equals(confirm, "n")){
+                            } else if (Objects.equals(confirm, "n")) {
                                 //Exits resign (what should I send?)
                                 break;
-                            }
-                            else {
+                            } else {
                                 System.out.println("Please enter 'y' for yes or 'n' for no");
                             }
-                            }
+                        }
                         break;
                     }
                     printGamePlayHelp();

@@ -14,7 +14,7 @@ public class QueenMoveCalculator extends PieceMoveCalculator {
 
         Collection<ChessMove> moves = new LinkedList<>();
 
-        for (int i = 1; i <= 8; i++){
+        for (int i = 1; i <= 8; i++) {
             sequenceCalc(i, moves, pieceColor, board, myPosition);
         }
 

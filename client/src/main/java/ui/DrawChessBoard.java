@@ -21,7 +21,7 @@ public class DrawChessBoard {
         board = new ChessBoard();
     }
 
-    public void printStartingBoard(){
+    public void printStartingBoard() {
         ChessBoard board = new ChessBoard();
         board.resetBoard();
 
@@ -38,7 +38,7 @@ public class DrawChessBoard {
         this.game = game;
     }
 
-    public void setHighlightPiece(ChessPosition highlightPiece){
+    public void setHighlightPiece(ChessPosition highlightPiece) {
         this.highlightPiece = highlightPiece;
     }
 
@@ -100,24 +100,23 @@ public class DrawChessBoard {
 
             if (!highlight) {
                 drawBoardTile(out, pieceSymbol, isTileWhite, isPieceWhite);
-            }
-            else{
+            } else {
                 // Added logic to highlight valid moves of a specific piece
                 ChessPosition currentPosition;
                 if (isReversed) {
-                    currentPosition = new ChessPosition(9-row, col);
-                }else {
-                    currentPosition = new ChessPosition(row, 9-col);
+                    currentPosition = new ChessPosition(9 - row, col);
+                } else {
+                    currentPosition = new ChessPosition(row, 9 - col);
                 }
                 boolean highlightHere = false;
-                for (ChessPosition pos: positionsToHighlight){
-                    if (currentPosition.equals(pos)){
+                for (ChessPosition pos : positionsToHighlight) {
+                    if (currentPosition.equals(pos)) {
                         highlightHere = true;
                         break;
                     }
                 }
 
-                if (highlightHere){
+                if (highlightHere) {
                     drawHighlightTile(out, pieceSymbol, isPieceWhite);
                 } else {
                     drawBoardTile(out, pieceSymbol, isTileWhite, isPieceWhite);
@@ -178,7 +177,7 @@ public class DrawChessBoard {
         Collection<ChessMove> moves = game.validMoves(highlightPiece);
 
         positionsToHighlight = new ArrayList<>();
-        for (ChessMove move: moves){
+        for (ChessMove move : moves) {
             positionsToHighlight.add(move.getEndPosition());
         }
 

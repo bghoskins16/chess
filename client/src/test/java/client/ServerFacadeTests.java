@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ServerFacadeTests {
 
-    private static Server server;
     static ServerFacade facade;
+    private static Server server;
 
     @BeforeAll
     public static void init() {

@@ -19,12 +19,12 @@ import java.io.IOException;
 @WebSocket
 public class WebSocketHandler {
 
-    Gson serializer = new Gson();
     private final ConnectionManager connections = new ConnectionManager();
     private final WebsocketService service = new WebsocketService();
+    Gson serializer = new Gson();
 
     @OnWebSocketMessage
-    public void onMessage(Session session, String message) throws IOException  {
+    public void onMessage(Session session, String message) throws IOException {
         System.out.printf("Received: %s\n", message);
 
         UserGameCommand action = new Gson().fromJson(message, UserGameCommand.class);
@@ -37,9 +37,8 @@ public class WebSocketHandler {
     }
 
     private void connect(String authToken, Integer gameID, Session session) throws IOException {
-        System.out.println("Received a connect");
 
-        try{
+        try {
             AuthData authData = service.authenticate(authToken);
             GameData gameData = service.getGame(gameID);
             connections.add(authData.username(), gameID, session);
@@ -53,13 +52,18 @@ public class WebSocketHandler {
     }
 
     private void makeMove(String message, Session session) throws IOException {
-        System.out.println("Received a move");
 
         MakeMoveCommand action = new Gson().fromJson(message, MakeMoveCommand.class);
 
-        try{
+        try {
             AuthData authData = service.authenticate(action.getAuthToken());
-            GameData gameData = service.makeMove(action.getGameID(), action.getMove());
+
+            if (service.isObserver(action.getGameID(), authData.username())){
+                session.getRemote().sendString(serializer.toJson(new ErrorMessage("Error: observers can't make moves")));
+                return;
+            }
+
+            GameData gameData = service.makeMove(action.getGameID(), authData ,action.getMove());
             // Send a move notification to all other users in the game
             connections.broadcast(authData.username(), action.getGameID(), serializer.toJson(new NotificationMessage(authData.username() + " made a move")));
             // Send a LOAD_GAME command to ALL users
@@ -69,32 +73,27 @@ public class WebSocketHandler {
             if (gameData.game().isInCheckmate(ChessGame.TeamColor.WHITE)) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.whiteUsername() + " WINS!")));
                 service.endGame(action.getGameID());
-            }
-            else if (gameData.game().isInCheckmate(ChessGame.TeamColor.BLACK)) {
+            } else if (gameData.game().isInCheckmate(ChessGame.TeamColor.BLACK)) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.blackUsername() + " WINS!")));
                 service.endGame(action.getGameID());
-            }
-            else if (gameData.game().isInCheck(gameData.game().getTeamTurn())){
+            } else if (gameData.game().isInCheck(gameData.game().getTeamTurn())) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECK!")));
-            }
-            else if (gameData.game().isInCheckmate(gameData.game().getTeamTurn())) {
+            } else if (gameData.game().isInCheckmate(gameData.game().getTeamTurn())) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("STALEMATE. GAME OVER")));
                 service.endGame(action.getGameID());
             }
 
         } catch (ResponseException ex) {
-            System.out.println("error " + ex.getMessage());
-            session.getRemote().sendString("message");
+            System.out.println(ex.getMessage());
             session.getRemote().sendString(serializer.toJson(new ErrorMessage(ex.getMessage())));
         }
     }
 
     private void leave(String authToken, Integer gameID, Session session) throws IOException {
-        System.out.println("Received a leave");
 
-        try{
+        try {
             AuthData authData = service.authenticate(authToken);
-            GameData gameData = service.getGame(gameID);
+            service.leaveGame(gameID, authData.username());
             connections.remove(authData.username());
             // Send a leave notification to all other users in the game
             connections.broadcast(authData.username(), gameID, serializer.toJson(new NotificationMessage(authData.username() + " left the game")));
@@ -104,10 +103,15 @@ public class WebSocketHandler {
     }
 
     private void resign(String authToken, Integer gameID, Session session) throws IOException {
-        System.out.println("Received a resign");
 
-        try{
+        try {
             AuthData authData = service.authenticate(authToken);
+
+            if (service.isObserver(gameID, authData.username())){
+                session.getRemote().sendString(serializer.toJson(new ErrorMessage("Error: observers can't resign")));
+                return;
+            }
+
             service.endGame(gameID);
             // Send a resignation notification to ALL users in the game
             connections.broadcast("", gameID, serializer.toJson(new NotificationMessage(authData.username() + " has resigned from the game")));

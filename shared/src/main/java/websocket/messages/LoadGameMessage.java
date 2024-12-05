@@ -8,12 +8,12 @@ import java.util.Collection;
 public class LoadGameMessage extends ServerMessage {
     ChessGame game;
 
-    public LoadGameMessage(ChessGame game){
+    public LoadGameMessage(ChessGame game) {
         super(ServerMessageType.LOAD_GAME);
         this.game = game;
     }
 
-    public ChessGame getGame(){
+    public ChessGame getGame() {
         return game;
     }
 }

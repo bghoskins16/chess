@@ -120,14 +120,24 @@ public class GameMySqlDataAccess extends MySqlDataAccess implements GameDataAcce
     }
 
     public void addUserWhite(int gameID, String username) {
-        String statement =
-                "UPDATE game SET whiteUsername = \"" + username + "\" WHERE id=" + gameID;
+        String statement;
+        if (username != null){
+            statement = "UPDATE game SET whiteUsername = \"" + username + "\" WHERE id=" + gameID;
+        }
+        else {
+            statement = "UPDATE game SET whiteUsername = NULL WHERE id=" + gameID;
+        }
         executeUpdate(statement);
     }
 
     public void addUserBlack(int gameID, String username) {
-        String statement =
-                "UPDATE game SET blackUsername = \"" + username + "\" WHERE id=" + gameID;
+        String statement;
+        if (username != null) {
+            statement = "UPDATE game SET blackUsername = \"" + username + "\" WHERE id=" + gameID;
+        }
+        else{
+            statement = "UPDATE game SET blackUsername = NULL WHERE id=" + gameID;
+        }
         executeUpdate(statement);
     }
 }

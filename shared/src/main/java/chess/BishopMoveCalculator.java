@@ -17,7 +17,7 @@ public class BishopMoveCalculator extends PieceMoveCalculator {
 
         Collection<ChessMove> moves = new LinkedList<>();
 
-        for (int i = 1; i <= 4; i++){
+        for (int i = 1; i <= 4; i++) {
             sequenceCalc(i, moves, pieceColor, board, myPosition);
         }
 

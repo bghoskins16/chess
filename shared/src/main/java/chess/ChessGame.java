@@ -230,12 +230,12 @@ public class ChessGame implements Cloneable {
         // Might need to copy one piece at a time
     }
 
-    public void setGameOver(boolean gameOver) {
-        this.gameOver = gameOver;
+    public boolean isGameOver() {
+        return gameOver;
     }
 
-    public boolean isGameOver(){
-        return gameOver;
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 
     @Override
@@ -244,14 +244,6 @@ public class ChessGame implements Cloneable {
         game.setBoard((ChessBoard) getBoard().clone());
         game.setTeamTurn(getTeamTurn());
         return game;
-    }
-
-    /**
-     * Enum identifying the 2 possible teams in a chess game
-     */
-    public enum TeamColor {
-        WHITE,
-        BLACK
     }
 
     @Override
@@ -271,7 +263,7 @@ public class ChessGame implements Cloneable {
         return Objects.hash(teamTurn, gameBoard);
     }
 
-    private boolean isAnyValidMoves(TeamColor teamColor){
+    private boolean isAnyValidMoves(TeamColor teamColor) {
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 ChessPosition pos = new ChessPosition(i, j);
@@ -292,5 +284,13 @@ public class ChessGame implements Cloneable {
 
         // It will reach here if color is in check and has no valid moves, so return true (Checkmate!)
         return true;
+    }
+
+    /**
+     * Enum identifying the 2 possible teams in a chess game
+     */
+    public enum TeamColor {
+        WHITE,
+        BLACK
     }
 }

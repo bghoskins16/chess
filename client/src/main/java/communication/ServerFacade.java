@@ -22,6 +22,25 @@ public class ServerFacade {
     WebsocketCommunicator ws = null;
     HTTPCommunicator com;
     Collection<GameData> currGameList = new ArrayList<>();
+    ServerMessageObserver serverMessageObserver = new ServerMessageObserver() {
+        @Override
+        public void notify(String message) {
+
+            ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
+            if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME) {
+                LoadGameMessage m = new Gson().fromJson(message, LoadGameMessage.class);
+
+                connectedGame = m.getGame();
+                drawBoard();
+            } else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.ERROR) {
+                ErrorMessage m = new Gson().fromJson(message, ErrorMessage.class);
+                System.out.println(m.getErrorMessage());
+            } else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
+                NotificationMessage m = new Gson().fromJson(message, NotificationMessage.class);
+                System.out.println(m.getMessage());
+            }
+        }
+    };
 
     public ServerFacade() {
         com = new HTTPCommunicator(defaultPort);
@@ -30,28 +49,6 @@ public class ServerFacade {
     public ServerFacade(int port) {
         com = new HTTPCommunicator(port);
     }
-
-    ServerMessageObserver serverMessageObserver = new ServerMessageObserver() {
-        @Override
-        public void notify(String message) {
-
-            ServerMessage serverMessage = new Gson().fromJson(message, ServerMessage.class);
-            if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME){
-                LoadGameMessage m = new Gson().fromJson(message, LoadGameMessage.class);
-
-                connectedGame = m.getGame();
-                drawBoard();
-            }
-            else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.ERROR){
-                ErrorMessage m = new Gson().fromJson(message, ErrorMessage.class);
-                System.out.println(m.getErrorMessage());
-            }
-            else if (serverMessage.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION){
-                NotificationMessage m = new Gson().fromJson(message, NotificationMessage.class);
-                System.out.println(m.getMessage());
-            }
-        }
-    };
 
     public void clear() {
         String response = com.clear();
@@ -179,26 +176,33 @@ public class ServerFacade {
         return true;
     }
 
-    public boolean resign(String authToken){
+    public void resign(String authToken) {
         try {
             ws.resign(connectedGameId, authToken);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        return true;
     }
 
-    public boolean makeMove(String authToken, ChessMove move){
+    public void leave(String authToken) {
+        try {
+            ws.leave(connectedGameId, authToken);
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public boolean makeMove(String authToken, ChessMove move) {
         try {
             // Just check if it is your turn to move
-            if (isConnectedWhite == null){
+            if (isConnectedWhite == null) {
                 System.out.println("Must join a game to make moves");
                 return false;
             }
 
             ChessGame.TeamColor whoseTurn = connectedGame.getTeamTurn();
             if ((isConnectedWhite && whoseTurn != ChessGame.TeamColor.WHITE) ||
-                    (!isConnectedWhite && whoseTurn != ChessGame.TeamColor.BLACK)){
+                    (!isConnectedWhite && whoseTurn != ChessGame.TeamColor.BLACK)) {
                 System.out.println("Please wait for your turn");
                 return false;
             }
@@ -211,7 +215,7 @@ public class ServerFacade {
         return true;
     }
 
-    public boolean observe(String authToken, String id){
+    public boolean observe(String authToken, String id) {
         //verify id and color
         int idInt;
         try {
@@ -238,14 +242,14 @@ public class ServerFacade {
     }
 
 
-    public void drawBoard(){
+    public void drawBoard() {
         DrawChessBoard drawChessBoard = new DrawChessBoard();
         drawChessBoard.setBoard(connectedGame.getBoard());
         drawChessBoard.drawBoard(Objects.requireNonNullElse(isConnectedWhite, true));
     }
 
-    public void drawBoardWithMoves(ChessPosition position){
-        if (connectedGame.getBoard().getPiece(position) == null){
+    public void drawBoardWithMoves(ChessPosition position) {
+        if (connectedGame.getBoard().getPiece(position) == null) {
             System.out.println("No piece at that location");
             return;
         }
