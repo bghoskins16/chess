@@ -21,15 +21,6 @@ public class DrawChessBoard {
         board = new ChessBoard();
     }
 
-    public void printStartingBoard() {
-        ChessBoard board = new ChessBoard();
-        board.resetBoard();
-
-        setBoard(board);
-        drawBoard(true);
-        drawBoard(false);
-    }
-
     public void setBoard(ChessBoard board) {
         this.board = board;
     }

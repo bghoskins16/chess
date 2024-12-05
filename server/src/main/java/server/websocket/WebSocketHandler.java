@@ -43,7 +43,12 @@ public class WebSocketHandler {
             GameData gameData = service.getGame(gameID);
             connections.add(authData.username(), gameID, session);
             // Send a join notification to all other users in the game
-            connections.broadcast(authData.username(), gameID, serializer.toJson(new NotificationMessage(authData.username() + " is now in the game")));
+            connections.broadcast(
+                    authData.username(),
+                    gameID,
+                    serializer.toJson(new NotificationMessage(authData.username() + " is now in the game"))
+            );
+
             // Send a LOAD_GAME command back to the root client
             session.getRemote().sendString(serializer.toJson(new LoadGameMessage(gameData.game())));
         } catch (ResponseException ex) {
@@ -59,22 +64,37 @@ public class WebSocketHandler {
             AuthData authData = service.authenticate(action.getAuthToken());
 
             if (service.isObserver(action.getGameID(), authData.username())){
-                session.getRemote().sendString(serializer.toJson(new ErrorMessage("Error: observers can't make moves")));
+                session.getRemote().sendString(
+                        serializer.toJson(new ErrorMessage("Error: observers can't make moves")));
                 return;
             }
 
             GameData gameData = service.makeMove(action.getGameID(), authData ,action.getMove());
             // Send a move notification to all other users in the game
-            connections.broadcast(authData.username(), action.getGameID(), serializer.toJson(new NotificationMessage(authData.username() + " made a move")));
+            connections.broadcast(
+                    authData.username(),
+                    action.getGameID(),
+                    serializer.toJson(new NotificationMessage(authData.username() + " made a move"))
+            );
+
             // Send a LOAD_GAME command to ALL users
-            connections.broadcast("", action.getGameID(), serializer.toJson(new LoadGameMessage(gameData.game())));
+            connections.broadcast("",
+                    action.getGameID(),
+                    serializer.toJson(new LoadGameMessage(gameData.game()))
+            );
 
             //check for check, checkmate, and stalemate
             if (gameData.game().isInCheckmate(ChessGame.TeamColor.WHITE)) {
-                connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.whiteUsername() + " WINS!")));
+                connections.broadcast("",
+                        action.getGameID(),
+                        serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.whiteUsername() + " WINS!"))
+                );
                 service.endGame(action.getGameID());
             } else if (gameData.game().isInCheckmate(ChessGame.TeamColor.BLACK)) {
-                connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.blackUsername() + " WINS!")));
+                connections.broadcast("",
+                        action.getGameID(),
+                        serializer.toJson(new NotificationMessage("CHECKMATE!! " + gameData.blackUsername() + " WINS!"))
+                );
                 service.endGame(action.getGameID());
             } else if (gameData.game().isInCheck(gameData.game().getTeamTurn())) {
                 connections.broadcast("", action.getGameID(), serializer.toJson(new NotificationMessage("CHECK!")));
@@ -114,7 +134,10 @@ public class WebSocketHandler {
 
             service.endGame(gameID);
             // Send a resignation notification to ALL users in the game
-            connections.broadcast("", gameID, serializer.toJson(new NotificationMessage(authData.username() + " has resigned from the game")));
+            connections.broadcast("",
+                    gameID,
+                    serializer.toJson(new NotificationMessage(authData.username() + " has resigned from the game"))
+            );
         } catch (ResponseException ex) {
             session.getRemote().sendString(serializer.toJson(new ErrorMessage(ex.getMessage())));
         }
